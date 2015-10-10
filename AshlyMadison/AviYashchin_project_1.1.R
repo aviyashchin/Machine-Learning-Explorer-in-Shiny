@@ -1,43 +1,32 @@
 #database connection
 
-#Database tables
-# '120 - no exercise adults (percent) - national'
-# '121 - few fruitsvegetables adults (percent) - national'
-# 'aminno_member'
-# 'bankruptcy'
-# 'county business patterns from factfinder.census.gov1'
-# 'education1'
-# 'household income disparity1'
-# 'member_details'
-# 'populationestimates'
-# 'povertyestimates'
-# 'social_capital'
-# 'unemployment'
-# 'ziptofips'
-main <- function(){
-  LoadDepends();
-  loadMysqlData();
-}
 
-
-LoadDepends <- function(){
 #load dependency libraries
-	library(dplyr)
-	library(reshape2)
-	library(ggplot2)
-	library(lattice)
-	library(DBI)
-	library(RMySQL)
-	library(plyr)
+  library(dplyr)
+  library(reshape2)
+  library(ggplot2)
+  library(lattice)
+  library(DBI)
+  library(RMySQL)
+  library(plyr)
   library(PASWR)
   library(mice)
   library(VIM)
   library("ggthemes")
   
-	setwd("/Users/avi/boxer/AshlyMadison/")
-	save.image("am.RData")
-	load("am.RData")
+  setwd("/Users/avi/boxer/AshlyMadison/")
+  save.image("am.RData")
+  load("am.RData")
+
+main <- function(){
+  loadMysqlData();
+  source("/Users/avi/Dropbox/programming/boxer/Avi_r_tools.R")
+
+    
+
+
 }
+
 
 getConnection <- function() {
   if (!exists('.connection', where=.GlobalEnv)) {
