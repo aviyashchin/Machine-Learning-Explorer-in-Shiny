@@ -1,4 +1,6 @@
 
+main <- function(){
+
 setwd("/Users/avi/boxer/data/week1data")
 load(".RData")
 
@@ -13,7 +15,7 @@ save.image()
 save.image("Shiny.RData")
 # save specific objects to a file
 # if you don't specify the path, the cwd is assumed 
-save(object list,file="myfile.RData")
+#save(object list,file="myfile.RData")
 
 #loading data
 	mydata = read.csv("NYC_Jobs.csv")
@@ -144,7 +146,7 @@ ggplot(mpg, aes(hwy, cty)) +
   scale_color_gradient() +
   theme_hc()
 
-ggpsadflot(dat,asdfadsfjh  aes(x=xvar, y=yvar)) +
+aes(x=xvar, y=yvar)) +
   geom_point(shape=1)      # Use hollow circles
 
 ggplot(dat, aes(x=xvar, y=yvar)) +
@@ -171,21 +173,20 @@ SBmodel.full.bc$x[SBmodel.full.bc$y ==max(SBmodel.full.bc$y)]
 
 #➢ Independent Errors
 
+#> Are the predictor variables useful to help predict Y?
+
+#> How well does our model fit? 
+
+#> How accurate are our guesses for y? 
 
 
-> Are the predictor variables useful to help predict Y?
-
-> How well does our model fit? 
-
-> How accurate are our guesses for y? 
-
-
-
+adsfadsf
 
 #Check for AIC
 #Check for BIC
 
 
-Forward selection
-backward selection
-both selection
+#Forward selection#
+#backward selection
+#both selection
+}
