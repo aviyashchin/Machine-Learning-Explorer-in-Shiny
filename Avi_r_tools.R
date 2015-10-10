@@ -148,7 +148,7 @@ ggpsadflot(dat,asdfadsfjh  aes(x=xvar, y=yvar)) +
   geom_point(shape=1)      # Use hollow circles
 
 ggplot(dat, aes(x=xvar, y=yvar)) +
-  geom_point(shape=1) +    # Use hollow circles
+  geom_point(shape=1) +    # Use hllow circles
   geom_smooth(method=lm)   # Add linear regression line 
 #  (by default includes 95% confidence region)
 
