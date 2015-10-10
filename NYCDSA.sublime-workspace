@@ -1,0 +1,428 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"OR",
+				"OR"
+			],
+			[
+				"id",
+				"DepartmentID"
+			],
+			[
+				"Depart",
+				"DepartmentID"
+			],
+			[
+				"de",
+				"DepartmentID"
+			],
+			[
+				"Empl",
+				"Employee"
+			],
+			[
+				"Emplo",
+				"EmployeeName"
+			],
+			[
+				"file",
+				"_numFields〔variable〕"
+			],
+			[
+				"a",
+				"a"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 167.0,
+		"last_filter": "package control dis",
+		"selected_items":
+		[
+			[
+				"package control dis",
+				"Package Control: Disable Package"
+			],
+			[
+				"packag",
+				"Package Control: Install Package"
+			],
+			[
+				"terminal",
+				"Terminal: Open"
+			],
+			[
+				"package control di",
+				"Package Control: Disable Package"
+			],
+			[
+				"package control inst",
+				"Package Control: Install Package"
+			],
+			[
+				"package control ab",
+				"Package Control: Enable Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git status",
+				"Git: Status"
+			],
+			[
+				"git commit",
+				"Git: Quick Commit"
+			],
+			[
+				"gitgut",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"gitgutter",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"gitgi",
+				"GitGutter: Compare Against HEAD"
+			],
+			[
+				"git all",
+				"Git: Diff All Files"
+			],
+			[
+				"git pull",
+				"Git: Pull"
+			],
+			[
+				"quick",
+				"Git: Quick Commit"
+			],
+			[
+				"git diff",
+				"Git: Diff All Files"
+			],
+			[
+				"git add",
+				"Git: Add Current File"
+			],
+			[
+				"git gui",
+				"GitGutter: Compare Against Branch"
+			],
+			[
+				"git clone",
+				"Git: Diff Current File (Ignore Whitespace)"
+			],
+			[
+				"git conf",
+				"Git: Show Current File"
+			],
+			[
+				"git commi	",
+				"Git: Commit"
+			],
+			[
+				"r",
+				"SublimeREPL: R"
+			],
+			[
+				"git comi",
+				"Git: Commit"
+			],
+			[
+				"git log all",
+				"Git: Log All"
+			],
+			[
+				"git stauts",
+				"Git: Status"
+			],
+			[
+				"git",
+				"Git: Push"
+			],
+			[
+				"git p",
+				"Git: Pull"
+			],
+			[
+				"git gutter",
+				"GitGutter: Compare Against HEAD"
+			],
+			[
+				"repl r",
+				"SublimeREPL: R"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"install pac",
+				"Package Control: Install Package"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"git:",
+				"Git: Status"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 435.0
+	},
+	"console":
+	{
+		"height": 672.0,
+		"history":
+		[
+			"git config --global push.default simple",
+			"it config --global push.default simple",
+			"import os; os.system('git --version')"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/Terminal/Terminal.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/Terminal.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Default (OSX).sublime-keymap",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/Git/Git.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/Git.sublime-settings",
+		"/Users/avi/boxer/Avi_r_tools.R",
+		"/Users/avi/boxer/bootcamp003_student/sql_quiz_part2/aviyashchin_sql_quiz2.sql",
+		"/Users/avi/boxer/NYCDSA_Submission/09-23BasicProgrammingElementsInR/AviYashchin1.1.R",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/R/Default.sublime-commands",
+		"/Users/avi/boxer/NYCDSA/hw1/Github HW Answers",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/R.sublime-settings",
+		"/Users/avi/boxer/NYCDSA/hw2/aviyashchin_sql_quiz.sql",
+		"/Users/avi/boxer/test/Github HW Answers",
+		"/Users/avi/Downloads/stocklist_etf_active.txt",
+		"/Users/avi/boxer/NYCDSA/hw2/hw2.r",
+		"/Users/avi/boxer/NYCDSA/hw2/HW2",
+		"/Users/avi/caffe/Makefile.config",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/swarm_description.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/swarm.py",
+		"/Users/avi/Programming/GitHub/nupic/nupic/frameworks/opf/clamodel.py",
+		"/Users/avi/Programming/GitHub/nupic/nupic/frameworks/opf/modelfactory.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/run.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/nupic_output.py",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/GitGutter.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/GitGutter/GitGutter.sublime-settings",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/README.md",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/rec-center-hourly.csv",
+		"/Users/avi/Programming/GitHub/nupic/examples/opf/clients/cpu/numpy cpu example.sublime-project",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/mongodb/DummyData.json",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/cleanup.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/nupic_output.pyc",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/mongodb/loadDDTest.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/swarm_description.pyc",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/mongodb/TestData.json",
+		"/Users/avi/Programming/GitHub/nupic/examples/opf/clients/cpu/cpu.py",
+		"/Users/avi/Programming/GitHub/nupic/examples/opf/clients/cpu/README.md",
+		"/Users/avi/Programming/GitHub/nupic/examples/opf/clients/cpu/model_params.py",
+		"/Users/avi/foo.avi"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"id",
+			"employe",
+			"class",
+			"NOT NULL",
+			"origin",
+			"group",
+			"asdf",
+			"l",
+			"decorate",
+			"LIBRARY_DIRS",
+			"opencv",
+			"install",
+			"LIBRARY_DIRS",
+			"opencv",
+			"python2.7",
+			"python",
+			"blas",
+			"cuda",
+			"anaconda",
+			"xcode",
+			"home",
+			"	",
+			"\\t"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			","
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		},
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 21.0
+	},
+	"input":
+	{
+		"height": 30.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.515621620891,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 46.0
+	},
+	"pinned_build_system": "",
+	"project": "NYCDSA.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"*REPL* [r]"
+			],
+			[
+				"inupic_out",
+				"~/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/nupic_output.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"selected_group": 1,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 133.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
