@@ -1,7 +1,13 @@
-#database connection
+# /** 
+#  * [I PITY THE FOOL Project]
+#  * @type {[R Script]}
+#  *
+#  * To run me:
+#  * source("/Users/avi/Dropbox/programming/boxer/AshlyMadison/AviYashchin_Project_1.1.R")
+#  *
+#  */
 
-
-#load dependency libraries
+#Load Dependency Libraries
   library(dplyr)
   library(reshape2)
   library(ggplot2)
@@ -12,23 +18,63 @@
   library(PASWR)
   library(mice)
   library(VIM)
+  library(mailR)
+  library(kknn)
+  library(Hmisc)
   library("ggthemes")
-  
-  setwd("/Users/avi/boxer/AshlyMadison/")
-  save.image("am.RData")
-  load("am.RData")
-
-main <- function(){
-  loadMysqlData();
   source("/Users/avi/Dropbox/programming/boxer/Avi_r_tools.R")
 
-    
+load_Constants <- function(){
+  path <<- "/Users/avi/boxer/AshlyMadison/"
+  imgpath <<- "/Users/avi/boxer/AshlyMadison/plots/"
 
-
+  #If missing data for a certain feature or sample is more than 5% then you probably should leave that feature or sample out. We therefore check for features (columns) and samples (rows) where more than 5% of the data is missing using a simple function
+  Missing_cols_for_removal <<- 5
+  Missing_rows_for_removal <<- 5
 }
 
+load_DataSets <- function(){
+  titanic <<- titanic3
+  airquality <<- airquality
+}
 
-getConnection <- function() {
+main <- function(){
+  load_Constants()
+  load_DataSets()
+
+  setwd(path)
+  save.image("am.RData")
+  #load("am.RData")
+
+  #Define DataSet and Independent Variable
+  FIPS=loadAllAMMysqlData()
+  outcomeVariable="SBsPerCapita"
+
+  #Check for missingness
+  #Missing Completely at Random (MCAR) - Very rare, can drop observations. 
+  #Missing at Random (MAR) - if missing at random, can drop observations. 
+  #Missing Not at Random (MNAR) NON-IGNORABLE!
+  FIPS_Missing_fixed <<- Missingness_Analysis(FIPS)
+
+  #➢ Linearity
+  # Not linear? Does Tranform help?
+
+  #➢ Constant Variance
+  # Not linear? Does Tranform help?
+
+  #➢ Normality
+  #Checking for normality of Dependent Variable
+  #Run Box-Cox Transformation on dependent Variable
+
+  #➢ Independent Error
+}
+
+getConnectionGoogleMySql <- function() {
+  ################################################################################################################################
+  #
+  # Get Connections to Google Account
+  #
+  ################################################################################################################################
   if (!exists('.connection', where=.GlobalEnv)) {
     .connection <<- dbConnect(MySQL(max.con = 1), user="root" , password="uLFZ2WoB" , dbname="test" , host="130.211.154.93")
   } else if (class(try(dbGetQuery(.connection, "SELECT 1"))) == "try-error") {
@@ -39,63 +85,73 @@ getConnection <- function() {
 }
 
 runSQL <- function(con,Query){
+  ################################################################################################################################
+  #
+  # Call SQL Query.
+  #
+  # Useage:  con <- dbConnect(MySQL(max.con = 16), user="root" , password="uLFZ2WoB" , dbname="test" , host="130.211.154.93")
+  # No_Exercise <- runSQL(con,"select `Locale County FIPS Code` as FIPS,`Numeric Value` as `no_exercise_percent` from `120 - no exercise adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")
+  ################################################################################################################################
+
+  print(paste("Calling SQL Query:",Query))
   rs <- dbSendQuery(con, Query)
   tempsql <- fetch(rs,n=-1)
+  dbClearResult(rs)
   return(tempsql);
 }
 
+loadAllAMMysqlData <- function(){
+  ################################################################################################################################
+  #
+  # Make each SQL Call
+  # Useage:   FIPS=loadAllAMMysqlData()
+  #
+  ################################################################################################################################
 
-loadMysqlData <- function(){
-
-  con <- dbConnect(MySQL(max.con = 1), user="root" , password="uLFZ2WoB" , dbname="test" , host="130.211.154.93")
+  con <- dbConnect(MySQL(max.con = 16), user="root" , password="uLFZ2WoB" , dbname="test" , host="130.211.154.93")
 
   #load first set of MYSQL queries
-#	rs <- dbSendQuery(con, "select `Locale County FIPS Code` as FIPS,`Numeric Value` as `no_exercise_percent` from `120 - no exercise adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")
-#	No_Exercise <- fetch(rs,n=-1)
-	No_Exercise <- runSQL(con,"select `Locale County FIPS Code` as FIPS,`Numeric Value` as `no_exercise_percent` from `120 - no exercise adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")
-	
-	Fruits_Vegetables <- runSQL(con,"select `Locale County FIPS Code` as FIPS,`Numeric Value` as `few_fruits_percent` from `121 - few fruitsvegetables adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")
+  # rs <- dbSendQuery(con, "select `Locale County FIPS Code` as FIPS,`Numeric Value` as `no_exercise_percent` from `120 - no exercise adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")
+  # No_Exercise <- fetch(rs,n=-1)
+  No_Exercise <- runSQL(con,"select `Locale County FIPS Code` as FIPS,`Numeric Value` as `no_exercise_percent` from `120 - no exercise adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")
+  
+  Fruits_Vegetables <- runSQL(con,"select `Locale County FIPS Code` as FIPS,`Numeric Value` as `few_fruits_percent` from `121 - few fruitsvegetables adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")
 
   No_Exercise <- runSQL(con,"select `Locale County FIPS Code` as FIPS,`Numeric Value` as `no_exercise_percent` from `120 - no exercise adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")
 
-	Bankruptcy <- runSQL(con,"select `Circ/Dist and County`,`County Code` as `FIPS`,sum(`All FilingsTotal`) as `All FilingsTotal`,sum(`Business Filings Total`) as `Business Filings Total`,sum(`Nonbusiness Filings Total`) as `Nonbusiness Filings Total` from `bankruptcy` group by `County Code`;")
+  Bankruptcy <- runSQL(con,"select `Circ/Dist and County`,`County Code` as `FIPS`,sum(`All FilingsTotal`) as `All FilingsTotal`,sum(`Business Filings Total`) as `Business Filings Total`,sum(`Nonbusiness Filings Total`) as `Nonbusiness Filings Total` from `bankruptcy` group by `County Code`;")
 
-	NumCompanies <- runSQL(con,"select `FIPS`,`Number of establishments`, `Paid employees for pay period including March 12 (number)` as `num_paid_employees`, `First-quarter payroll ($1,000)` as `first_q_payroll`, `Annual payroll ($1,000)` as `annual_payroll` from `county business patterns from factfinder.census.gov1` where year=2013 and `Meaning of 2012 NAICS code`='Total for all sectors';")
+  NumCompanies <- runSQL(con,"select `FIPS`,`Number of establishments`, `Paid employees for pay period including March 12 (number)` as `num_paid_employees`, `First-quarter payroll ($1,000)` as `first_q_payroll`, `Annual payroll ($1,000)` as `annual_payroll` from `county business patterns from factfinder.census.gov1` where year=2013 and `Meaning of 2012 NAICS code`='Total for all sectors';")
 
-	Education <- runSQL(con,"select `FIPS Code` as FIPS,`State` as `State`,`Area name` as `Area_name`,`2013 Rural-urban Continuum Code` as `2013_Rural-urban_Continuum_Code`,`2013 Urban Influence Code` as `2013_Urban_Influence_Code`,`Prc of adults with less than high school diploma, 2009-2013` as `Prc_of_adults_with_less_than_high_school_diploma_2009-2013`,`Prc of adults with a high school diploma only, 2009-2013` as `Prc_of_adults_with_a_high_school_diploma_only_2009-2013`,`Prc of adults compl some college or asc deg, 2009-2013` as `Prc_of_adults_compl_some_college_or_asc_deg_2009-2013`,`Prc of adults with a bachelor's deg or higher, 2009-2013` as `Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013` from `education1`;")
+  Education <- runSQL(con,"select `FIPS Code` as FIPS,`State` as `State`,`Area name` as `Area_name`,`2013 Rural-urban Continuum Code` as `2013_Rural-urban_Continuum_Code`,`2013 Urban Influence Code` as `2013_Urban_Influence_Code`,`Prc of adults with less than high school diploma, 2009-2013` as `Prc_of_adults_with_less_than_high_school_diploma_2009-2013`,`Prc of adults with a high school diploma only, 2009-2013` as `Prc_of_adults_with_a_high_school_diploma_only_2009-2013`,`Prc of adults compl some college or asc deg, 2009-2013` as `Prc_of_adults_compl_some_college_or_asc_deg_2009-2013`,`Prc of adults with a bachelor's deg or higher, 2009-2013` as `Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013` from `education1`;")
 
-	Disparity <- runSQL(con,"select * from `household income disparity1`;")
+  Disparity <- runSQL(con,"select * from `household income disparity1`;")
 
-	PopulationEstimates <- runSQL(con,"select FIPStxt as FIPS, State, Area_Name, `Rural-urban_Continuum Code_2013` as `Rural_urban_Continuum_Code_2013`, Urban_Influence_Code_2013, CENSUS_2010_POP, ESTIMATES_BASE_2010, POP_ESTIMATE_2014, N_POP_CHG_2014, Births_2014, Deaths_2014, NATURAL_INC_2014, INTERNATIONAL_MIG_2014, DOMESTIC_MIG_2014, NET_MIG_2014, RESIDUAL_2014, GQ_ESTIMATES_2014, R_birth_2014, R_death_2014, R_NATURAL_INC_2014, R_INTERNATIONAL_MIG_2014, R_DOMESTIC_MIG_2014, R_NET_MIG_2014 from `populationestimates`;")
+  PopulationEstimates <- runSQL(con,"select FIPStxt as FIPS, State, Area_Name, `Rural-urban_Continuum Code_2013` as `Rural_urban_Continuum_Code_2013`, Urban_Influence_Code_2013, CENSUS_2010_POP, ESTIMATES_BASE_2010, POP_ESTIMATE_2014, N_POP_CHG_2014, Births_2014, Deaths_2014, NATURAL_INC_2014, INTERNATIONAL_MIG_2014, DOMESTIC_MIG_2014, NET_MIG_2014, RESIDUAL_2014, GQ_ESTIMATES_2014, R_birth_2014, R_death_2014, R_NATURAL_INC_2014, R_INTERNATIONAL_MIG_2014, R_DOMESTIC_MIG_2014, R_NET_MIG_2014 from `populationestimates`;")
 
-	PovertyEstimates <- runSQL(con,"select * from `povertyestimates`;")
+  PovertyEstimates <- runSQL(con,"select * from `povertyestimates`;")
 
-	SocialCapital <- runSQL(con,"select * from `social_capital`;")
+  SocialCapital <- runSQL(con,"select * from `social_capital`;")
 
-	Unemployment <- runSQL(con,"select FIPS_Code as FIPS, State, Area_name, Rural_urban_continuum_code_2013, Urban_influence_code_2013, Civilian_labor_force_2014, Employed_2014, Unemployed_2014, Unemployment_rate_2014, Median_Household_Income_2013 from `unemployment`;")
+  Unemployment <- runSQL(con,"select FIPS_Code as FIPS, State, Area_name, Rural_urban_continuum_code_2013, Urban_influence_code_2013, Civilian_labor_force_2014, Employed_2014, Unemployed_2014, Unemployment_rate_2014, Median_Household_Income_2013 from `unemployment`;")
 
-	ZiptoFips <- runSQL(con,"Select ZCTA5,FIPS from ziptofips;")
+  ZiptoFips <- runSQL(con,"Select ZCTA5,FIPS from ziptofips;")
 
-	AllScumbags <- runSQL(con,"select zip as ZCTA5, count(pnum) as SBs from `aminno_member` where gender=2 and approved=1 and country=1 and zip is not NULL group by zip;")
+  AllScumbags <- runSQL(con,"select zip as ZCTA5, count(pnum) as SBs from `aminno_member` where gender=2 and approved=1 and country=1 and zip is not NULL group by zip;")
 
-    dbClearResult(rs)
-  dbDisconnect(con)
-  on.exit(dbDisconnect(con))
-	
-}
-
-MungMe <- function(){
-#Crap I forgot to do in SQL
-	#rename columns so that all FIPS columns are proerp
-  #AllScumbags <- rename(AllScumbags, c("zip"="ZCTA5"))
-	names(SocialCapital)[names(SocialCapital)=="fips"] <- "FIPS"
-	names(PovertyEstimates)[names(PovertyEstimates)=="FIPStxt"] <- "FIPS"
-	
-	#cast things properly 
-	Fruits_Vegetables[,1]=as.integer(Fruits_Vegetables[,1])
-	NumCompanies[,"first_q_payroll"]=as.integer(NumCompanies[,"first_q_payroll"])
-	NumCompanies[,"annual_payroll"]=as.integer(NumCompanies[,"annual_payroll"])
-	NumCompanies[,"num_paid_employees"]=as.integer(NumCompanies[,"num_paid_employees"])
+  ################################################################################################################################
+  #
+  # DATA MUNGING PART I - NAME COLUMNS PROPERLY, GET READY FOR THE MASS JOIN
+  #
+  ################################################################################################################################
+  names(SocialCapital)[names(SocialCapital)=="fips"] <- "FIPS"
+  names(PovertyEstimates)[names(PovertyEstimates)=="FIPStxt"] <- "FIPS"
+  
+  #cast things properly 
+  Fruits_Vegetables[,1]=as.integer(Fruits_Vegetables[,1])
+  NumCompanies[,"first_q_payroll"]=as.integer(NumCompanies[,"first_q_payroll"])
+  NumCompanies[,"annual_payroll"]=as.integer(NumCompanies[,"annual_payroll"])
+  NumCompanies[,"num_paid_employees"]=as.integer(NumCompanies[,"num_paid_employees"])
   PovertyEstimates[,"FIPS"]=as.integer(as.data.frame(PovertyEstimates)[,"FIPS"])
   Fruits_Vegetables[,"FIPS"]=as.integer(as.data.frame(Fruits_Vegetables)[,"FIPS"])
   SocialCapital[,"FIPS"]=as.integer(as.data.frame(SocialCapital)[,"FIPS"])
@@ -105,54 +161,196 @@ MungMe <- function(){
   ZiptoFips[,"FIPS"]=as.integer(as.data.frame(ZiptoFips)[,"FIPS"])
   ZiptoFips[,"ZCTA5"]=as.integer(as.data.frame(ZiptoFips)[,"ZCTA5"])
 
-  View(AllScumbags)	 
-	#fix ZiptoFips Index
-	Zeyu <- left_join(ZiptoFips,AllScumbags,by="ZCTA5")
+  #View(AllScumbags)  
+  #fix ZiptoFips Index
+  Zeyu <- left_join(ZiptoFips,AllScumbags,by="ZCTA5")
   Zeyu[Zeyu == ""] <- NA
-	Zeyu <- Zeyu[!is.na(Zeyu[, "SBs"]),]
-	allscumbags <- dplyr::group_by(Zeyu, FIPS) %>% dplyr::summarize(SBs=sum(SBs))
+  Zeyu <- Zeyu[!is.na(Zeyu[, "SBs"]),]
+  allscumbags <- dplyr::group_by(Zeyu, FIPS) %>% dplyr::summarize(SBs=sum(SBs))
 
-#   #TO DO - check out what's wrong with these variables:
-# aggr_plot <- aggr(t, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(t), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
-      #      annual_payroll 1.000000000
-      #          POV05_2013 1.000000000
-      #       CI90LB05_2013 1.000000000
-      #       CI90UB05_2013 1.000000000
-      #       PCTPOV05_2013 1.000000000
-      #      CI90LB05P_2013 1.000000000
-      #      CI90UB05P_2013 1.000000000
-      # no_exercise_percent 0.734161095
-      #  few_fruits_percent 0.686723973}
 
-BuildFinalTable <- function(){
-#Goes through all the data and does a join on Zip code (FIPS code)
-# ZiptoFips
+    #   #TO DO - check out what's wrong with these variables:
+    # aggr_plot <- aggr(t, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(t), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+          #      annual_payroll 1.000000000
+          #          POV05_2013 1.000000000
+          #       CI90LB05_2013 1.000000000
+          #       CI90UB05_2013 1.000000000
+          #       PCTPOV05_2013 1.000000000
+          #      CI90LB05P_2013 1.000000000
+          #      CI90UB05P_2013 1.000000000
+          # no_exercise_percent 0.734161095
+          #  few_fruits_percent 0.686723973}
 
-allData=list(Bankruptcy, Fruits_Vegetables, SocialCapital, Unemployment, Disparity, Education, No_Exercise, NumCompanies, PovertyEstimates, PopulationEstimates,allscumbags)
-
-  	i=1
-  	FIPS=Bankruptcy
-#  	FIPS=left_join(FIPS,allData[[i]],by="FIPS")
-   	for (i in 2:length(allData)){
-  	   print(paste("table ",i," ",nrow(allData[[i]])))
-   		 FIPS=left_join(FIPS,allData[[i]],by="FIPS")
-  		 print(paste("rows:",nrow(FIPS)))
-  	}
-
-  #Replace any blank values with NA.
+  ################################################################################################################################
   #
-  FIPS[FIPS == ""] <- NA
-#complete.cases(FIPS)
-md.pattern(FIPS)
-aggr_plot <- aggr(FIPS, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(FIPS), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+  # DATA MUNGING PART II - THE MASS LEFT JOIN ON ZIP CODE
+  #
+  ################################################################################################################################
 
+  #Goes through all the data and does a join on Zip code (FIPS code)
+  # ZiptoFips
+  allData=list(Bankruptcy, Fruits_Vegetables, SocialCapital, Unemployment, Disparity, Education, No_Exercise, NumCompanies, PovertyEstimates, PopulationEstimates,allscumbags)
 
-  	#Delete weird columns because I fell asleep at 2:00am at my desk
-  	#drops=c("CI90UBINC_2013","CI90LBINC_2013","R_NATURAL_INC_2014","R_NET_MIG_2014","R_DOMESTIC_MIG_2014","R_INTERNATIONAL_MIG_2014","CI90LBAll_2013","CI90UBALL_2013 ","CI90LB017_2013 ","CI90LB517_2013","CI90UB017_2013","CI90UB517_2013","CI90UB017P_2013","CI90UB517P_2013","CI90LB017P_2013","CI90UBALLP_2013","first_q_payrollPerCapita","num_paid_employees","Number of establishmentsPerCapita","annual_payrollPerCapita","POV05_2013PerCapita","CI90LB05_2013","CI90UB05_2013","PCTPOV05_2013","CI90LB05P_2013","CI90UB05P_2013")
-    drops=c("annual_payroll","POV05_2013","CI90LB05_2013","CI90UB05_2013","PCTPOV05_2013","CI90LB05P_2013","CI90UB05P_2013")
-  	FIPS=FIPS[,!(names(FIPS) %in% drops)]
+    i=1
+    FIPS=Bankruptcy
+    print(paste("# of FIPS Codes:",nrow(FIPS)))
+  #   FIPS=left_join(FIPS,allData[[i]],by="FIPS")
+    for (i in 2:length(allData)){
+       print(paste("Left Joining table ",i," ",nrow(allData[[i]])," Rows"))
+       FIPS=left_join(FIPS,allData[[i]],by="FIPS")
+    }
 
+  dbDisconnect(con)
+
+  return(FIPS)
+
+  on.exit(dbDisconnect(con))
 }
+
+Email_file_to_Slack <- function(Body,File_Location){
+  send.mail(from = "mrtdatascientist@gmail.com",
+  to = c("mrt.9msiu@zapiermail.com"),
+  subject = "Hello sucka",
+  body = Body,
+  html = FALSE,
+  smtp = list(host.name = "smtp.gmail.com", port = 465, user.name = "mrtdatascientist@gmail.com", passwd = "ipitythefool", ssl = TRUE),
+  attach.files = c(File_Location),
+  authenticate = TRUE,
+  send = TRUE)
+}
+
+print_and_save_graph <- function(execute_function,new_data,file_name){
+  data2=new_data
+  mypath <- file.path(imgpath,file_name)
+  jpeg(file=mypath)
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))
+  dev.off()
+  return(paste(imgpath,file_name,sep=""))
+}
+
+Missingness_Analysis <- function(FIPS){
+  data <- FIPS
+  #data <- titanic3
+  #data <- airquality
+
+  data[data == ""] <- NA
+
+  fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") 
+  Email_file_to_Slack("I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA.  Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",fileloc)
+
+  #Checking for more than 5% missing values in cols
+  pMiss <- function(x){sum(is.na(x))/length(x)*100}
+  badcols = apply(data,2,pMiss)
+
+  if(sum(badcols)>0){
+    #columns to remove
+    removecols=names(badcols[badcols>=Missing_cols_for_removal])
+    data <- data[,-which(names(data) %in% removecols)]
+
+    fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")
+    Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)
+  } 
+
+  #Checking for more than 5% missing values in rows
+  badrows = apply(data,1,pMiss)
+  if(sum(badrows[which(badrows>=5)])){
+    #Rows to remove
+    data <- data[which(badrows<=Missing_rows_for_removal),]
+
+    fileloc <- print_and_save_graph("aggr",data,"After_Row_Removal.jpg")
+    Email_file_to_Slack(paste(" WHOHA.  More than ",Missing_rows_for_removal,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)
+  }
+
+  # for (i in 1:39487) {
+  #   #ERROR HANDLING
+  #   possibleError <- tryCatch(
+  #       thing(),
+  #       error=function(e) e
+  #   )
+
+  #   if(!inherits(possibleError, "error")){
+  #     #REAL WORK
+  #     useful(i); fun(i); good(i);
+  #   }
+
+  # }  #end for
+}
+
+K_means_Clustering <- function(FIPS){
+
+  ######################################################################################
+  #
+  # Impute leftovers with K Means clustering
+  #
+  ######################################################################################
+  odata <- titanic3
+  odata <- airquality
+  odata <- data
+  odata <- FIPS
+
+  count(odata[odata == ""])
+
+  odata[odata == ""] <- NA
+  #tdata = titanic3[,c(1,2,4,5,6,7)]
+
+  #only build correlation on complete columns 
+  badcolnames = apply(odata,2,pMiss)
+  goodcols = names(odata[badcolnames==0])  #no missing data
+  badcols = names(odata[badcolnames>0])  # any missing data
+
+  #colnames(odata)[sapply(odata, class)=="character"]
+  for (i in 1:length(badcols)){
+    gdata = odata[,c(goodcols)]
+    bdata = odata[,c(badcols)]
+
+    current_var = badcols[i]
+    gdata[,current_var] <- odata[,current_var]
+
+    train = gdata[!is.na(gdata[,current_var]),]
+    test = gdata[is.na(gdata[,current_var]),]
+
+    regression_formula = as.formula(paste(current_var," ~ .",sep=""))
+    kknn1  = kknn(regression_formula, train, test, k = 1, distance = 1)
+    kknn2  = kknn(regression_formula, train, test, k = 1, distance = 2)
+    kknn10  = kknn(regression_formula, train, test, k = 1, distance = 10)
+
+    a1 = data.frame(test = kknn1$fitted.values, type = "kmeans k=1 dist=1")
+    a2 = data.frame(test = kknn2$fitted.values, type = "kmeans k=1 dist=2")
+    a3 = data.frame(test = kknn10$fitted.values, type = "kmeans k=1 dist=10")
+    colnames(a1)[1]=current_var
+    colnames(a2)[1]=current_var
+    colnames(a3)[1]=current_var
+
+    newdata = list(a1,a2,a3,data.frame(current_var = c(train[current_var]), type = "baseline"))
+    q3.4 = do.call(rbind, newdata)
+    ggplot(q3.4) + geom_density(aes(x = current_var, color = type))
+    
+    odata[current_var][is.na(odata[current_var])]=a3[,current_var]
+
+  }
+
+
+  # #Search for columns with a lot of missing data - drop them
+  # for (i in 1:length(colnames(cleanMe))){
+  #   YOB=colnames(cleanMe)[i]
+  #     if (class(cleanMe[,i])=="character"){ 
+  #     cleanMe[,i] <- cleanMe[,i] %>% mutate(YOB=ifelse(YOB=="",NA,as.character(YOB)))
+  #   }
+  # }
+
+  #Search for rows with a lot of missing data - drop them
+
+  #Delete weird columns because I fell asleep at 2:00am at my desk
+  #drops=c("CI90UBINC_2013","CI90LBINC_2013","R_NATURAL_INC_2014","R_NET_MIG_2014","R_DOMESTIC_MIG_2014","R_INTERNATIONAL_MIG_2014","CI90LBAll_2013","CI90UBALL_2013 ","CI90LB017_2013 ","CI90LB517_2013","CI90UB017_2013","CI90UB517_2013","CI90UB017P_2013","CI90UB517P_2013","CI90LB017P_2013","CI90UBALLP_2013","first_q_payrollPerCapita","num_paid_employees","Number of establishmentsPerCapita","annual_payrollPerCapita","POV05_2013PerCapita","CI90LB05_2013","CI90UB05_2013","PCTPOV05_2013","CI90LB05P_2013","CI90UB05P_2013")
+  #drops=c("annual_payroll","POV05_2013","CI90LB05_2013","CI90UB05_2013","PCTPOV05_2013","CI90LB05P_2013","CI90UB05P_2013")
+  #df=df[,!(names(df) %in% df)]
+
+  #complete.cases(FIPS)
+
+return(data)
+}
+
+
 
 LinearModelAnalysis <- function(){
   
@@ -414,9 +612,9 @@ SBmodel.back <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_
 makeplot <- function(){
 
 
-plot(lm(Sig,x ~ .))) #Conducting the One-Way ANOVA on the weight
+plot(lm(Sig,x ~ .)) #Conducting the One-Way ANOVA on the weight
 
-  plot(lm(x ~ y))) #Conducting the One-Way ANOVA on the weight
+  plot(lm(x ~ y)) #Conducting the One-Way ANOVA on the weight
   summary(aov(x ~ y)) #Conducting the One-Way ANOVA on the weight
   #loss by considering each category of diet.
 }
@@ -487,3 +685,7 @@ Prettyqplot<-function(xs,ys){
 # KXCD comics
 
 #my spotify playlist https://open.spotify.com/user/shanonlev/playlist/3mAMTVobhui7WNAnGowQQrFruits_Vegetables[,1]=as.numeric(Fruits_Vegetables[,1])
+
+
+
+
