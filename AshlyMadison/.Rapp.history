@@ -1,767 +1,897 @@
-confint(model)
-exit
-exit()
-j=2  #start at 2 because NewGuys first row is already initialized
-asdfadsfadsfadsf
-adsf
-adsfadsf
-a
-dsf
-adsf
-source("/Users/avi/boxer/bootcamp003_student/Project1-ExploreVis/AviYashchin_project_1/AviYashchin_project_1.1.R")
-source("/Users/avi/boxer/data/Week3LectureCodeData/04 Multiple Linear Regression Lecture Code.R")
-######################################################
-#####Example using the State Information Dataset######
-######################################################
-help(state.x77)#
-state.x77 #Investigating the state.x77 dataset.#
+paste(EmailMessage," More than ",#
+  Missing_rows_for_removal,#
+  "% of variables data missing for rows ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=","))#
+,", deleting. ",sep="")
+paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for columns '",#
+    do.call(paste, c(as.list(removecols)),sep=", "),#
+  "', deleting. ",sep="")
+paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for columns '",#
+    do.call(paste,sep=", ", c(as.list(removecols))),#
+  "', deleting. ",sep="")
+paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for columns '",#
+    do.call(paste, c(as.list(removecols))),#
+  "', deleting. ",sep="")
+paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for columns '",#
+    do.call(paste, as.list(removecols)),#
+  "', deleting. ",sep="")
+paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for columns '",#
+    paste(as.list(removecols))),#
+  "', deleting. ",sep="")
+paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for columns '",#
+    paste(as.list(removecols)),#
+  "', deleting. ",sep="")
+paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for columns '",#
+    do.call(paste, c(as.list(removecols),sep=", ")),#
+  "', deleting. ",sep="")
+paste(EmailMessage," More than ",#
+  Missing_rows_for_removal,#
+  "% of variables data missing for rows ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=","))#
+,", deleting. ",sep="")
+data <- titanic3#
 #
-states = as.data.frame(state.x77) #Forcing the state.x77 dataset to be a dataframe.#
+EmailMessage = "I'm assuming your files are Missing not at random. "#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+data <- data[ , -which(names(data) %in% removecols)]#
 #
-#Cleaning up the column names so that there are no spaces.#
-colnames(states)[4] = "Life.Exp"#
-colnames(states)[6] = "HS.Grad"#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for columns '",#
+    do.call(paste, c(as.list(removecols),sep=", ")),#
+  "', deleting. ",sep="")#
 #
-#Creating a population density variable.#
-states[,9] = (states$Population*1000)/states$Area#
-colnames(states)[9] = "Density"#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+data <- data[which(badrows<=5),]#
 #
-#Basic numerical EDA for states dataset.#
-summary(states)#
-sapply(states, sd)#
-cor(states)#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_rows_for_removal,#
+  "% of variables data missing for rows ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", "))#
+,", deleting. ",sep="")
+EmailMessage
+data <- FIPS#
 #
-#Basic graphical EDA for the states dataset.#
-plot(states)#
+EmailMessage = "I'm assuming your files are Missing not at random. "#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+data <- data[ , -which(names(data) %in% removecols)]#
 #
-#Can we estimate an individual's life expectancy based upon the state in which#
-#they reside?#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for column(s) '",#
+    do.call(paste, c(as.list(removecols),sep=", ")),#
+  "', deleting. ",sep="")#
 #
-#Creating a saturated model (a model with all variables included).#
-model.saturated = lm(Life.Exp ~ ., data = states)#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+data <- data[which(badrows<=5),]#
 #
-##################TEST#
-#adjust on highest Adjusted R-squared#
-#lowest AIC#
-st=states#
-variables = names(st)#
-independent = "Life.Exp"#
-eval(parse(text=paste("st$",independent," = 1",sep="")))#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_rows_for_removal,#
+  "% of variables data missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", "))#
+,", deleting. ",sep="")
+EmailMessage
+md.pattern(df)
+md.pattern(data)
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+data <- titanic3#
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+EmailMessage = "I'm assuming your files are Missing not at random. Any blank data is converted to NA"#
 #
-x <- st$Life.Exp#
-  for (i in 1:ncol(st)){#
-        y <- st[eval(colnames(st)[i])][,1]#
-        aovr <- summary(lm(x ~ y)) #Conducting the One-Way ANOVA on the weight#
-        Pr_of_y = aovr$coefficients[,"Pr(>|t|)"]["y"]#
-      if (Pr_of_y<0.025){ #
-        print(paste("  SIGNIFICANT Name:",#
-          colnames(st)[i]," Adjr2:",aovr$adj.r.squared,"Pr(>|t|):",Pr_of_y))#
-      }else{#
-        print(paste("INSIGNIFICANT Name:",#
-          colnames(st)[i]," Adjr2:",aovr$adj.r.squared,"Pr(>|t|):",Pr_of_y))#
-      }#
-  }#
-##################TEST#
+data[data == ""] <- NA#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+data <- data[ , -which(names(data) %in% removecols)]#
 #
-summary(model.saturated) #Many predictor variables are not significant, yet the#
-                         #overall regression is significant.#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for column(s) '",#
+    do.call(paste, c(as.list(removecols),sep=", ")),#
+  "', deleting. ",sep="")#
 #
-plot(model.saturated) #Assessing the assumptions of the model.#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+data <- data[which(badrows<=5),]#
 #
-library(car) #Companion to applied regression.#
-influencePlot(model.saturated)#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_rows_for_removal,#
+  "% of variables data missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", "))#
+,", deleting. ",sep="")
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+data <- titanic3#
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))#
 #
-vif(model.saturated) #Assessing the variance inflation factors for the variables#
-                     #in our model.#
+EmailMessage = "I'm assuming your files are Missing not at random. Any blank data is converted to NA"#
 #
-#Added variable plots for assessing the contribution of each additional variable.#
-avPlots(model.saturated) #Distinct patterns are indications of good contributions#
-                         #to the model; absent patterns usually are pointers to#
-                         #variables that could be dropped from the model.#
+data[data == ""] <- NA#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+data <- data[ , -which(names(data) %in% removecols)]#
 #
-#We note that Illiteracy has a large VIF, an insignificant p-value in the overall#
-#regression, and no strong distinct pattern in the added-variable plot. What#
-#happens when we remove it from the model?#
-model2 = lm(Life.Exp ~ . - Illiteracy, data = states)#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for column(s) '",#
+    do.call(paste, c(as.list(removecols),sep=", ")),#
+  "', deleting. ",sep="")#
 #
-summary(model2) #R^2 adjusted went up, model still significant, etc.#
-summary(model.saturated)#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+data <- data[which(badrows<=5),]#
 #
-plot(model2) #No overt additional violations.#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_rows_for_removal,#
+  "% of variables data missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", "))#
+,", deleting. ",sep="")
+data
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+data <- titanic3#
 #
-influencePlot(model2) #No overt additional violations; Hawaii actually lowers#
-                      #its hat value (leverage).#
+par(mfrow=c(2,1)) #2x2 plot#
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("myplot_", "Missingness", ".jpg", sep = ""))#
 #
-vif(model2) #VIFs all decrease.#
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))#
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))#
 #
-#We can compare these two models using a partial F-test using the anova function.#
-#Here, the first model we supply is the reduced model, and the second is the full#
-#model.#
-anova(model2, model.saturated) #The p-value is quite large, indicating that we#
-                               #retain the null hypothesis. Recall that the null#
-                               #hypothesis is that the slope coefficients of the#
-                               #variables in the subset of interest are all 0.#
-                               #We retain this hypothesis and conclude that the#
-                               #Illiteracy variable is not informative in our#
-                               #model; we move forward with the reduced model.#
+EmailMessage = "I'm assuming your files are Missing not at random. Any blank data is converted to NA"#
 #
-#Let's use the partial F-test to test multiple predictors at once. As compared#
-#to the saturated model, does the subset of Illiteracy, Area, and Income have#
-#any effect on our prediction of Life.Exp?#
-model.full = lm(Life.Exp ~ ., data = states)#
-model.reduced = lm(Life.Exp ~ . - Illiteracy - Area - Income, data = states)#
+data[data == ""] <- NA#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+data <- data[ , -which(names(data) %in% removecols)]#
 #
-anova(model.reduced, model.full) #The p-value is quite large; thus, the reduced#
-                                 #model is sufficient.#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for column(s) '",#
+    do.call(paste, c(as.list(removecols),sep=", ")),#
+  "', deleting. ",sep="")#
 #
-#Checking the model summary and assumptions of the reduced model.#
-summary(model.reduced)#
-plot(model.reduced)#
-influencePlot(model.reduced)#
-vif(model.reduced)#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+data <- data[which(badrows<=5),]#
 #
-#We can also inspect the AIC and BIC values to compare various models.#
-AIC(model.full,    #Model with all variables.#
-    model2,        #Model with all variables EXCEPT Illiteracy.#
-    model.reduced) #Model with all variables EXCEPT Illiteracy, Area, and Income.#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_rows_for_removal,#
+  "% of variables data missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", "))#
+,", deleting. ",sep="")#
 #
-BIC(model.full,#
-    model2,#
-    model.reduced) #Both the minimum AIC and BIC values appear alongside the#
-                   #reduced model that we tested above.
-Sig[Sig == ""] <- NA#
-SBmodel.empty = lm(SBsPerCapita ~ 1, data = Sig) #The model with an intercept ONLY.#
-SBmodel.full = lm(SBsPerCapita ~ ., data = Sig) #The model with ALL variables.#
-scope = list(lower = formula(SBmodel.empty), upper = formula(SBmodel.full))#
+data#
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))#
+dev.off()
+dev.off()
+data <- titanic3#
 #
-library(MASS) #The Modern Applied Statistics library.#
+par(mfrow=c(1,2)) #2x2 plot#
+#jpeg(file=mypath)#
+#mypath <- file.path(path,paste("plots/myplot_", "Missingness", ".jpg", sep = ""))#
 #
-#Stepwise regression using AIC as the criteria (the penalty k = 2).#
-forwardAIC = step(SBmodel.empty, scope, direction = "forward", k = 2)
-library(dplyr)#
-	library(reshape2)#
-	library(ggplot2)#
-	library(lattice)#
-	library(DBI)#
-	library(RMySQL)#
-	library(plyr)#
-  library(PASWR)#
-  library(mice)#
-  library(VIM)#
-  library("ggthemes")#
-	setwd("/Users/avi/boxer/AshlyMadison/")
-getConnection <- function() {#
-  if (!exists('.connection', where=.GlobalEnv)) {#
-    .connection <<- dbConnect(MySQL(max.con = 1), user="root" , password="uLFZ2WoB" , dbname="test" , host="130.211.154.93")#
-  } else if (class(try(dbGetQuery(.connection, "SELECT 1"))) == "try-error") {#
-    dbDisconnect(.connection)#
-    .connection <<- dbConnect(MySQL(max.con = 1), user="root" , password="uLFZ2WoB" , dbname="test" , host="130.211.154.93")#
-  }#
-  return(.connection)#
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))#
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))#
+#
+EmailMessage = "I'm assuming your files are Missing not at random. Any blank data is converted to NA"#
+#
+data[data == ""] <- NA#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+data <- data[ , -which(names(data) %in% removecols)]#
+#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for column(s) '",#
+    do.call(paste, c(as.list(removecols),sep=", ")),#
+  "', deleting. ",sep="")#
+#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+data <- data[which(badrows<=5),]#
+#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_rows_for_removal,#
+  "% of variables data missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", "))#
+,", deleting. ",sep="")#
+#
+data#
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+par(mfrow=c(1,2)) #2x2 plot
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+plot()
+plot(x)
+par(mfrow=c(1,3)) #2x2 plot
+aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+dev.off
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))
+aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))
+dev.off
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+call("aggr",aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c('BEFORE: Histogram of missing data','Pattern')))#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+call("aggr",data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c('BEFORE: Histogram of missing data','Pattern'))#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+do.call("aggr",data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c('BEFORE: Histogram of missing data','Pattern'))#
+dev.off()
+call("aggr","data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c('BEFORE: Histogram of missing data','Pattern')")#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+call("aggr","data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c('BEFORE: Histogram of missing data','Pattern')")#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+call("aggr","data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c('BEFORE: Histogram of missing data','Pattern')")#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+aggr(data, params)#
+#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+call("aggr",data,params)#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+call("aggr",data,params)#
+dev.off()
+do.call("aggr",data,params)
+eval("aggr",data,params)
+do.call("aggr",data,params)
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+do.call("aggr",c(data,params))#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+do.call("aggr",c(data,params))#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+do.call("aggr",c(data,params))#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+do.call("aggr",c(data,params))#
+dev.off()
+data <- titanic3
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+do.call("aggr",c(data,params))#
+dev.off()
+do.call("aggr",data,params)
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+do.call("aggr",data,params)#
+dev.off()
+params = c(data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+do.call("aggr",params)
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+do.call("aggr",params)#
+dev.off()
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+#
+params = c(data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))#
+#aggr(data, params)#
+do.call("aggr",data)#
+dev.off()
+aggr(data, params)
+aggr(data, params)
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))
+aggr(data, params)
+do.call("aggr",data)
+aggr(data)
+aggr(data)
+do.call("aggr",data)
+do.call("aggr",c(data))
+data
+aggr(data)
+eval(call("aggr",data))
+eval(call("aggr",data,params))
+eval(call("aggr",data))
+params = c(col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern"))
+eval(call("aggr",data,params))
+eval(call("aggr",data),params)
+eval(call("aggr",data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern")))
+jpeg(file=mypath)#
+mypath <- file.path(path,paste("plots/myplot_", "Before_Missingness", ".jpg", sep = ""))#
+eval(call("aggr",data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(df), cex.axis=.7, gap=3, ylab=c("BEFORE: Histogram of missing data","Pattern")))#
+dev.off()
+print_and_save_graph <- function(execute_function,data,file_name){#
+  jpeg(file=mypath)#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  eval(call(execute_function,data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c(file_name)))#
+  dev.off()#
+}
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")
+print_and_save_graph <- function(execute_function,data2,file_name){#
+  jpeg(file=mypath)#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2), cex.axis=.7, gap=3, ylab=c(file_name)))#
+  dev.off()#
+}
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+data2=new_data#
+  jpeg(file=mypath)#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2), cex.axis=.7, gap=3, ylab=c(file_name)))#
+  dev.off()#
+}
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+data2=new_data#
+  jpeg(file=mypath)#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2), cex.axis=.7, gap=3, ylab=file_name))#
+  dev.off()#
+}
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+data2=new_data#
+  jpeg(file=mypath)#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))#
+  dev.off()#
+}
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")
+data[data == ""] <- NA#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+data <- data[ , -which(names(data) %in% removecols)]#
+#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_cols_for_removal,#
+  "% of variables data missing for column(s) '",#
+    do.call(paste, c(as.list(removecols),sep=", ")),#
+  "', deleting. ",sep="")#
+#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+data <- data[which(badrows<=5),]#
+#
+EmailMessage = paste(EmailMessage," More than ",#
+  Missing_rows_for_removal,#
+  "% of variables data missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", "))#
+,", deleting. ",sep="")#
+#
+print_and_save_graph("aggr",data,"After_Missingness_Adjustment")
+print_and_save_graph("aggr",data,"After_Missingness_Adjustment")
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+  data2=new_data#
+  jpeg(file=mypath)#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))#
+  dev.off()#
+}
+print_and_save_graph("aggr",data,"After_Missingness_Adjustment")
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+  data2=new_data#
+  jpeg(file=mypath)#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))#
+  dev.off()#
+}
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+  data2=new_data#
+  jpeg(file=mypath)#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))#
+  dev.off()#
+}
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")
+ls()
+rm(print_and_save_graph)
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+  data2=new_data#
+  jpeg(file=mypath)#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))#
+  dev.off()#
+}
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")
+print_and_save_graph
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+  data2=new_data#
+  mypath <- file.path(path,paste("plots/",file_name, ".jpg", sep = ""))#
+  jpeg(file=mypath)#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))#
+  dev.off()#
+}
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")
+badcols = apply(data,2,pMiss)
+badcols
+data <- titanic3
+badcols = apply(data,2,pMiss)
+badcols
+sum(badcols)
+badrows = apply(data,1,pMiss)
+badrows
+sum(badrows)
+sum(badrows[which(badrows<=5)])
+sum(badrows[which(badrows>=5)])
+badrows[which(badrows>=5)]
+badrows[which(badrows>=5)]
+data[data == ""] <- NA
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")#
+#
+if(sum(badcols)>0){#
+#
+  print_and_save_graph("aggr",data,"After_Column_Adjustment")#
+  removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+  data <- data[ , -which(names(data) %in% removecols)]#
+#
+  EmailMessage = paste(EmailMessage," BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', deleting. ",sep="")#
+}
+badrows = apply(data,1,pMiss)
+badrows
+badrows[whihc(badrows>=5)]
+badrows[whihc(badrows>-=5)]
+badrows[whihc(badrows>=5)]
+badrows[which(badrows>=5)]
+sum(badrows[which(badrows>=5)]))
+sum(badrows[which(badrows>=5)]))
+sum(badrows[which(badrows>=5)])
+Email_file_to_Slack <- function(Body,File_Location){#
+  send.mail(from = "mrtdatascientist@gmail.com",#
+  to = c("mrt.9msiu@zapiermail.com"),#
+  #subject = Body,#
+  body = Body,#
+  html = FALSE,#
+  smtp = list(host.name = "smtp.gmail.com", port = 465, user.name = "mrtdatascientist@gmail.com", passwd = "ipitythefool", ssl = TRUE),#
+  attach.files = c(File_Location),#
+  authenticate = TRUE,#
+  send = TRUE)#
+}
+EmailBody=c()#
+EmailAttachments=c()#
+EmailMessage = "I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == \\"\\"] <- NA."#
+#
+data <- FIPS#
+data <- titanic3
+EmailMessage = "I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == \"\""] <- NA."
+EmailMessage = "I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == """"] <- NA."
+EmailMessage = "I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA."
+EmailBody=c()#
+EmailAttachments=c()#
+EmailMessage = "I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA."#
+#
+data <- FIPS#
+data <- titanic3
+#par(mfrow=c(1,3)) #2x2 plot#
+data[data == ""] <- NA#
+#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")#
+EmailAttachments=c(EmailAttachments,paste(path,"/plots/","Before_Missingness_Adjustment.jpg"))#
+#
+if(sum(badcols)>0){#
+  removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+  data <- data[ , -which(names(data) %in% removecols)]#
+#
+  EmailMessage = paste(EmailMessage," BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', deleting. ",sep="")#
+  print_and_save_graph("aggr",data,"After_Column_Removal")#
+  EmailAttachments=c(EmailAttachments,paste(path,"/plots/","After_Column_Removal.jpg"))#
+}#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+#
+if(sum(badrows[which(badrows>=5)])){#
+#
+  data <- data[which(badrows<=5),]#
+#
+  EmailMessage = paste(EmailMessage," WHOHA.  More than ",#
+    Missing_rows_for_removal,#
+    "% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", "))#
+  ,", so I deleted them! CLEAN YO DATA. ",sep="")#
+  print_and_save_graph("aggr",data,"After_Row_Removal")#
+  EmailAttachments=c(EmailAttachments,paste(path,"/plots/","After_Row_Removal.jpg"))#
+}
+Email_file_to_Slack(EmailBody,EmailAttachments)
+EmailAttachments
+EmailAttachments=c()
+EmailAttachments=c(EmailAttachments,paste(path,"/plots/","Before_Missingness_Adjustment.jpg",sep=""))
+EmailAttachments
+EmailAttachments=c(EmailAttachments,paste(path,"/plots/","After_Column_Removal.jpg",sep=""))
+EmailAttachments=c(EmailAttachments,paste(path,"/plots/","After_Row_Removal.jpg",sep=""))
+EmailAttachments
+Email_file_to_Slack(EmailBody,EmailAttachments)
+Email_file_to_Slack <- function(Body,File_Location){#
+  send.mail(from = "mrtdatascientist@gmail.com",#
+  to = c("mrt.9msiu@zapiermail.com"),#
+  #subject = Body,#
+  body = Body,#
+  html = FALSE,#
+  smtp = list(host.name = "smtp.gmail.com", port = 465, user.name = "mrtdatascientist@gmail.com", passwd = "ipitythefool", ssl = TRUE),#
+  attach.files = File_Location,#
+  authenticate = TRUE,#
+  send = TRUE)#
+}
+Email_file_to_Slack(EmailBody,EmailAttachments)
+Email_file_to_Slack <- function(Body,File_Location){#
+  send.mail(from = "mrtdatascientist@gmail.com",#
+  to = c("mrt.9msiu@zapiermail.com"),#
+  subject = "Hello sucka",#
+  body = Body,#
+  html = FALSE,#
+  smtp = list(host.name = "smtp.gmail.com", port = 465, user.name = "mrtdatascientist@gmail.com", passwd = "ipitythefool", ssl = TRUE),#
+  attach.files = File_Location,#
+  authenticate = TRUE,#
+  send = TRUE)#
+}
+Email_file_to_Slack(EmailBody,EmailAttachments)
+EmailBody
+EmailMessage
+EmailBody = EMailMessage
+EmailBody
+EmailMessage
+EmailBody = EmailMessage
+EmailBody
+Email_file_to_Slack(EmailBody,EmailAttachments)
+Email_file_to_Slack <- function(Body,File_Location){#
+  send.mail(from = "mrtdatascientist@gmail.com",#
+  to = c("mrt.9msiu@zapiermail.com"),#
+  subject = "Hello sucka",#
+  body = Body,#
+  html = FALSE,#
+  smtp = list(host.name = "smtp.gmail.com", port = 465, user.name = "mrtdatascientist@gmail.com", passwd = "ipitythefool", ssl = TRUE),#
+  attach.files = c(File_Location),#
+  authenticate = TRUE,#
+  send = TRUE)#
+}
+Email_file_to_Slack(EmailBody,EmailAttachments)
+EmailAttachments=c()
+EmailAttachments=c(EmailAttachments,paste(path,"/plots/","Before_Missingness_Adjustment.jpg",sep=""))
+Email_file_to_Slack(EmailBody,EmailAttachments)
+EmailBody=c()#
+EmailAttachments=c()#
+EmailBody = "I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA."#
+#
+data <- FIPS#
+data <- titanic3#
+#
+#par(mfrow=c(1,3)) #2x2 plot#
+data[data == ""] <- NA#
+#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")#
+EmailAttachments=c(EmailAttachments,paste(path,"/plots/","Before_Missingness_Adjustment.jpg",sep=""))#
+#
+if(sum(badcols)>0){#
+  removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+  data <- data[ , -which(names(data) %in% removecols)]#
+#
+  EmailBody = paste(EmailBody," BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I'm deleting them. ",sep="")#
+  print_and_save_graph("aggr",data,"After_Column_Removal")#
+  EmailAttachments=c(EmailAttachments,paste(path,"/plots/","After_Column_Removal.jpg",sep=""))#
+}#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+#
+if(sum(badrows[which(badrows>=5)])){#
+#
+  data <- data[which(badrows<=5),]#
+#
+  EmailBody = paste(EmailBody," WHOHA.  More than ",#
+    Missing_rows_for_removal,#
+    "% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", "))#
+  ,", so I deleted them! CLEAN YO DATA. ",sep="")#
+  print_and_save_graph("aggr",data,"After_Row_Removal")#
+  EmailAttachments=c(EmailAttachments,paste(path,"/plots/","After_Row_Removal.jpg",sep=""))#
 }#
 #
-runSQL <- function(con,Query){#
-  rs <- dbSendQuery(con, Query)#
-  tempsql <- fetch(rs,n=-1)#
-  return(tempsql);#
+Email_file_to_Slack(EmailBody,EmailAttachments)
+data <- titanic3
+data[data == ""] <- NA
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)
+badcols
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment")#
+EmailAttachments=c(EmailAttachments,paste(path,"/plots/","Before_Missingness_Adjustment.jpg",sep=""))
+aggr(data)
+Missing_cols_for_removal
+badcols>=Missing_cols_for_removal]
+badcols[badcols>=Missing_cols_for_removal]
+pMiss <- function(x){sum(is.na(x))/length(x)*100}
+pMiss <- function(x){sum(is.na(x))/length(x)*100}
+badcols = apply(data,2,pMiss)
+badcols
+View(data)
+[data == ""]
+data[data == ""]
+data <- titanic3
+data[data == ""]
+data[data == ""]
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+  data2=new_data#
+  mypath <- file.path(imgpath,file_name)#
+  jpeg(file=mypath)#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))#
+  dev.off()#
+  return(paste(imgpath,file_name,sep=""))#
 }
-con <- dbConnect(MySQL(max.con = 1), user="root" , password="uLFZ2WoB" , dbname="test" , host="130.211.154.93")#
-#
-  #load first set of MYSQL queries#
-#	rs <- dbSendQuery(con, "select `Locale County FIPS Code` as FIPS,`Numeric Value` as `no_exercise_percent` from `120 - no exercise adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")#
-#	No_Exercise <- fetch(rs,n=-1)#
-	No_Exercise <- runSQL(con,"select `Locale County FIPS Code` as FIPS,`Numeric Value` as `no_exercise_percent` from `120 - no exercise adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")#
-	Fruits_Vegetables <- runSQL(con,"select `Locale County FIPS Code` as FIPS,`Numeric Value` as `few_fruits_percent` from `121 - few fruitsvegetables adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")#
-#
-  No_Exercise <- runSQL(con,"select `Locale County FIPS Code` as FIPS,`Numeric Value` as `no_exercise_percent` from `120 - no exercise adults (percent) - national` where Timeframe=2009 and `Numeric Value` is NOT NULL;")#
-#
-	Bankruptcy <- runSQL(con,"select `Circ/Dist and County`,`County Code` as `FIPS`,sum(`All FilingsTotal`) as `All FilingsTotal`,sum(`Business Filings Total`) as `Business Filings Total`,sum(`Nonbusiness Filings Total`) as `Nonbusiness Filings Total` from `bankruptcy` group by `County Code`;")#
-#
-	NumCompanies <- runSQL(con,"select `FIPS`,`Number of establishments`, `Paid employees for pay period including March 12 (number)` as `num_paid_employees`, `First-quarter payroll ($1,000)` as `first_q_payroll`, `Annual payroll ($1,000)` as `annual_payroll` from `county business patterns from factfinder.census.gov1` where year=2013 and `Meaning of 2012 NAICS code`='Total for all sectors';")#
-#
-	Education <- runSQL(con,"select `FIPS Code` as FIPS,`State` as `State`,`Area name` as `Area_name`,`2013 Rural-urban Continuum Code` as `2013_Rural-urban_Continuum_Code`,`2013 Urban Influence Code` as `2013_Urban_Influence_Code`,`Prc of adults with less than high school diploma, 2009-2013` as `Prc_of_adults_with_less_than_high_school_diploma_2009-2013`,`Prc of adults with a high school diploma only, 2009-2013` as `Prc_of_adults_with_a_high_school_diploma_only_2009-2013`,`Prc of adults compl some college or asc deg, 2009-2013` as `Prc_of_adults_compl_some_college_or_asc_deg_2009-2013`,`Prc of adults with a bachelor's deg or higher, 2009-2013` as `Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013` from `education1`;")#
-#
-	Disparity <- runSQL(con,"select * from `household income disparity1`;")#
-#
-	PopulationEstimates <- runSQL(con,"select FIPStxt as FIPS, State, Area_Name, `Rural-urban_Continuum Code_2013` as `Rural_urban_Continuum_Code_2013`, Urban_Influence_Code_2013, CENSUS_2010_POP, ESTIMATES_BASE_2010, POP_ESTIMATE_2014, N_POP_CHG_2014, Births_2014, Deaths_2014, NATURAL_INC_2014, INTERNATIONAL_MIG_2014, DOMESTIC_MIG_2014, NET_MIG_2014, RESIDUAL_2014, GQ_ESTIMATES_2014, R_birth_2014, R_death_2014, R_NATURAL_INC_2014, R_INTERNATIONAL_MIG_2014, R_DOMESTIC_MIG_2014, R_NET_MIG_2014 from `populationestimates`;")#
-#
-	PovertyEstimates <- runSQL(con,"select * from `povertyestimates`;")#
-#
-	SocialCapital <- runSQL(con,"select * from `social_capital`;")#
-#
-	Unemployment <- runSQL(con,"select FIPS_Code as FIPS, State, Area_name, Rural_urban_continuum_code_2013, Urban_influence_code_2013, Civilian_labor_force_2014, Employed_2014, Unemployed_2014, Unemployment_rate_2014, Median_Household_Income_2013 from `unemployment`;")#
-#
-	ZiptoFips <- runSQL(con,"Select ZCTA5,FIPS from ziptofips;")#
-#
-	AllScumbags <- runSQL(con,"select zip as ZCTA5, count(pnum) as SBs from `aminno_member` where gender=2 and approved=1 and country=1 and zip is not NULL group by zip;")
-#rename columns so that all FIPS columns are proerp#
-  #AllScumbags <- rename(AllScumbags, c("zip"="ZCTA5"))#
-	names(SocialCapital)[names(SocialCapital)=="fips"] <- "FIPS"#
-	names(PovertyEstimates)[names(PovertyEstimates)=="FIPStxt"] <- "FIPS"#
-	#cast things properly #
-	Fruits_Vegetables[,1]=as.integer(Fruits_Vegetables[,1])#
-	NumCompanies[,"first_q_payroll"]=as.integer(NumCompanies[,"first_q_payroll"])#
-	NumCompanies[,"annual_payroll"]=as.integer(NumCompanies[,"annual_payroll"])#
-	NumCompanies[,"num_paid_employees"]=as.integer(NumCompanies[,"num_paid_employees"])#
-  PovertyEstimates[,"FIPS"]=as.integer(as.data.frame(PovertyEstimates)[,"FIPS"])#
-  Fruits_Vegetables[,"FIPS"]=as.integer(as.data.frame(Fruits_Vegetables)[,"FIPS"])#
-  SocialCapital[,"FIPS"]=as.integer(as.data.frame(SocialCapital)[,"FIPS"])#
-#
-  AllScumbags$ZCTA5 <- iconv(AllScumbags$ZCTA5,"WINDOWS-1252","UTF-8")#
-  AllScumbags[,"ZCTA5"]=as.integer(as.data.frame(AllScumbags)[,"ZCTA5"])#
-  ZiptoFips[,"FIPS"]=as.integer(as.data.frame(ZiptoFips)[,"FIPS"])#
-  ZiptoFips[,"ZCTA5"]=as.integer(as.data.frame(ZiptoFips)[,"ZCTA5"])#
-#
-  View(AllScumbags)	 #
-	#fix ZiptoFips Index#
-	Zeyu <- left_join(ZiptoFips,AllScumbags,by="ZCTA5")#
-  Zeyu[Zeyu == ""] <- NA#
-	Zeyu <- Zeyu[!is.na(Zeyu[, "SBs"]),]#
-	allscumbags <- dplyr::group_by(Zeyu, FIPS) %>% dplyr::summarize(SBs=sum(SBs))
-allData=list(Bankruptcy, Fruits_Vegetables, SocialCapital, Unemployment, Disparity, Education, No_Exercise, NumCompanies, PovertyEstimates, PopulationEstimates,allscumbags)#
-#
-  	i=1#
-  	FIPS=Bankruptcy#
-#  	FIPS=left_join(FIPS,allData[[i]],by="FIPS")#
-   	for (i in 2:length(allData)){#
-  	   print(paste("table ",i," ",nrow(allData[[i]])))#
-   		 FIPS=left_join(FIPS,allData[[i]],by="FIPS")#
-  		 print(paste("rows:",nrow(FIPS)))#
-  	}#
-#
-  #Replace any blank values with NA.#
-  ##
-  FIPS[FIPS == ""] <- NA
-aggr_plot <- aggr(FIPS, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(FIPS), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))#
-  	#Delete weird columns because I fell asleep at 2:00am at my desk#
-  	#drops=c("CI90UBINC_2013","CI90LBINC_2013","R_NATURAL_INC_2014","R_NET_MIG_2014","R_DOMESTIC_MIG_2014","R_INTERNATIONAL_MIG_2014","CI90LBAll_2013","CI90UBALL_2013 ","CI90LB017_2013 ","CI90LB517_2013","CI90UB017_2013","CI90UB517_2013","CI90UB017P_2013","CI90UB517P_2013","CI90LB017P_2013","CI90UBALLP_2013","first_q_payrollPerCapita","num_paid_employees","Number of establishmentsPerCapita","annual_payrollPerCapita","POV05_2013PerCapita","CI90LB05_2013","CI90UB05_2013","PCTPOV05_2013","CI90LB05P_2013","CI90UB05P_2013")#
-    drops=c("annual_payroll","POV05_2013","CI90LB05_2013","CI90UB05_2013","PCTPOV05_2013","CI90LB05P_2013","CI90UB05P_2013")#
-#
-  	FIPS=FIPS[,!(names(FIPS) %in% drops)]
-#    SEPARATES CONTINUOUS AND CATEGORICAL VARIABLES#
-  	j=2  #start at 2 because NewGuys first row is already initialized#
-    k=2#
-  	continuousVariables<-as.data.frame(FIPS$FIPS)#
-  	categoricalVariables<-as.data.frame(FIPS$FIPS)#
-  	#find non-numeric names#
-     	for (i in 1:length(colnames(FIPS))){#
-  	   print(paste("coltype ",i," ",colnames(FIPS)[i]," ",class(FIPS[,i])))#
-     	  if (class(FIPS[,i])=="integer"){ #
-     	    continuousVariables[j]<-FIPS[i]#
-     	    j<-j+1#
-     	  }else{#
-       	    if (class(FIPS[,i])=="numeric"){ #
-       	      continuousVariables[j]<-FIPS[i]#
-       	      j<-j+1#
-       	    }else{#
-       	      categoricalVariables[k]<-FIPS[i]#
-              k<-k+1#
-            }#
-     	  }#
-     	}#
-  	#Which columns to use#
-  	MakeMePerCapita <- c("All FilingsTotal",#
-  	                     "Business Filings Total",#
-  	                     "Nonbusiness Filings Total", #
-  	                     "Number of establishments",#
-  	                     #"Paid employees for pay period including March 12 (number)", #
-  	                     #"first_q_payroll",#
-  	                     #"annual_payroll", #
-  	                     "N_POP_CHG_2014",#
-  	                     "Births_2014", #
-  	                     "Deaths_2014", #
-  	                     "NATURAL_INC_2014",#
-  	                     "INTERNATIONAL_MIG_2014",#
-  	                     "DOMESTIC_MIG_2014", #
-  	                     "NET_MIG_2014",#
-  	                     "RESIDUAL_2014", #
-  	                     "GQ_ESTIMATES_2014", #
-  	                     "POVALL_2013", #
-  	                     "POV017_2013",#
-  	                     "POV517_2013", #
-  	                     #"POV05_2013",#
-  	                     "Civilian_labor_force_2014",#
-  	                     "Employed_2014",#
-  	                     "Unemployed_2014",#
-  	                     "SBs")#
-  	percapita<-FIPS[2]#
-i=1#
-  	for (i in 1:length(MakeMePerCapita)){#
-  	    print(paste("MakeMePerCapita ",i," ",colnames(continuousVariables[eval(MakeMePerCapita[i])])))#
-    	  ((continuousVariables[,eval(MakeMePerCapita[i])]=continuousVariables[,eval(MakeMePerCapita[i])]/continuousVariables[,"POP_ESTIMATE_2014"]))#
-  	  #rename columns that have been adjusted to Per Capita Columns#
-    	  names(continuousVariables)[names(continuousVariables)==eval(MakeMePerCapita[i])] <- paste(eval(MakeMePerCapita[i]),"PerCapita",sep="")#
-  	  }
-SBMatrix<-cor(final, method = "spearman", use = "pairwise")#
-  sort(SBMatrix[nrow(SBMatrix),])
-#------- CHECK FOR THESE FOR EACH OF THE INPUT VARIABLES  ----------#
-#➢ Linearity#
-#➢ Constant Variance#
-#➢ Normality  #
-#➢ Independent Errors#
-#
-Sig=final[1]#
-NoSig=final[1]#
-#i=3#
-i=1#
-  #find non-numeric names#
-x <- final$SBsPerCapita#
-  for (i in 1:nrow(SBMatrix)){#
-        y <- final[eval(colnames(SBMatrix)[i])][,1]#
-        qplot(x, y, geom = "smooth")#
-        qplot(x, y)#
-        #aovr <- summary(aov(x ~ y),na.rm="TRUE") #Conducting the One-Way ANOVA on the weight#
-        aovr <- summary(aov(x ~ y,na.rm="TRUE")) #Conducting the One-Way ANOVA on the weight#
-      if (aovr[[1]][5][1,]<0.025){ #
-        print(paste("SIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-        Sig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }else{#
-      print(paste("INSIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-      NoSig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }#
-  }#
+print_and_save_graph <- function(execute_function,new_data,file_name){#
+  data2=new_data#
+  mypath <- file.path(imgpath,file_name)#
+  jpeg(file=mypath)#
+  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))#
+  dev.off()#
+  return(paste(imgpath,file_name,sep=""))#
 }
-Sig=final[1]#
-NoSig=final[1]#
-#i=3#
-i=1#
-  #find non-numeric names#
-x <- final$SBsPerCapita#
-  for (i in 1:nrow(SBMatrix)){#
-        y <- final[eval(colnames(SBMatrix)[i])][,1]#
-        qplot(x, y, geom = "smooth")#
-        qplot(x, y)#
-        #aovr <- summary(aov(x ~ y),na.rm="TRUE") #Conducting the One-Way ANOVA on the weight#
-        aovr <- summary(aov(x ~ y,na.rm="TRUE")) #Conducting the One-Way ANOVA on the weight#
-      if (aovr[[1]][5][1,]<0.025){ #
-        print(paste("SIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-        Sig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }else{#
-      print(paste("INSIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-      NoSig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }#
-  }#
-}
-Sig=final[1]#
-NoSig=final[1]#
-#i=3#
-i=1#
-  #find non-numeric names#
-x <- final$SBsPerCapita#
-  for (i in 1:nrow(SBMatrix)){#
-        y <- final[eval(colnames(SBMatrix)[i])][,1]#
-        qplot(x, y, geom = "smooth")#
-        qplot(x, y)#
-        #aovr <- summary(aov(x ~ y),na.rm="TRUE") #Conducting the One-Way ANOVA on the weight#
-        aovr <- summary(aov(x ~ y,na.rm="TRUE")) #Conducting the One-Way ANOVA on the weight#
-      if (aovr[[1]][5][1,]<0.025){ #
-        print(paste("SIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-        Sig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }else{#
-      print(paste("INSIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-      NoSig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }#
-  }
-SBMatrix<-cor(final, method = "spearman", use = "pairwise")
-SBMatrix<-cor(FIPS, method = "spearman", use = "pairwise")
-View(FIPS)
-CleanMeJohn <- function(dirty){#
-   cleanMe=dirty#
-      for (i in 1:length(colnames(dirty))){#
-        if (class(dirty[,i])=="character"){ #
-          dirty[,i] <- dirty[,i] %>% mutate(YOB=ifelse(YOB=="",NA,as.character(YOB)))#
-        }#
-      }#
-      return CleanMe#
-}
-CleanMeJohn <- function(dirty){#
-   cleanMe=dirty#
-      for (i in 1:length(colnames(dirty))){#
-        if (class(dirty[,i])=="character"){ #
-          dirty[,i] <- dirty[,i] %>% mutate(YOB=ifelse(YOB=="",NA,as.character(YOB)))#
-        }#
-      }#
-      return(CleanMe)#
-}
-CleanMeJohn(titanic3)
-CleanMeJohn <- function(dirty){#
-   cleanMe=dirty#
-      for (i in 1:length(colnames(dirty))){#
-        if (class(dirty[,i])=="character"){ #
-          dirty[,i] <- dirty[,i] %>% mutate(YOB=ifelse(YOB=="",NA,as.character(YOB)))#
-        }#
-      }#
-      return(cleanMe)#
-}
-CleanMeJohn(titanic3)
-colnames(dirty[i])
-colnames(titanic3[i])
-#    SEPARATES CONTINUOUS AND CATEGORICAL VARIABLES#
-CleanMeJohn <- function(dirty){#
-   cleanMe=dirty#
-      for (i in 1:length(colnames(cleanMe))){#
-        YOB=colnames(cleanMe)[i]#
-        if (class(cleanMe[,i])=="character"){ #
-          cleanMe[,i] <- cleanMe[,i] %>% mutate(YOB=ifelse(YOB=="",NA,as.character(YOB)))#
-        }#
-      }#
-      return(cleanMe)#
-}
-CleanMeJohn(titanic3)
-x <- c(1,2,"   ",3,4,5)#
-y <- c(1,2,3,"   bats   ",6,8)#
-my.data <- data.frame(x, y)
-myData
-colnames(my.data)
-my.data
-CleanMeJohn(my.data)
-class(my.data$x)
-class(my.data$y)
-x <- c("hi","asdf","   ","cat","hat","bannan")#
-y <- c("hiy","asdfy"," y  ","ycat","","bannan")#
-my.data <- data.frame(x, y)
-x <- c("hi","asdf","   ","cat","hat","bannan")#
-y <- c("hiy","asdfy"," y  ","ycat","","bannan")#
-z <- c(1,2,3,4,5,6,7)#
-my.data <- data.frame(x, y,z)
-x <- c("hi","asdf","   ","cat","hat","bannan")#
-y <- c("hiy","asdfy"," y  ","ycat","","bannan")#
-z <- c(1,2,3,4,5,6)#
-my.data <- data.frame(x, y,z)
-CleanMeJohn(my.data)
-r <- CleanMeJohn(my.data)
-class(R)
-class(r)
-class(r$x)
-class(r$y)
-x <- c("hi","asdf","   ","cat","hat","bannan")#
-y <- c("hiy","asdfy"," y  ","ycat","","bannan")#
-z <- c(1,2,3,4,5,6)#
-my.data <- data.frame(x, y,z)
-class(my.data$x)
-class(my.data$y)
-x = c("Bob","Carol","Ted","Alice")
-x
-class(x)
-x <- c("hi","asdf","   ","cat","hat","bannan")#
-y <- c("hiy","asdfy"," y  ","ycat","","bannan")#
-z <- c(1,2,3,4,5,6)
-class(x)
-class(y)
-my.data <- c(x, y,z)
-my.data
-my.data <- as.data.frame(x, y,z)
-my.data <- as.data.frame(x, y,z)
-my.data <- matrix(x, y,z)
-x <- c("hi","asdf","   ","cat","hat","bannan")#
-y <- c("hiy","asdfy"," y  ","ycat","","bannan")#
-z <- c(1,2,3,4,5,6)#
-my.data <- data.frame(x, y,z)
-my.data
-CleanMeJohn <- function(dirty){#
-   cleanMe=dirty#
-      for (i in 1:length(colnames(cleanMe))){#
-        YOB=colnames(cleanMe)[i]#
-        if (class(cleanMe[,i])=="character"){ #
-          cleanMe[,i] <- cleanMe[,i] %>% mutate(YOB=ifelse(YOB=="",NA,as.character(YOB)))#
-        }#
-      }#
-      return(cleanMe)#
-}
-my.data
-class(my.data$x)
-class(my.data$y)
-SBMatrix<-cor(FIPS, method = "spearman", use = "pairwise")
-#    SEPARATES CONTINUOUS AND CATEGORICAL VARIABLES#
-    j=2  #start at 2 because NewGuys first row is already initialized#
-    k=2#
-    continuousVariables<-as.data.frame(FIPS$FIPS)#
-    categoricalVariables<-as.data.frame(FIPS$FIPS)#
-    #find non-numeric names#
-        for (i in 1:length(colnames(FIPS))){#
-       print(paste("coltype ",i," ",colnames(FIPS)[i]," ",class(FIPS[,i])))#
-          if (class(FIPS[,i])=="integer"){ #
-            continuousVariables[j]<-FIPS[i]#
-            j<-j+1#
-          }else{#
-            if (class(FIPS[,i])=="numeric"){ #
-              continuousVariables[j]<-FIPS[i]#
-              j<-j+1#
-            }else{#
-              categoricalVariables[k]<-FIPS[i]#
-              k<-k+1#
-            }#
-          }#
-        }#
-    #Which columns to use#
-    MakeMePerCapita <- c("All FilingsTotal",#
-                         "Business Filings Total",#
-                         "Nonbusiness Filings Total", #
-                         "Number of establishments",#
-                         #"Paid employees for pay period including March 12 (number)", #
-                         #"first_q_payroll",#
-                         #"annual_payroll", #
-                         "N_POP_CHG_2014",#
-                         "Births_2014", #
-                         "Deaths_2014", #
-                         "NATURAL_INC_2014",#
-                         "INTERNATIONAL_MIG_2014",#
-                         "DOMESTIC_MIG_2014", #
-                         "NET_MIG_2014",#
-                         "RESIDUAL_2014", #
-                         "GQ_ESTIMATES_2014", #
-                         "POVALL_2013", #
-                         "POV017_2013",#
-                         "POV517_2013", #
-                         #"POV05_2013",#
-                         "Civilian_labor_force_2014",#
-                         "Employed_2014",#
-                         "Unemployed_2014",#
-                         "SBs")#
-    percapita<-FIPS[2]#
-i=1#
-    for (i in 1:length(MakeMePerCapita)){#
-        print(paste("MakeMePerCapita ",i," ",colnames(continuousVariables[eval(MakeMePerCapita[i])])))#
-          ((continuousVariables[,eval(MakeMePerCapita[i])]=continuousVariables[,eval(MakeMePerCapita[i])]/continuousVariables[,"POP_ESTIMATE_2014"]))#
-      #rename columns that have been adjusted to Per Capita Columns#
-          names(continuousVariables)[names(continuousVariables)==eval(MakeMePerCapita[i])] <- paste(eval(MakeMePerCapita[i]),"PerCapita",sep="")#
-      }
-#Find correlation matrix of SB's#
-  SBMatrix<-cor(FIPS, method = "spearman", use = "pairwise")#
+data <- FIPS#
+data <- titanic3
+data[data == ""] <- NA#
 #
-  SBMatrix<-cor(final, method = "spearman", use = "pairwise")#
-#  sort(SBMatrix[nrow(SBMatrix),])
-?cor
-?cor
-final = filter(continuousVariables, !is.na(continuousVariables$SBsPerCapita))
-SBMatrix<-cor(final, method = "spearman", use = "pairwise")
-sort(SBMatrix[nrow(SBMatrix),])
-Sig=final[1]#
-NoSig=final[1]#
-#i=3#
-i=1#
-  #find non-numeric names#
-x <- final$SBsPerCapita#
-  for (i in 1:nrow(SBMatrix)){#
-        y <- final[eval(colnames(SBMatrix)[i])][,1]#
-        qplot(x, y, geom = "smooth")#
-        qplot(x, y)#
-        #aovr <- summary(aov(x ~ y),na.rm="TRUE") #Conducting the One-Way ANOVA on the weight#
-        aovr <- summary(aov(x ~ y,na.rm="TRUE")) #Conducting the One-Way ANOVA on the weight#
-      if (aovr[[1]][5][1,]<0.025){ #
-        print(paste("SIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-        Sig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }else{#
-      print(paste("INSIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-      NoSig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }#
-  }
-colnames(Sig)
-Final[Final == ""] <- NA
-final[final == ""] <- NA
-SBmodel.empty = lm(SBsPerCapita ~ 1, data = Final) #The model with an intercept ONLY.
-SBmodel.empty = lm(SBsPerCapita ~ 1, data = final) #The model with an intercept ONLY.
-SBmodel.empty = lm(SBsPerCapita ~ 1, data = final) #The model with an intercept ONLY.
-SBmodel.full = lm(SBsPerCapita ~ ., data = final) #The model with ALL variables.
-scope = list(lower = formula(SBmodel.empty), upper = formula(SBmodel.full))
-library(MASS) #The Modern Applied Statistics library.
-forwardAIC = step(SBmodel.empty, scope, direction = "forward", k = 2)
-sapply(final,function(f){is.na(f)<-which(f == '');f}))
-sapply(final,function(f){is.na(f)<-which(f == '');f})
-ft <- sapply(final,function(f){is.na(f)<-which(f == '');f})
-ft[ft == ""] <- NA#
-SBmodel.empty = lm(SBsPerCapita ~ 1, data = ft) #The model with an intercept ONLY.#
-SBmodel.full = lm(SBsPerCapita ~ ., data = ft) #The model with ALL variables.#
-scope = list(lower = formula(SBmodel.empty), upper = formula(SBmodel.full))
-ft[ft == ""] <- NA
-SBmodel.empty = lm(SBsPerCapita ~ 1, data = ft) #The model with an intercept ONLY.
-SBmodel.empty = lm(SBsPerCapita ~ 1, data = as.data.frame(ft)) #The model with an intercept ONLY.
-SBmodel.full = lm(SBsPerCapita ~ ., data = as.data.frame(ft)) #The model with ALL variables.
-scope = list(lower = formula(SBmodel.empty), upper = formula(SBmodel.full))
-forwardAIC = step(SBmodel.empty, scope, direction = "forward", k = 2)
-sapply(final,function(f){is.na(f)<-count(f == '');f})
-sapply(final,function(f){is.na(f);f})
-apply(ft, 1, function(z) sum(is.na(z)))
-ft[!(numNAs_by_row >= 3),]
-numNAs_by_row <- apply(ft, 1, function(z) sum(is.na(z)))
-ft[!(numNAs_by_row >= 3),]
-ft <- apply(x, 1, function(z) sum(is.na(z)))
-ft[!(numNAs_by_row >= 3),]
-ft <- ft[!(numNAs_by_row >= 3),]
-numNAs_by_row <- apply(ft, 1, function(z) sum(is.na(z)))
-apply(ft, 1, function(z) sum(is.na(z)))
-SBmodel.empty = lm(SBsPerCapita ~ 1, data = as.data.frame(ft)) #The model with an intercept ONLY.
-SBmodel.full = lm(SBsPerCapita ~ ., data = as.data.frame(ft)) #The model with ALL variables.
-scope = list(lower = formula(SBmodel.empty), upper = formula(SBmodel.full))
-library(MASS) #The Modern Applied Statistics library.
-forwardAIC = step(SBmodel.empty, scope, direction = "forward", k = 2)
-drops=c("CI90UBINC_2013","CI90LBINC_2013","R_NATURAL_INC_2014","R_NET_MIG_2014","R_DOMESTIC_MIG_2014","R_INTERNATIONAL_MIG_2014","CI90LBAll_2013","CI90UBALL_2013 ","CI90LB017_2013 ","CI90LB517_2013","CI90UB017_2013","CI90UB517_2013","CI90UB017P_2013","CI90UB517P_2013","CI90LB017P_2013","CI90UBALLP_2013","first_q_payrollPerCapita","num_paid_employees","Number of establishmentsPerCapita","annual_payrollPerCapita","POV05_2013PerCapita","CI90LB05_2013","CI90UB05_2013","PCTPOV05_2013","CI90LB05P_2013","CI90UB05P_2013")
-FIPS=FIPS[,!(names(FIPS) %in% drops)]
-#    SEPARATES CONTINUOUS AND CATEGORICAL VARIABLES#
-    j=2  #start at 2 because NewGuys first row is already initialized#
-    k=2#
-    continuousVariables<-as.data.frame(FIPS$FIPS)#
-    categoricalVariables<-as.data.frame(FIPS$FIPS)#
-    #find non-numeric names#
-        for (i in 1:length(colnames(FIPS))){#
-       print(paste("coltype ",i," ",colnames(FIPS)[i]," ",class(FIPS[,i])))#
-          if (class(FIPS[,i])=="integer"){ #
-            continuousVariables[j]<-FIPS[i]#
-            j<-j+1#
-          }else{#
-            if (class(FIPS[,i])=="numeric"){ #
-              continuousVariables[j]<-FIPS[i]#
-              j<-j+1#
-            }else{#
-              categoricalVariables[k]<-FIPS[i]#
-              k<-k+1#
-            }#
-          }#
-        }#
-    #Which columns to use#
-    MakeMePerCapita <- c("All FilingsTotal",#
-                         "Business Filings Total",#
-                         "Nonbusiness Filings Total", #
-                         "Number of establishments",#
-                         #"Paid employees for pay period including March 12 (number)", #
-                         #"first_q_payroll",#
-                         #"annual_payroll", #
-                         "N_POP_CHG_2014",#
-                         "Births_2014", #
-                         "Deaths_2014", #
-                         "NATURAL_INC_2014",#
-                         "INTERNATIONAL_MIG_2014",#
-                         "DOMESTIC_MIG_2014", #
-                         "NET_MIG_2014",#
-                         "RESIDUAL_2014", #
-                         "GQ_ESTIMATES_2014", #
-                         "POVALL_2013", #
-                         "POV017_2013",#
-                         "POV517_2013", #
-                         #"POV05_2013",#
-                         "Civilian_labor_force_2014",#
-                         "Employed_2014",#
-                         "Unemployed_2014",#
-                         "SBs")#
-    percapita<-FIPS[2]#
-i=1#
-    for (i in 1:length(MakeMePerCapita)){#
-        print(paste("MakeMePerCapita ",i," ",colnames(continuousVariables[eval(MakeMePerCapita[i])])))#
-          ((continuousVariables[,eval(MakeMePerCapita[i])]=continuousVariables[,eval(MakeMePerCapita[i])]/continuousVariables[,"POP_ESTIMATE_2014"]))#
-      #rename columns that have been adjusted to Per Capita Columns#
-          names(continuousVariables)[names(continuousVariables)==eval(MakeMePerCapita[i])] <- paste(eval(MakeMePerCapita[i]),"PerCapita",sep="")#
-      }#
+fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg")#
+Email_file_to_Slack("I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA.",fileloc)
+imgpath = "/Users/avi/boxer/AshlyMadison/plots/"
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg")
+print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg")
+fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg")
+fileloc
+Email_file_to_Slack("I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA.",fileloc)
+fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") #
+Email_file_to_Slack("I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA.  Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",fileloc)#
 #
-        #Remove NAs- REDUCES ZIP CODES FROM 3,100 TO 1,100.  YIKES#
-    final = filter(continuousVariables, !is.na(continuousVariables$SBsPerCapita))    #
-    #sum(final$SBsPerCapita)#
-    #filter for less than 100 SB's per county#
-    #final = filter(final, final$SBstest>100)    #
-    #sum(final$SBstest)#
-   #Find correlation matrix of SB's#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)
+if(sum(badcols)>0){#
+  #columns to remove#
+  removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+  data <- data[,-which(names(data) %in% removecols)]#
 #
-#  SBMatrix<-cor(FIPS, method = "spearman", use = "pairwise")#
-  SBMatrix<-cor(final, method = "spearman", use = "pairwise")#
-#  sort(SBMatrix[nrow(SBMatrix),])
-Sig=final[1]#
-NoSig=final[1]#
-#i=3#
-i=1#
-  #find non-numeric names#
-x <- final$SBsPerCapita#
-  for (i in 1:nrow(SBMatrix)){#
-        y <- final[eval(colnames(SBMatrix)[i])][,1]#
-        qplot(x, y, geom = "smooth")#
-        qplot(x, y)#
-        #aovr <- summary(aov(x ~ y),na.rm="TRUE") #Conducting the One-Way ANOVA on the weight#
-        aovr <- summary(aov(x ~ y,na.rm="TRUE")) #Conducting the One-Way ANOVA on the weight#
-      if (aovr[[1]][5][1,]<0.025){ #
-        print(paste("SIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-        Sig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }else{#
-      print(paste("INSIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))#
-      NoSig[eval(colnames(SBMatrix)[i])] <- final[i]#
-    }#
-  }#
+  fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")#
+  Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I'm deleting them. ",sep=""),fileloc)#
+}
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+if(sum(badrows[which(badrows>=5)])){#
+  #Rows to remove#
+  data <- data[which(badrows<=Missing_rows_for_removal),]#
 #
-#remove missing values#
-impute.na <- function(x){#
-  return (sapply(x, function(f){is.na(f)<-which(f == '');f}))#
-}#
-ft <- sapply(final,function(f){is.na(f)<-which(f == '');f})#
+  fileloc <- print_and_save_graph("aggr",data,"After_Row_Removal.jpg")#
+  Email_file_to_Slack(paste(" WHOHA.  More than ",Missing_rows_for_removal,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)#
+}
+data <- FIPS
+data[data == ""] <- NA#
 #
-# count number of NAs per row#
-numNAs_by_row <- apply(ft, 1, function(z) sum(is.na(z)))#
- # remove rows with more than 3 NAs#
-ft <- ft[!(numNAs_by_row >= 3),]#
+fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") #
+Email_file_to_Slack("I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA.  Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",fileloc)#
 #
-SBmodel.empty = lm(SBsPerCapita ~ 1, data = as.data.frame(ft)) #The model with an intercept ONLY.#
-SBmodel.full = lm(SBsPerCapita ~ ., data = as.data.frame(ft)) #The model with ALL variables.#
-scope = list(lower = formula(SBmodel.empty), upper = formula(SBmodel.full))
-library(MASS) #The Modern Applied Statistics library.
-forwardAIC = step(SBmodel.empty, scope, direction = "forward", k = 2)
-backwardAIC = step(SBmodel.full, scope, direction = "backward", k = 2)
-forwardAIC = step(SBmodel.empty, scope, direction = "forward", k = 2)
-backwardAIC = step(SBmodel.full, scope, direction = "backward", k = 2)
-bothAIC.empty = step(SBmodel.empty, scope, direction = "both", k = 2)
-bothAIC.full = step(SBmodel.full, scope, direction = "both", k = 2)
-forwardBIC = step(SBmodel.empty, scope, direction = "forward", k = log(50))
-backwardBIC = step(SBmodel.full, scope, direction = "backward", k = log(50))
-bothBIC.empty = step(SBmodel.empty, scope, direction = "both", k = log(50))
-bothBIC.full = step(SBmodel.full, scope, direction = "both", k = log(50))
-summary(lm(Sig$SBsPerCapita ~ ., data = Sig))
-summary(lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = Sig))
-summary(lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = ft))
-summary(lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = as.data.frame(ft)))
-SBmodel <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = as.
-data.frame(SBmodel)
-summary(SBmodel)
-SBmodel <- as.data.frame(lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = SBmodel))
-SBmodel <- as.data.frame(lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = ft))
-SBmodel <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = as.data.frame(ft))
-summary(SBmodel)
-plot(SBmodel)
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+#
+if(sum(badcols)>0){#
+  #columns to remove#
+  removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+  data <- data[,-which(names(data) %in% removecols)]#
+#
+  fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")#
+  Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)#
+} #
+#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+if(sum(badrows[which(badrows>=5)])){#
+  #Rows to remove#
+  data <- data[which(badrows<=Missing_rows_for_removal),]#
+#
+  fileloc <- print_and_save_graph("aggr",data,"After_Row_Removal.jpg")#
+  Email_file_to_Slack(paste(" WHOHA.  More than ",Missing_rows_for_removal,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)#
+}
+loadAllAMMysqlData()
+data <- titanic3#
+#
+data[data == ""] <- NA#
+#
+fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") #
+Email_file_to_Slack("I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA.  Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",fileloc)#
+#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+#
+if(sum(badcols)>0){#
+  #columns to remove#
+  removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+  data <- data[,-which(names(data) %in% removecols)]#
+#
+  fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")#
+  Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)#
+} #
+#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+if(sum(badrows[which(badrows>=5)])){#
+  #Rows to remove#
+  data <- data[which(badrows<=Missing_rows_for_removal),]#
+#
+  fileloc <- print_and_save_graph("aggr",data,"After_Row_Removal.jpg")#
+  Email_file_to_Slack(paste(" WHOHA.  More than ",Missing_rows_for_removal,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)#
+}
+badrows = apply(data,1,pMiss)
+badrows
+sum(badrows()
+sum(badrows()))
+sum(badrows())
+sum(badrows())
+sum(badrows)
+data <- titanic3#
+#
+data[data == ""] <- NA#
+#
+fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") #
+Email_file_to_Slack("I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA.  Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",fileloc)#
+#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+#
+if(sum(badcols)>0){#
+  #columns to remove#
+  removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+  data <- data[,-which(names(data) %in% removecols)]#
+#
+  fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")#
+  Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)#
+}
+marginplot(data)
+data
+data <- airquality
+data[data == ""] <- NA#
+#
+fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") #
+Email_file_to_Slack("I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA.  Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",fileloc)#
+#
+#Checking for more than 5% missing values in cols#
+pMiss <- function(x){sum(is.na(x))/length(x)*100}#
+badcols = apply(data,2,pMiss)#
+#
+if(sum(badcols)>0){#
+  #columns to remove#
+  removecols=names(badcols[badcols>=Missing_cols_for_removal])#
+  data <- data[,-which(names(data) %in% removecols)]#
+#
+  fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")#
+  Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)#
+} #
+#
+#Checking for more than 5% missing values in rows#
+badrows = apply(data,1,pMiss)#
+if(sum(badrows[which(badrows>=5)])){#
+  #Rows to remove#
+  data <- data[which(badrows<=Missing_rows_for_removal),]#
+#
+  fileloc <- print_and_save_graph("aggr",data,"After_Row_Removal.jpg")#
+  Email_file_to_Slack(paste(" WHOHA.  More than ",Missing_rows_for_removal,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)#
+}
+complete(tempData,1)
+?complete
+View(data)
+data <- airquality
+complete(data,1)
+mice::complete(data,1)
+densityplot(tempData)
+densityplot(data)
+densityplot(as.data.frame(data))
+densityplot(data)
+data[1]
+data[,]
+densityplot(data[,])
+class(data[,])
+class(data[,1])
+class(data[1,])
+class(data[1:4])
+tempData <- mice(data,m=5,maxit=50,meth='pmm',seed=500)
+summary(tempData)
+completedData <- complete(tempData,1)
+View(completedData)
+data <- airquality
+tempData <- mice(data,m=5,maxit=50,meth='pmm',seed=500)#
+summary(tempData)#
+completedData <- complete(tempData,1)
+densityplot(tempData)
+densityplot(tempData)
+densityplot(tempData)
+par(mfrow=c(2,2)) #2x2 plot#
+densityplot(tempData)
+par(mfrow=c(2,2)) #2x2 plot#
+densityplot(tempData)
+dev.off()
+dev.off()
+dev.off()
+dev.off()
+densityplot(tempData)
 par(mfrow=c(2,2)) #2x2 plot
-SBmodel <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = as.data.frame(ft))
-summary(SBmodel)
-plot(SBmodel)
-SBmodelff <- lm(SBsPerCapita ~ FIPS$FIPS + "All FilingsTotalPerCapita" + "Business Filings TotalPerCapita" + few_fruits_percent + statcode + relig09 + civic09 + bus09 + pol09 + prof09 + labor09 + bowl09 + fitns09 + golf09 + sport09 + pop09 + respn10 + pvote08 + assn09 + sk09 + Rural_urban_continuum_code_2013 + Urban_influence_code_2013 + Civilian_labor_force_2014PerCapita + Employed_2014PerCapita + Unemployment_rate_2014 + Median_Household_Income_2013 + "gini2000: Gini Coef of income disparity, 2000" + "RS2000: Ricci-Schutz Coef of income disparity, 2000" + "Atkin2000: Atkinsons measure of income disparity, 2000" + "Theil2000: Theil index of income disparity, 2000" + "VarCoe2000: Coef of var for household income, 2000" + "SqVar2000: Squared Coef of var for household income, 2000" + "Entrop2000: Entropy index of income disparity, 2000" + "gini1990: Gini Coef of income disparity, 1990" + "Atkin1990: Atkinsons measure of income disparity, 1990" + "Theil1990: Theil index of income disparity, 1990" + "VarCoe1990: Coef of var for household income, 1990" + "SqVar1990: Squared Coef of var for household income, 1990" + "Entrop1990: Entropy index of income disparity, 1990" + "Prc_of_adults_with_less_than_high_school_diploma_2009-2013" + "Prc_of_adults_with_a_high_school_diploma_only_2009-2013" + "Prc_of_adults_compl_some_college_or_asc_deg_2009-2013" + "Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013" + no_exercise_percent + "Number of establishmentsPerCapita" + first_q_payroll + Rural_urban_Continuum_Code_2003 + Urban_Influence_Code_2003 + POVALL_2013PerCapita + CI90UBALL_2013 + CI90LBALLP_2013 + POV017_2013PerCapita + CI90LB017_2013 + PCTPOV017_2013 + POV517_2013PerCapita + PCTPOV517_2013 + CI90LB517P_2013 + CENSUS_2010_POP + ESTIMATES_BASE_2010 + POP_ESTIMATE_2014 + N_POP_CHG_2014PerCapita + Births_2014PerCapita + Deaths_2014PerCapita + INTERNATIONAL_MIG_2014PerCapita + DOMESTIC_MIG_2014PerCapita + GQ_ESTIMATES_2014PerCapita + R_birth_2014 + R_death_2014, data = as.data.frame(ft))
-lm(SBsPerCapita ~ "All FilingsTotalPerCapita" + "Business Filings TotalPerCapita" + few_fruits_percent + statcode + relig09 + civic09 + bus09 + pol09 + prof09 + labor09 + bowl09 + fitns09 + golf09 + sport09 + pop09 + respn10 + pvote08 + assn09 + sk09 + Rural_urban_continuum_code_2013 + Urban_influence_code_2013 + Civilian_labor_force_2014PerCapita + Employed_2014PerCapita + Unemployment_rate_2014 + Median_Household_Income_2013 + "gini2000: Gini Coef of income disparity, 2000" + "RS2000: Ricci-Schutz Coef of income disparity, 2000" + "Atkin2000: Atkinsons measure of income disparity, 2000" + "Theil2000: Theil index of income disparity, 2000" + "VarCoe2000: Coef of var for household income, 2000" + "SqVar2000: Squared Coef of var for household income, 2000" + "Entrop2000: Entropy index of income disparity, 2000" + "gini1990: Gini Coef of income disparity, 1990" + "Atkin1990: Atkinsons measure of income disparity, 1990" + "Theil1990: Theil index of income disparity, 1990" + "VarCoe1990: Coef of var for household income, 1990" + "SqVar1990: Squared Coef of var for household income, 1990" + "Entrop1990: Entropy index of income disparity, 1990" + "Prc_of_adults_with_less_than_high_school_diploma_2009-2013" + "Prc_of_adults_with_a_high_school_diploma_only_2009-2013" + "Prc_of_adults_compl_some_college_or_asc_deg_2009-2013" + "Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013" + no_exercise_percent + "Number of establishmentsPerCapita" + first_q_payroll + Rural_urban_Continuum_Code_2003 + Urban_Influence_Code_2003 + POVALL_2013PerCapita + CI90UBALL_2013 + CI90LBALLP_2013 + POV017_2013PerCapita + CI90LB017_2013 + PCTPOV017_2013 + POV517_2013PerCapita + PCTPOV517_2013 + CI90LB517P_2013 + CENSUS_2010_POP + ESTIMATES_BASE_2010 + POP_ESTIMATE_2014 + N_POP_CHG_2014PerCapita + Births_2014PerCapita + Deaths_2014PerCapita + INTERNATIONAL_MIG_2014PerCapita + DOMESTIC_MIG_2014PerCapita + GQ_ESTIMATES_2014PerCapita + R_birth_2014 + R_death_2014, data = as.data.frame(ft))
-lm(SBsPerCapita ~ "All FilingsTotalPerCapita" + "Business Filings TotalPerCapita" + few_fruits_percent + statcode + relig09 + civic09 + bus09 + pol09 + prof09 + labor09 + bowl09 + fitns09 + golf09 + sport09 + pop09 + respn10 + pvote08 + assn09 + sk09 + Rural_urban_continuum_code_2013 + Urban_influence_code_2013 + Civilian_labor_force_2014PerCapita + Employed_2014PerCapita + Unemployment_rate_2014 + Median_Household_Income_2013 + "gini2000: Gini Coef of income disparity, 2000" + "RS2000: Ricci-Schutz Coef of income disparity, 2000" + "Atkin2000: Atkinsons measure of income disparity, 2000" + "Theil2000: Theil index of income disparity, 2000" + "VarCoe2000: Coef of var for household income, 2000" + "SqVar2000: Squared Coef of var for household income, 2000" + "Entrop2000: Entropy index of income disparity, 2000" + "gini1990: Gini Coef of income disparity, 1990" + "Atkin1990: Atkinsons measure of income disparity, 1990" + "Theil1990: Theil index of income disparity, 1990" + "VarCoe1990: Coef of var for household income, 1990" + "SqVar1990: Squared Coef of var for household income, 1990" + "Entrop1990: Entropy index of income disparity, 1990" + "Prc_of_adults_with_less_than_high_school_diploma_2009-2013" + "Prc_of_adults_with_a_high_school_diploma_only_2009-2013" + "Prc_of_adults_compl_some_college_or_asc_deg_2009-2013" + "Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013" + no_exercise_percent + "Number of establishmentsPerCapita" + first_q_payroll + Rural_urban_Continuum_Code_2003 + Urban_Influence_Code_2003 + POVALL_2013PerCapita + CI90UBALL_2013 + CI90LBALLP_2013 + POV017_2013PerCapita + CI90LB017_2013 + PCTPOV017_2013 + POV517_2013PerCapita + PCTPOV517_2013 + CI90LB517P_2013 + CENSUS_2010_POP + ESTIMATES_BASE_2010 + POP_ESTIMATE_2014 + N_POP_CHG_2014PerCapita + Births_2014PerCapita + Deaths_2014PerCapita + INTERNATIONAL_MIG_2014PerCapita + DOMESTIC_MIG_2014PerCapita + GQ_ESTIMATES_2014PerCapita + R_birth_2014 + R_death_2014, data=as.data.frame(ft))
-SBmodelff <- lm(SBsPerCapita ~ "All FilingsTotalPerCapita" + "Business Filings TotalPerCapita" + few_fruits_percent + statcode + relig09 + civic09 + bus09 + pol09 + prof09 + labor09 + bowl09 + fitns09 + golf09 + sport09 + pop09 + respn10 + pvote08 + assn09 + sk09 + Rural_urban_continuum_code_2013 + Urban_influence_code_2013 + Civilian_labor_force_2014PerCapita + Employed_2014PerCapita + Unemployment_rate_2014 + Median_Household_Income_2013 + "gini2000: Gini Coef of income disparity, 2000" + "RS2000: Ricci-Schutz Coef of income disparity, 2000" + "Atkin2000: Atkinsons measure of income disparity, 2000" + "Theil2000: Theil index of income disparity, 2000" + "VarCoe2000: Coef of var for household income, 2000" + "SqVar2000: Squared Coef of var for household income, 2000" + "Entrop2000: Entropy index of income disparity, 2000" + "gini1990: Gini Coef of income disparity, 1990" + "Atkin1990: Atkinsons measure of income disparity, 1990" + "Theil1990: Theil index of income disparity, 1990" + "VarCoe1990: Coef of var for household income, 1990" + "SqVar1990: Squared Coef of var for household income, 1990" + "Entrop1990: Entropy index of income disparity, 1990" + "Prc_of_adults_with_less_than_high_school_diploma_2009-2013" + "Prc_of_adults_with_a_high_school_diploma_only_2009-2013" + "Prc_of_adults_compl_some_college_or_asc_deg_2009-2013" + "Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013" + no_exercise_percent + "Number of establishmentsPerCapita" + first_q_payroll + Rural_urban_Continuum_Code_2003 + Urban_Influence_Code_2003 + POVALL_2013PerCapita + CI90UBALL_2013 + CI90LBALLP_2013 + POV017_2013PerCapita + CI90LB017_2013 + PCTPOV017_2013 + POV517_2013PerCapita + PCTPOV517_2013 + CI90LB517P_2013 + CENSUS_2010_POP + ESTIMATES_BASE_2010 + POP_ESTIMATE_2014 + N_POP_CHG_2014PerCapita + Births_2014PerCapita + Deaths_2014PerCapita + INTERNATIONAL_MIG_2014PerCapita + DOMESTIC_MIG_2014PerCapita + GQ_ESTIMATES_2014PerCapita + R_birth_2014 + R_death_2014, data=ft)
-lm(SBsPerCapita ~ "All FilingsTotalPerCapita" + "Business Filings TotalPerCapita" + few_fruits_percent + statcode + relig09 + civic09 + bus09 + pol09 + prof09 + labor09 + bowl09 + fitns09 + golf09 + sport09 + pop09 + respn10 + pvote08 + assn09 + sk09 + Rural_urban_continuum_code_2013 + Urban_influence_code_2013 + Civilian_labor_force_2014PerCapita + Employed_2014PerCapita + Unemployment_rate_2014 + Median_Household_Income_2013 + "gini2000: Gini Coef of income disparity, 2000" + "RS2000: Ricci-Schutz Coef of income disparity, 2000" + "Atkin2000: Atkinsons measure of income disparity, 2000" + "Theil2000: Theil index of income disparity, 2000" + "VarCoe2000: Coef of var for household income, 2000" + "SqVar2000: Squared Coef of var for household income, 2000" + "Entrop2000: Entropy index of income disparity, 2000" + "gini1990: Gini Coef of income disparity, 1990" + "Atkin1990: Atkinsons measure of income disparity, 1990" + "Theil1990: Theil index of income disparity, 1990" + "VarCoe1990: Coef of var for household income, 1990" + "SqVar1990: Squared Coef of var for household income, 1990" + "Entrop1990: Entropy index of income disparity, 1990" + "Prc_of_adults_with_less_than_high_school_diploma_2009-2013" + "Prc_of_adults_with_a_high_school_diploma_only_2009-2013" + "Prc_of_adults_compl_some_college_or_asc_deg_2009-2013" + "Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013" + no_exercise_percent + "Number of establishmentsPerCapita" + first_q_payroll + Rural_urban_Continuum_Code_2003 + Urban_Influence_Code_2003 + POVALL_2013PerCapita + CI90UBALL_2013 + CI90LBALLP_2013 + POV017_2013PerCapita + CI90LB017_2013 + PCTPOV017_2013 + POV517_2013PerCapita + PCTPOV517_2013 + CI90LB517P_2013 + CENSUS_2010_POP + ESTIMATES_BASE_2010 + POP_ESTIMATE_2014 + N_POP_CHG_2014PerCapita + Births_2014PerCapita + Deaths_2014PerCapita + INTERNATIONAL_MIG_2014PerCapita + DOMESTIC_MIG_2014PerCapita + GQ_ESTIMATES_2014PerCapita + R_birth_2014 + R_death_2014, data= as.data.frame(ft))
-lm(SBsPerCapita ~ `FIPS$FIPS` + `All FilingsTotalPerCapita` + `Business Filings TotalPerCapita` + few_fruits_percent + statcode + relig09 + civic09 + bus09 + pol09 + prof09 + labor09 + bowl09 + fitns09 + golf09 + sport09 + pop09 + respn10 + pvote08 + assn09 + sk09 + Rural_urban_continuum_code_2013 + Urban_influence_code_2013 + Civilian_labor_force_2014PerCapita + Employed_2014PerCapita + Unemployment_rate_2014 + Median_Household_Income_2013 + `gini2000: Gini Coef of income disparity, 2000` + `RS2000: Ricci-Schutz Coef of income disparity, 2000` + `Atkin2000: Atkinsons measure of income disparity, 2000` + `Theil2000: Theil index of income disparity, 2000` + `VarCoe2000: Coef of var for household income, 2000` + `SqVar2000: Squared Coef of var for household income, 2000` + `Entrop2000: Entropy index of income disparity, 2000` + `gini1990: Gini Coef of income disparity, 1990` + `Atkin1990: Atkinsons measure of income disparity, 1990` + `Theil1990: Theil index of income disparity, 1990` + `VarCoe1990: Coef of var for household income, 1990` + `SqVar1990: Squared Coef of var for household income, 1990` + `Entrop1990: Entropy index of income disparity, 1990` + `Prc_of_adults_with_less_than_high_school_diploma_2009-2013` + `Prc_of_adults_with_a_high_school_diploma_only_2009-2013` + `Prc_of_adults_compl_some_college_or_asc_deg_2009-2013` + `Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013` + no_exercise_percent + `Number of establishmentsPerCapita` + first_q_payroll + Rural_urban_Continuum_Code_2003 + Urban_Influence_Code_2003 + POVALL_2013PerCapita + CI90UBALL_2013 + CI90LBALLP_2013 + POV017_2013PerCapita + CI90LB017_2013 + PCTPOV017_2013 + POV517_2013PerCapita + PCTPOV517_2013 + CI90LB517P_2013 + CENSUS_2010_POP + ESTIMATES_BASE_2010 + POP_ESTIMATE_2014 + N_POP_CHG_2014PerCapita + Births_2014PerCapita + Deaths_2014PerCapita + INTERNATIONAL_MIG_2014PerCapita + DOMESTIC_MIG_2014PerCapita + GQ_ESTIMATES_2014PerCapita + R_birth_2014 + R_death_2014, data= as.data.frame(ft))
-SBmodelff <- lm(SBsPerCapita ~ `FIPS$FIPS` + `All FilingsTotalPerCapita` + `Business Filings TotalPerCapita` + few_fruits_percent + statcode + relig09 + civic09 + bus09 + pol09 + prof09 + labor09 + bowl09 + fitns09 + golf09 + sport09 + pop09 + respn10 + pvote08 + assn09 + sk09 + Rural_urban_continuum_code_2013 + Urban_influence_code_2013 + Civilian_labor_force_2014PerCapita + Employed_2014PerCapita + Unemployment_rate_2014 + Median_Household_Income_2013 + `gini2000: Gini Coef of income disparity, 2000` + `RS2000: Ricci-Schutz Coef of income disparity, 2000` + `Atkin2000: Atkinsons measure of income disparity, 2000` + `Theil2000: Theil index of income disparity, 2000` + `VarCoe2000: Coef of var for household income, 2000` + `SqVar2000: Squared Coef of var for household income, 2000` + `Entrop2000: Entropy index of income disparity, 2000` + `gini1990: Gini Coef of income disparity, 1990` + `Atkin1990: Atkinsons measure of income disparity, 1990` + `Theil1990: Theil index of income disparity, 1990` + `VarCoe1990: Coef of var for household income, 1990` + `SqVar1990: Squared Coef of var for household income, 1990` + `Entrop1990: Entropy index of income disparity, 1990` + `Prc_of_adults_with_less_than_high_school_diploma_2009-2013` + `Prc_of_adults_with_a_high_school_diploma_only_2009-2013` + `Prc_of_adults_compl_some_college_or_asc_deg_2009-2013` + `Prc_of_adults_with_a_bachelor's_deg_or_higher_2009-2013` + no_exercise_percent + `Number of establishmentsPerCapita` + first_q_payroll + Rural_urban_Continuum_Code_2003 + Urban_Influence_Code_2003 + POVALL_2013PerCapita + CI90UBALL_2013 + CI90LBALLP_2013 + POV017_2013PerCapita + CI90LB017_2013 + PCTPOV017_2013 + POV517_2013PerCapita + PCTPOV517_2013 + CI90LB517P_2013 + CENSUS_2010_POP + ESTIMATES_BASE_2010 + POP_ESTIMATE_2014 + N_POP_CHG_2014PerCapita + Births_2014PerCapita + Deaths_2014PerCapita + INTERNATIONAL_MIG_2014PerCapita + DOMESTIC_MIG_2014PerCapita + GQ_ESTIMATES_2014PerCapita + R_birth_2014 + R_death_2014, data=
-summary(SBmodelff)
-backwardAIC = step(SBmodel.full, scope, direction = "backward", k = 2)
-backwardAIC = step(SBmodel.full, scope, direction = "backward", k = 2)
-bothAIC.empty = step(SBmodel.empty, scope, direction = "both", k = 2)
-bothAIC.full = step(SBmodel.full, scope, direction = "both", k = 2)
-forwardBIC = step(SBmodel.empty, scope, direction = "forward", k = log(50))
-backwardBIC = step(SBmodel.full, scope, direction = "backward", k = log(50))
-bothBIC.empty = step(SBmodel.empty, scope, direction = "both", k = log(50))
-bothBIC.full = step(SBmodel.full, scope, direction = "both", k = log(50))
-SBmodel.forw <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita, data = as.data.frame(ft))#
-#
-SBmodel.back <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = as.data.frame(ft))
-summary(SBmodel.forw)
-summary(SBmodel.back)
-forwardAIC = step(SBmodel.empty, scope, direction = "forward", k = 2)
-backwardAIC = step(SBmodel.full, scope, direction = "backward", k = 2)
-forwardBIC = step(SBmodel.empty, scope, direction = "forward", k = log(50))
-backwardBIC = step(SBmodel.full, scope, direction = "backward", k = log(50))
-bothBIC.empty = step(SBmodel.empty, scope, direction = "both", k = log(50))
-bothBIC.full = step(SBmodel.full, scope, direction = "both", k = log(50))
-forwardAIC = step(SBmodel.empty, scope, direction = "forward", k = 2)
-SBmodel.forw <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita, data = as.data.frame(ft))#
-SBmodel.back <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = as.
-summary(SBmodel.forw)#
-  summary(SBmodel.back)
-summary(SBmodel.back)
-summary(SBmodel.forw)
-Plot(SBmodel.fow)
-Plot(SBmodel.forw)
-plot(SBmodel.forw)
 par(mfrow=c(2,2)) #2x2 plot
-plot(SBmodel.forw)
-plot(SBmodel.forw)
+densityplot(tempData)
+View(tempData)
+tempData
+data <- titanic3
+tempData <- mice(data,m=5,maxit=50,meth='pmm',seed=500)#
+summary(tempData)#
+completedData <- complete(tempData,1)

@@ -20,13 +20,14 @@
   library(VIM)
   library(mailR)
   library(kknn)
+  library(PASWR)
   library(Hmisc)
   library("ggthemes")
   source("/Users/avi/Dropbox/programming/boxer/Avi_r_tools.R")
 
 load_Constants <- function(){
-  path <<- "/Users/avi/boxer/AshlyMadison/"
-  imgpath <<- "/Users/avi/boxer/AshlyMadison/plots/"
+  path <<- "/Users/avi/boxer/AshlyMadison"
+  imgpath <<- "/Users/avi/boxer/AshlyMadison/plots"
 
   #If missing data for a certain feature or sample is more than 5% then you probably should leave that feature or sample out. We therefore check for features (columns) and samples (rows) where more than 5% of the data is missing using a simple function
   Missing_cols_for_removal <<- 5
@@ -50,11 +51,16 @@ main <- function(){
   FIPS=loadAllAMMysqlData()
   outcomeVariable="SBsPerCapita"
 
-  #Check for missingness
+  FIPS = titanic3
+  #Check for missingness (blanks and NA's)
   #Missing Completely at Random (MCAR) - Very rare, can drop observations. 
   #Missing at Random (MAR) - if missing at random, can drop observations. 
   #Missing Not at Random (MNAR) NON-IGNORABLE!
-  FIPS_Missing_fixed <<- Missingness_Analysis(FIPS)
+  FIPS.Missing <- Missingness_Analysis(FIPS)
+
+  #run K_means on the remaining NA's in the data
+  FIPS.NAs_replaced <- K_means_Clustering(FIPS.Missing)
+#  FIPS.NAs_replaced <- K_means_Clustering(FIPS)
 
   #➢ Linearity
   # Not linear? Does Tranform help?
@@ -208,35 +214,63 @@ loadAllAMMysqlData <- function(){
 }
 
 Email_file_to_Slack <- function(Body,File_Location){
-  send.mail(from = "mrtdatascientist@gmail.com",
-  to = c("mrt.9msiu@zapiermail.com"),
-  subject = "Hello sucka",
-  body = Body,
-  html = FALSE,
-  smtp = list(host.name = "smtp.gmail.com", port = 465, user.name = "mrtdatascientist@gmail.com", passwd = "ipitythefool", ssl = TRUE),
-  attach.files = c(File_Location),
-  authenticate = TRUE,
-  send = TRUE)
+  if (File_Location==""){
+      send.mail(from = "mrtdatascientist@gmail.com",
+      to = c("mrt.9msiu@zapiermail.com"),
+      subject = "Hello sucka",
+      body = Body,
+      html = FALSE,
+      smtp = list(host.name = "smtp.gmail.com", port = 465, user.name = "mrtdatascientist@gmail.com", passwd = "ipitythefool", ssl = TRUE),
+      authenticate = TRUE,
+      send = TRUE)
+  }else{
+      send.mail(from = "mrtdatascientist@gmail.com",
+      to = c("mrt.9msiu@zapiermail.com"),
+      subject = "Hello sucka",
+      body = Body,
+      html = FALSE,
+      smtp = list(host.name = "smtp.gmail.com", port = 465, user.name = "mrtdatascientist@gmail.com", passwd = "ipitythefool", ssl = TRUE),
+      attach.files = c(File_Location),
+      authenticate = TRUE,
+      send = TRUE)
+    }
 }
 
 print_and_save_graph <- function(execute_function,new_data,file_name){
   data2=new_data
-  mypath <- file.path(imgpath,file_name)
-  jpeg(file=mypath)
-  eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))
-  dev.off()
-  return(paste(imgpath,file_name,sep=""))
+  print("test")
+
+  if(execute_function == "aggr"){
+    mypath <- file.path(imgpath,file_name)
+    print(mypath)
+    jpeg(file=mypath)
+    print("AGGR!")
+    eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))
+    dev.off()
+
+  } else if (execute_function == "density"){
+      ggplot(data2)+ 
+        aes_string(x=colnames(data2)[1],group="type",color="type") + 
+        geom_density(fill=NA)
+      print("DENSITY!")
+      ggsave(filename = paste(imgpath,"/",file_name,sep=""), plot = last_plot())
+  }
+  return(paste(imgpath,"/",file_name,sep=""))
 }
 
 Missingness_Analysis <- function(FIPS){
-  data <- FIPS
   #data <- titanic3
   #data <- airquality
+  data <- FIPS
 
-  data[data == ""] <- NA
+  tmp=data[is.na(data)==FALSE]
+  numBlanks = count(tmp[tmp == ""])[1,2]
+  if(!is.na(numBlanks)){
+    data[data == ""] <- NA
+    fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") 
 
-  fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") 
-  Email_file_to_Slack("I'm assuming your files are Missing not at random. I converted blank columns to NA using data[data == ''] <- NA.  Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",fileloc)
+    Email_file_to_Slack(paste("Teachin' fools some basic rules - ",numBlanks," blanks were replaced with NA. I'm assuming your files are Missing not at random. Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",sep=""),fileloc)
+  }
 
   #Checking for more than 5% missing values in cols
   pMiss <- function(x){sum(is.na(x))/length(x)*100}
@@ -274,71 +308,72 @@ Missingness_Analysis <- function(FIPS){
   #   }
 
   # }  #end for
+  return(data)
 }
 
 K_means_Clustering <- function(FIPS){
 
-  ######################################################################################
-  #
+  ################################################################################  
   # Impute leftovers with K Means clustering
   #
-  ######################################################################################
-  odata <- titanic3
-  odata <- airquality
-  odata <- data
+  ################################################################################  
+
+  #odata <- titanic3
+  #odata <- airquality
+  #odata <- data
   odata <- FIPS
-
-  count(odata[odata == ""])
-
-  odata[odata == ""] <- NA
-  #tdata = titanic3[,c(1,2,4,5,6,7)]
+  #odata <- FIPS.Missing     
 
   #only build correlation on complete columns 
-  badcolnames = apply(odata,2,pMiss)
-  goodcols = names(odata[badcolnames==0])  #no missing data
-  badcols = names(odata[badcolnames>0])  # any missing data
+  missingCols = apply(odata,2,pMiss)
+  compColNames = names(odata[missingCols==0])  #no missing data
+  missColNames = names(odata[missingCols>0])  # any missing data
 
+  if(length(missColNames)!=0){
   #colnames(odata)[sapply(odata, class)=="character"]
-  for (i in 1:length(badcols)){
-    gdata = odata[,c(goodcols)]
-    bdata = odata[,c(badcols)]
+  for (i in 1:length(missColNames)){
+    gdata = odata[,c(compColNames)]
+    bdata = odata[,c(missColNames)]
 
-    current_var = badcols[i]
-    gdata[,current_var] <- odata[,current_var]
+    #move the current columns from "Bad columns" to "good columns"
+    current_var = missColNames[i]
+    gdata[,current_var] <- bdata[,current_var]
+    bdata[,current_var] <- NULL
 
+    #only train and test using complete columns
     train = gdata[!is.na(gdata[,current_var]),]
     test = gdata[is.na(gdata[,current_var]),]
 
     regression_formula = as.formula(paste(current_var," ~ .",sep=""))
     kknn1  = kknn(regression_formula, train, test, k = 1, distance = 1)
     kknn2  = kknn(regression_formula, train, test, k = 1, distance = 2)
-    kknn10  = kknn(regression_formula, train, test, k = 1, distance = 10)
+    kknn5  = kknn(regression_formula, train, test, k = 1, distance = 5)
 
     a1 = data.frame(test = kknn1$fitted.values, type = "kmeans k=1 dist=1")
     a2 = data.frame(test = kknn2$fitted.values, type = "kmeans k=1 dist=2")
-    a3 = data.frame(test = kknn10$fitted.values, type = "kmeans k=1 dist=10")
+    a3 = data.frame(test = kknn5$fitted.values, type = "kmeans k=1 dist=5")
+    a4 = data.frame(test = c(train[current_var]),type="original")
+
     colnames(a1)[1]=current_var
     colnames(a2)[1]=current_var
     colnames(a3)[1]=current_var
+    colnames(a4)[1]=current_var
 
-    newdata = list(a1,a2,a3,data.frame(current_var = c(train[current_var]), type = "baseline"))
+    newdata = list(a1,a2,a3,a4)
     q3.4 = do.call(rbind, newdata)
-    ggplot(q3.4) + geom_density(aes(x = current_var, color = type))
-    
+    # ggplot(q3.4)+ 
+    #  aes_string(x=current_var,group="type",color="type") + 
+    #  geom_density(fill=NA)
+
+    fileloc <- print_and_save_graph("density",q3.4,paste("k_means_",current_var,".jpg",sep=''))
+    Email_file_to_Slack(paste("The jibba jabba stops here!  I've replaced NA's in variable '",current_var,"''  using K means Clustering.  ",sep=""),fileloc)
+
+    # m <- ggplot(q3.4, aes(x=age, group=type,color=type))
+    # m + geom_density(fill=NA)
     odata[current_var][is.na(odata[current_var])]=a3[,current_var]
-
   }
-
-
-  # #Search for columns with a lot of missing data - drop them
-  # for (i in 1:length(colnames(cleanMe))){
-  #   YOB=colnames(cleanMe)[i]
-  #     if (class(cleanMe[,i])=="character"){ 
-  #     cleanMe[,i] <- cleanMe[,i] %>% mutate(YOB=ifelse(YOB=="",NA,as.character(YOB)))
-  #   }
-  # }
-
-  #Search for rows with a lot of missing data - drop them
+  }
+  # Drink your milk.
 
   #Delete weird columns because I fell asleep at 2:00am at my desk
   #drops=c("CI90UBINC_2013","CI90LBINC_2013","R_NATURAL_INC_2014","R_NET_MIG_2014","R_DOMESTIC_MIG_2014","R_INTERNATIONAL_MIG_2014","CI90LBAll_2013","CI90UBALL_2013 ","CI90LB017_2013 ","CI90LB517_2013","CI90UB017_2013","CI90UB517_2013","CI90UB017P_2013","CI90UB517P_2013","CI90LB017P_2013","CI90UBALLP_2013","first_q_payrollPerCapita","num_paid_employees","Number of establishmentsPerCapita","annual_payrollPerCapita","POV05_2013PerCapita","CI90LB05_2013","CI90UB05_2013","PCTPOV05_2013","CI90LB05P_2013","CI90UB05P_2013")
@@ -346,11 +381,8 @@ K_means_Clustering <- function(FIPS){
   #df=df[,!(names(df) %in% df)]
 
   #complete.cases(FIPS)
-
-return(data)
+  return(odata)
 }
-
-
 
 LinearModelAnalysis <- function(){
   

@@ -1,4 +1,3 @@
-
 main <- function(){
 
 setwd("/Users/avi/boxer/data/week1data")
@@ -116,9 +115,7 @@ t$age = ifelse(is.na(t$age), mean(t$age, na.rm=TRUE), t$age)
 
 #KNN
 #k = square root of n
-
 #train a NN on how to do KNN properly. 
-
 
 #CHECK ASSUMPTIONS
 
@@ -146,7 +143,7 @@ ggplot(mpg, aes(hwy, cty)) +
   scale_color_gradient() +
   theme_hc()
 
-aes(x=xvar, y=yvar)) +
+aes(x=xvar, y=yvar) +
   geom_point(shape=1)      # Use hollow circles
 
 ggplot(dat, aes(x=xvar, y=yvar)) +
@@ -178,9 +175,6 @@ SBmodel.full.bc$x[SBmodel.full.bc$y ==max(SBmodel.full.bc$y)]
 #> How well does our model fit? 
 
 #> How accurate are our guesses for y? 
-
-
-adsfadsf
 
 #Check for AIC
 #Check for BIC
