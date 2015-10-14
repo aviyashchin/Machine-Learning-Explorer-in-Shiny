@@ -39,42 +39,6 @@ load_DataSets <- function(){
   airquality <<- airquality
 }
 
-main <- function(){
-  load_Constants()
-  load_DataSets()
-
-  setwd(path)
-  save.image("am.RData")
-  #load("am.RData")
-
-  #Define DataSet and Independent Variable
-  FIPS=loadAllAMMysqlData()
-  outcomeVariable="SBsPerCapita"
-
-  FIPS = titanic3
-  #Check for missingness (blanks and NA's)
-  #Missing Completely at Random (MCAR) - Very rare, can drop observations. 
-  #Missing at Random (MAR) - if missing at random, can drop observations. 
-  #Missing Not at Random (MNAR) NON-IGNORABLE!
-  FIPS.Missing <- Missingness_Analysis(FIPS)
-
-  #run K_means on the remaining NA's in the data
-  FIPS.NAs_replaced <- K_means_Clustering(FIPS.Missing)
-#  FIPS.NAs_replaced <- K_means_Clustering(FIPS)
-
-  #➢ Linearity
-  # Not linear? Does Tranform help?
-
-  #➢ Constant Variance
-  # Not linear? Does Tranform help?
-
-  #➢ Normality
-  #Checking for normality of Dependent Variable
-  #Run Box-Cox Transformation on dependent Variable
-
-  #➢ Independent Error
-}
-
 getConnectionGoogleMySql <- function() {
   ################################################################################################################################
   #
@@ -259,17 +223,25 @@ print_and_save_graph <- function(execute_function,new_data,file_name){
 }
 
 Missingness_Analysis <- function(FIPS){
+  #Missing Completely at Random (MCAR) - Very rare, can drop observations. 
+  #Missing at Random (MAR) - if missing at random, can drop observations. 
+  #Missing Not at Random (MNAR) NON-IGNORABLE!
+
   #data <- titanic3
   #data <- airquality
+  data <- cars
   data <- FIPS
+  Message_if_you_have_clean_data=""
 
-  tmp=data[is.na(data)==FALSE]
-  numBlanks = count(tmp[tmp == ""])[1,2]
+  #NA and Blanks Check
+  tmp=data[is.na(data)==FALSE] #only the non_na cells
+  numBlanks = count(tmp[tmp == ""])[1,2]  #checks for "" in cells
   if(!is.na(numBlanks)){
     data[data == ""] <- NA
     fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") 
-
     Email_file_to_Slack(paste("Teachin' fools some basic rules - ",numBlanks," blanks were replaced with NA. I'm assuming your files are Missing not at random. Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",sep=""),fileloc)
+  } else {
+   Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," There were no NA's or Blanks in this file. ") 
   }
 
   #Checking for more than 5% missing values in cols
@@ -277,22 +249,31 @@ Missingness_Analysis <- function(FIPS){
   badcols = apply(data,2,pMiss)
 
   if(sum(badcols)>0){
-    #columns to remove
+    #columns to remove, if more than Missing_cols_for_removal % of columsn are NA
     removecols=names(badcols[badcols>=Missing_cols_for_removal])
     data <- data[,-which(names(data) %in% removecols)]
 
     fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")
     Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)
-  } 
+  } else {
+    Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," No columns have more than ",Missing_cols_for_removal,"% of their data missing. ")
+  }
 
   #Checking for more than 5% missing values in rows
   badrows = apply(data,1,pMiss)
-  if(sum(badrows[which(badrows>=5)])){
-    #Rows to remove
+  if(sum(badrows[which(badrows>=Missing_rows_for_removal)])){
+
+    #only keep the good rows
     data <- data[which(badrows<=Missing_rows_for_removal),]
 
     fileloc <- print_and_save_graph("aggr",data,"After_Row_Removal.jpg")
     Email_file_to_Slack(paste(" WHOHA.  More than ",Missing_rows_for_removal,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)
+  } else {
+        Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," You're not missing more than ",Missing_rows_for_removal,"% of data points in any your rows.")
+  }
+
+  if(Message_if_you_have_clean_data!=""){
+    Email_file_to_Slack(Message_if_you_have_clean_data, paste(path,"/MrTImages/reuse these tools.jpg",sep=""))
   }
 
   # for (i in 1:39487) {
@@ -330,48 +311,51 @@ K_means_Clustering <- function(FIPS){
   missColNames = names(odata[missingCols>0])  # any missing data
 
   if(length(missColNames)!=0){
-  #colnames(odata)[sapply(odata, class)=="character"]
-  for (i in 1:length(missColNames)){
-    gdata = odata[,c(compColNames)]
-    bdata = odata[,c(missColNames)]
+    #colnames(odata)[sapply(odata, class)=="character"]
+    for (i in 1:length(missColNames)){
+      gdata = odata[,c(compColNames)]
+      bdata = odata[,c(missColNames)]
 
-    #move the current columns from "Bad columns" to "good columns"
-    current_var = missColNames[i]
-    gdata[,current_var] <- bdata[,current_var]
-    bdata[,current_var] <- NULL
+      #move the current columns from "Bad columns" to "good columns"
+      current_var = missColNames[i]
+      gdata[,current_var] <- bdata[,current_var]
+      bdata[,current_var] <- NULL
 
-    #only train and test using complete columns
-    train = gdata[!is.na(gdata[,current_var]),]
-    test = gdata[is.na(gdata[,current_var]),]
+      #only train and test using complete columns
+      train = gdata[!is.na(gdata[,current_var]),]
+      test = gdata[is.na(gdata[,current_var]),]
 
-    regression_formula = as.formula(paste(current_var," ~ .",sep=""))
-    kknn1  = kknn(regression_formula, train, test, k = 1, distance = 1)
-    kknn2  = kknn(regression_formula, train, test, k = 1, distance = 2)
-    kknn5  = kknn(regression_formula, train, test, k = 1, distance = 5)
+      regression_formula = as.formula(paste(current_var," ~ .",sep=""))
+      kknn1  = kknn(regression_formula, train, test, k = 1, distance = 1)
+      kknn2  = kknn(regression_formula, train, test, k = 1, distance = 2)
+      kknn5  = kknn(regression_formula, train, test, k = 1, distance = 5)
 
-    a1 = data.frame(test = kknn1$fitted.values, type = "kmeans k=1 dist=1")
-    a2 = data.frame(test = kknn2$fitted.values, type = "kmeans k=1 dist=2")
-    a3 = data.frame(test = kknn5$fitted.values, type = "kmeans k=1 dist=5")
-    a4 = data.frame(test = c(train[current_var]),type="original")
+      a1 = data.frame(test = kknn1$fitted.values, type = "kmeans k=1 dist=1")
+      a2 = data.frame(test = kknn2$fitted.values, type = "kmeans k=1 dist=2")
+      a3 = data.frame(test = kknn5$fitted.values, type = "kmeans k=1 dist=5")
+      a4 = data.frame(test = c(train[current_var]),type="original")
 
-    colnames(a1)[1]=current_var
-    colnames(a2)[1]=current_var
-    colnames(a3)[1]=current_var
-    colnames(a4)[1]=current_var
+      colnames(a1)[1]=current_var
+      colnames(a2)[1]=current_var
+      colnames(a3)[1]=current_var
+      colnames(a4)[1]=current_var
 
-    newdata = list(a1,a2,a3,a4)
-    q3.4 = do.call(rbind, newdata)
-    # ggplot(q3.4)+ 
-    #  aes_string(x=current_var,group="type",color="type") + 
-    #  geom_density(fill=NA)
+      newdata = list(a1,a2,a3,a4)
+      q3.4 = do.call(rbind, newdata)
+      # ggplot(q3.4)+ 
+      #  aes_string(x=current_var,group="type",color="type") + 
+      #  geom_density(fill=NA)
 
-    fileloc <- print_and_save_graph("density",q3.4,paste("k_means_",current_var,".jpg",sep=''))
-    Email_file_to_Slack(paste("The jibba jabba stops here!  I've replaced NA's in variable '",current_var,"''  using K means Clustering.  ",sep=""),fileloc)
+      fileloc <- print_and_save_graph("density",q3.4,paste("k_means_",current_var,".jpg",sep=''))
+      Email_file_to_Slack(paste("The jibba jabba stops here!  I've replaced NA's in variable '",current_var,"''  using K means Clustering.  ",sep=""),fileloc)
 
-    # m <- ggplot(q3.4, aes(x=age, group=type,color=type))
-    # m + geom_density(fill=NA)
-    odata[current_var][is.na(odata[current_var])]=a3[,current_var]
-  }
+      # m <- ggplot(q3.4, aes(x=age, group=type,color=type))
+      # m + geom_density(fill=NA)
+      odata[current_var][is.na(odata[current_var])]=a3[,current_var]
+    }
+  } else {
+    #no missing columns
+      Email_file_to_Slack("No missing data, so we don't need KNN.","")
   }
   # Drink your milk.
 
@@ -386,171 +370,168 @@ K_means_Clustering <- function(FIPS){
 
 LinearModelAnalysis <- function(){
   
- # Create categories of Rurual codes and Urban Influence Codes
-# category_list=c("Rural_urban_continuum_code_2013","Urban_influence_code_2013")
-FIPS$Rural_urban_continuum_code_2013 <- as.factor(FIPS$Rural_urban_continuum_code_2013)
-FIPS$Urban_influence_code_2013 <- as.factor(FIPS$Urban_influence_code_2013)
+  # Create categories of Rurual codes and Urban Influence Codes
+  # category_list=c("Rural_urban_continuum_code_2013","Urban_influence_code_2013")
+  FIPS$Rural_urban_continuum_code_2013 <- as.factor(FIPS$Rural_urban_continuum_code_2013)
+  FIPS$Urban_influence_code_2013 <- as.factor(FIPS$Urban_influence_code_2013)
 
-# Metropolitan Counties*  Rural_urban_continuum_code_2013
-# Code  Description
-# 1 Counties in metro areas of 1 million population or more
-# 2 Counties in metro areas of 250,000 to 1 million population
-# 3 Counties in metro areas of fewer than 250,000 population
-  
-# Nonmetropolitan Counties  
-# 4 Urban population of 20,000 or more, adjacent to a metro area
-# 5 Urban population of 20,000 or more, not adjacent to a metro area
-# 6 Urban population of 2,500 to 19,999, adjacent to a metro area
-# 7 Urban population of 2,500 to 19,999, not adjacent to a metro area
-# 8 Completely rural or less than 2,500 urban population, adjacent to a metro area
-# 9 Completely rural or less than 2,500 urban population, not adjacent to a metro area
-
-
-# Metropolitan Counties*  - URBAN-INFLUENCE-CODE
-# Code  
-# 1 In large metro area of 1+ million residents
-# 2 In small metro area of less than 1 million residents
-  
-# Nonmetropolitan Counties  
-# 3 Micropolitan area adjacent to large metro area
-# 4 Noncore adjacent to large metro area
-# 5 Micropolitan area adjacent to small metro area
-# 6 Noncore adjacent to small metro area and contains a town of at least 2,500 residents
-# 7 Noncore adjacent to small metro area and does not contain a town of at least 2,500 residents
-# 8 Micropolitan area not adjacent to a metro area
-# 9 Noncore adjacent to micro area and contains a town of at least 2,500 residents
-# 10  Noncore adjacent to micro area and does not contain a town of at least 2,500 residents
-# 11  Noncore not adjacent to metro or micro area and contains a town of at least 2,500 residents
-# 12  Noncore not adjacent to metro or micro area and does not contain a town of at least 2,500 residents
-  #go through and add numeric items into correlation table
+  # Metropolitan Counties*  Rural_urban_continuum_code_2013
+  # Code  Description
+  # 1 Counties in metro areas of 1 million population or more
+  # 2 Counties in metro areas of 250,000 to 1 million population
+  # 3 Counties in metro areas of fewer than 250,000 population
+    
+  # Nonmetropolitan Counties  
+  # 4 Urban population of 20,000 or more, adjacent to a metro area
+  # 5 Urban population of 20,000 or more, not adjacent to a metro area
+  # 6 Urban population of 2,500 to 19,999, adjacent to a metro area
+  # 7 Urban population of 2,500 to 19,999, not adjacent to a metro area
+  # 8 Completely rural or less than 2,500 urban population, adjacent to a metro area
+  # 9 Completely rural or less than 2,500 urban population, not adjacent to a metro area
 
 
-########################################################################################################
-#    NEED TO BUIULD A FUNCTION FOR CREATING FACTORS OUT OF REGULAR COLUMNS
-########################################################################################################
-#mtcars$am <- as.factor(mtcars$am)
+  # Metropolitan Counties*  - URBAN-INFLUENCE-CODE
+  # Code  
+  # 1 In large metro area of 1+ million residents
+  # 2 In small metro area of less than 1 million residents
+    
+  # Nonmetropolitan Counties  
+  # 3 Micropolitan area adjacent to large metro area
+  # 4 Noncore adjacent to large metro area
+  # 5 Micropolitan area adjacent to small metro area
+  # 6 Noncore adjacent to small metro area and contains a town of at least 2,500 residents
+  # 7 Noncore adjacent to small metro area and does not contain a town of at least 2,500 residents
+  # 8 Micropolitan area not adjacent to a metro area
+  # 9 Noncore adjacent to micro area and contains a town of at least 2,500 residents
+  # 10  Noncore adjacent to micro area and does not contain a town of at least 2,500 residents
+  # 11  Noncore not adjacent to metro or micro area and contains a town of at least 2,500 residents
+  # 12  Noncore not adjacent to metro or micro area and does not contain a town of at least 2,500 residents
+    #go through and add numeric items into correlation table
 
-########################################################################################################
-#    NEED TO BUILD FUNCTIONS FOR DICING COLUMNS
-########################################################################################################
 
-#    SEPARATES CONTINUOUS AND CATEGORICAL VARIABLES
-  	j=2  #start at 2 because NewGuys first row is already initialized
-    k=2
-  	continuousVariables<-as.data.frame(FIPS$FIPS)
-  	categoricalVariables<-as.data.frame(FIPS$FIPS)
-  	#find non-numeric names
-     	for (i in 1:length(colnames(FIPS))){
-  	   print(paste("coltype ",i," ",colnames(FIPS)[i]," ",class(FIPS[,i])))
-     	  if (class(FIPS[,i])=="integer"){ 
-     	    continuousVariables[j]<-FIPS[i]
-     	    j<-j+1
-     	  }else{
-       	    if (class(FIPS[,i])=="numeric"){ 
-       	      continuousVariables[j]<-FIPS[i]
-       	      j<-j+1
-       	    }else{
-       	      categoricalVariables[k]<-FIPS[i]
-              k<-k+1
-            }
-     	  }
-     	}
-  
-  	#Which columns to use
-  	MakeMePerCapita <- c("All FilingsTotal",
-  	                     "Business Filings Total",
-  	                     "Nonbusiness Filings Total", 
-  	                     "Number of establishments",
-  	                     #"Paid employees for pay period including March 12 (number)", 
-  	                     #"first_q_payroll",
-  	                     #"annual_payroll", 
-  	                     "N_POP_CHG_2014",
-  	                     "Births_2014", 
-  	                     "Deaths_2014", 
-  	                     "NATURAL_INC_2014",
-  	                     "INTERNATIONAL_MIG_2014",
-  	                     "DOMESTIC_MIG_2014", 
-  	                     "NET_MIG_2014",
-  	                     "RESIDUAL_2014", 
-  	                     "GQ_ESTIMATES_2014", 
-  	                     "POVALL_2013", 
-  	                     "POV017_2013",
-  	                     "POV517_2013", 
-  	                     #"POV05_2013",
-  	                     "Civilian_labor_force_2014",
-  	                     "Employed_2014",
-  	                     "Unemployed_2014",
-  	                     "SBs")
-  	percapita<-FIPS[2]
-i=1
-  	for (i in 1:length(MakeMePerCapita)){
-  	    print(paste("MakeMePerCapita ",i," ",colnames(continuousVariables[eval(MakeMePerCapita[i])])))
-    	  ((continuousVariables[,eval(MakeMePerCapita[i])]=continuousVariables[,eval(MakeMePerCapita[i])]/continuousVariables[,"POP_ESTIMATE_2014"]))
-  	  #rename columns that have been adjusted to Per Capita Columns
-    	  names(continuousVariables)[names(continuousVariables)==eval(MakeMePerCapita[i])] <- paste(eval(MakeMePerCapita[i]),"PerCapita",sep="")
-  	  }
+  ########################################################################################################
+  #    NEED TO BUIULD A FUNCTION FOR CREATING FACTORS OUT OF REGULAR COLUMNS
+  ########################################################################################################
+  #mtcars$am <- as.factor(mtcars$am)
 
-  	  	#Remove NAs- REDUCES ZIP CODES FROM 3,100 TO 1,100.  YIKES
-  	final = filter(continuousVariables, !is.na(continuousVariables$SBsPerCapita))    
-  	#sum(final$SBsPerCapita)
-  	
-  	#filter for less than 100 SB's per county
-  	#final = filter(final, final$SBstest>100)    
-  	#sum(final$SBstest)
-   #Find correlation matrix of SB's
+  ########################################################################################################
+  #    NEED TO BUILD FUNCTIONS FOR DICING COLUMNS
+  ########################################################################################################
 
-#  SBMatrix<-cor(FIPS, method = "spearman", use = "pairwise")
-  SBMatrix<-cor(final, method = "spearman", use = "pairwise")
-#  sort(SBMatrix[nrow(SBMatrix),])
+  #    SEPARATES CONTINUOUS AND CATEGORICAL VARIABLES
+    	j=2  #start at 2 because NewGuys first row is already initialized
+      k=2
+    	continuousVariables<-as.data.frame(FIPS$FIPS)
+    	categoricalVariables<-as.data.frame(FIPS$FIPS)
+    	#find non-numeric names
+       	for (i in 1:length(colnames(FIPS))){
+    	   print(paste("coltype ",i," ",colnames(FIPS)[i]," ",class(FIPS[,i])))
+       	  if (class(FIPS[,i])=="integer"){ 
+       	    continuousVariables[j]<-FIPS[i]
+       	    j<-j+1
+       	  }else{
+         	    if (class(FIPS[,i])=="numeric"){ 
+         	      continuousVariables[j]<-FIPS[i]
+         	      j<-j+1
+         	    }else{
+         	      categoricalVariables[k]<-FIPS[i]
+                k<-k+1
+              }
+       	  }
+       	}
+    
+    	#Which columns to use
+    	MakeMePerCapita <- c("All FilingsTotal",
+    	                     "Business Filings Total",
+    	                     "Nonbusiness Filings Total", 
+    	                     "Number of establishments",
+    	                     #"Paid employees for pay period including March 12 (number)", 
+    	                     #"first_q_payroll",
+    	                     #"annual_payroll", 
+    	                     "N_POP_CHG_2014",
+    	                     "Births_2014", 
+    	                     "Deaths_2014", 
+    	                     "NATURAL_INC_2014",
+    	                     "INTERNATIONAL_MIG_2014",
+    	                     "DOMESTIC_MIG_2014", 
+    	                     "NET_MIG_2014",
+    	                     "RESIDUAL_2014", 
+    	                     "GQ_ESTIMATES_2014", 
+    	                     "POVALL_2013", 
+    	                     "POV017_2013",
+    	                     "POV517_2013", 
+    	                     #"POV05_2013",
+    	                     "Civilian_labor_force_2014",
+    	                     "Employed_2014",
+    	                     "Unemployed_2014",
+    	                     "SBs")
+    	percapita<-FIPS[2]
+  i=1
+    	for (i in 1:length(MakeMePerCapita)){
+    	    print(paste("MakeMePerCapita ",i," ",colnames(continuousVariables[eval(MakeMePerCapita[i])])))
+      	  ((continuousVariables[,eval(MakeMePerCapita[i])]=continuousVariables[,eval(MakeMePerCapita[i])]/continuousVariables[,"POP_ESTIMATE_2014"]))
+    	  #rename columns that have been adjusted to Per Capita Columns
+      	  names(continuousVariables)[names(continuousVariables)==eval(MakeMePerCapita[i])] <- paste(eval(MakeMePerCapita[i]),"PerCapita",sep="")
+    	  }
 
+    	  	#Remove NAs- REDUCES ZIP CODES FROM 3,100 TO 1,100.  YIKES
+    	final = filter(continuousVariables, !is.na(continuousVariables$SBsPerCapita))    
+    	#sum(final$SBsPerCapita)
+    	
+    	#filter for less than 100 SB's per county
+    	#final = filter(final, final$SBstest>100)    
+    	#sum(final$SBstest)
+     #Find correlation matrix of SB's
+
+  #  SBMatrix<-cor(FIPS, method = "spearman", use = "pairwise")
+    SBMatrix<-cor(final, method = "spearman", use = "pairwise")
+  #  sort(SBMatrix[nrow(SBMatrix),])
 }
 
-
 CheckCorrs <- function(){
- 
-#------- CHECK FOR THESE FOR EACH OF THE INPUT VARIABLES  ----------
-#➢ Linearity
-#➢ Constant Variance
-#➢ Normality  
-#➢ Independent Errors
+  #------- CHECK FOR THESE FOR EACH OF THE INPUT VARIABLES  ----------
+  #➢ Linearity
+  #➢ Constant Variance
+  #➢ Normality  
+  #➢ Independent Errors
 
-Sig=final[1]
-NoSig=final[1]
-#i=3
-i=1
+  Sig=final[1]
+  NoSig=final[1]
+  #i=3
+  i=1
   #find non-numeric names
-x <- final$SBsPerCapita
+  x <- final$SBsPerCapita
   for (i in 1:nrow(SBMatrix)){
-        y <- final[eval(colnames(SBMatrix)[i])][,1]
-        qplot(x, y, geom = "smooth")
-        qplot(x, y)
-        #aovr <- summary(aov(x ~ y),na.rm="TRUE") #Conducting the One-Way ANOVA on the weight
-        aovr <- summary(aov(x ~ y,na.rm="TRUE")) #Conducting the One-Way ANOVA on the weight
-      if (aovr[[1]][5][1,]<0.025){ 
-        print(paste("SIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))
-        Sig[eval(colnames(SBMatrix)[i])] <- final[i]
+    y <- final[eval(colnames(SBMatrix)[i])][,1]
+    qplot(x, y, geom = "smooth")
+    qplot(x, y)
+    #aovr <- summary(aov(x ~ y),na.rm="TRUE") #Conducting the One-Way ANOVA on the weight
+    aovr <- summary(aov(x ~ y,na.rm="TRUE")) #Conducting the One-Way ANOVA on the weight
+    if (aovr[[1]][5][1,]<0.025){ 
+      print(paste("SIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))
+      Sig[eval(colnames(SBMatrix)[i])] <- final[i]
     }else{
       print(paste("INSIGNIFICANT Name:",colnames(SBMatrix)[i]," Class:",class(SBMatrix[,i])))
       NoSig[eval(colnames(SBMatrix)[i])] <- final[i]
     }
   }
 
-# #remove missing values
-# impute.na <- function(x){
-#   return (sapply(x, function(f){is.na(f)<-which(f == '');f}))
-# }
-# ft <- sapply(final,function(f){is.na(f)<-which(f == '');f})
+  # #remove missing values
+  # impute.na <- function(x){
+  #   return (sapply(x, function(f){is.na(f)<-which(f == '');f}))
+  # }
+  # ft <- sapply(final,function(f){is.na(f)<-which(f == '');f})
 
-# count number of NAs per row  and remove rows with more than 3 NAs
-numNAs_by_row <- apply(ft, 1, function(z) sum(is.na(z)))
-ft <- ft[!(numNAs_by_row >= 3),]
+  # count number of NAs per row  and remove rows with more than 3 NAs
+  numNAs_by_row <- apply(ft, 1, function(z) sum(is.na(z)))
+  ft <- ft[!(numNAs_by_row >= 3),]
 }
-library(crabs)
+
 AICCANalysis <- function(){
-########################################################################
-#boxcox transofrms
-ft$SBsPerCapita 
-ft$SBsPerCapita
+  ########################################################################
+  #boxcox transofrms
+  ft$SBsPerCapita 
+  ft$SBsPerCapita
 
   SBmodel.empty = lm(SBsPerCapita ~ 1, data = as.data.frame(ft)) #The model with an intercept ONLY.
   SBmodel.empty.bc = boxCox(SBmodel.empty)
@@ -566,7 +547,7 @@ ft$SBsPerCapita
 
   summary(SBmodel.full.bc)
 
-########################################################################
+  ########################################################################
 
   scope = list(lower = formula(SBmodel.empty), upper = formula(SBmodel.full))
 
@@ -587,72 +568,70 @@ ft$SBsPerCapita
   bothBIC.empty = step(SBmodel.empty, scope, direction = "both", k = log(50))
   bothBIC.full = step(SBmodel.full, scope, direction = "both", k = log(50))
 
-SBmodel.forw <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita, data = as.data.frame(ft))
+  SBmodel.forw <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita, data = as.data.frame(ft))
 
 
-SBmodel.back <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = as.data.frame(ft))
+  SBmodel.back <- lm(SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013, data = as.data.frame(ft))
 
   summary(SBmodel.forw)
   summary(SBmodel.back)
   plot(SBmodel)
-    
+
   summary(lm(Sig$SBsPerCapita ~ CI90LBALLP_2013 + PCTPOVALL_2013 + no_exercise_percent, data = Sig))
   plot(lm(Sig$SBsPerCapita ~ CI90LBALLP_2013 + PCTPOVALL_2013 + no_exercise_percent +`Theil1990: Theil index of income disparity, 1990`, data = Sig))
+}
 
-  Prettyqplot2<-function(xss,yss){
-    
+Prettyqplot2<-function(xss,yss){
+
   print(colnames(Sig))
 
-    x <- Sig$SBsPerCapita*100000
+  x <- Sig$SBsPerCapita*100000
 
-    #positive corrs
-    titlevar="Median_Household_Income_2013"
-    titlevar="N_POP_CHG_2014PerCapita"
-    titlevar="Employed_2014PerCapita"
-    titlevar="Civilian_labor_force_2014PerCapita"
-    titlevar="Prc_of_adults_with_a_bachelor's_deg_or_higher"
+  #positive corrs
+  titlevar="Median_Household_Income_2013"
+  titlevar="N_POP_CHG_2014PerCapita"
+  titlevar="Employed_2014PerCapita"
+  titlevar="Civilian_labor_force_2014PerCapita"
+  titlevar="Prc_of_adults_with_a_bachelor's_deg_or_higher"
 
-    #negative corrs
-    titlevar="Deaths_2014PerCapita"
-    titlevar="gini2000"
-    titlevar="few_fruits_percent"
-    titlevar="Unemployment_rate_2014"
+  #negative corrs
+  titlevar="Deaths_2014PerCapita"
+  titlevar="gini2000"
+  titlevar="few_fruits_percent"
+  titlevar="Unemployment_rate_2014"
 
   #Significant as per LM Model
   titlevar="CI90LBALLP_2013"
   titlevar="PCTPOVALL_2013"
   titlevar="no_exercise_percent"
 
-      y <-Sig[,titlevar]
+  y <-Sig[,titlevar]
 
-      #for (i in 1:ncol(Sig)){
-        qplot(x, y, geom = "smooth",na.rm=TRUE)
-        qplot(x, y,na.rm=TRUE)
-        cor(x,y, method = "spearman", use = "pairwise")
-        aovr <- summary(aov(x ~ y,na.rm="TRUE")) #Conducting the One-Way ANOVA on the weight
-        ggplot(final, aes(x, (y))) +
-        geom_point(size = 5) +
-        geom_point(aes(col = Sig[,"2013_Urban_Influence_Code"]), size = 4) +
-        theme_hc() + 
-        ylab(titlevar) + 
-        xlab("Scumbags per 100,000")+
-        ggtitle(paste("Scumbags vs ",titlevar,"by County"))+
-        ggsave(file=paste(titlevar,"x~y.png",sep=""))
- }
-
+  #for (i in 1:ncol(Sig)){
+  qplot(x, y, geom = "smooth",na.rm=TRUE)
+  qplot(x, y,na.rm=TRUE)
+  cor(x,y, method = "spearman", use = "pairwise")
+  aovr <- summary(aov(x ~ y,na.rm="TRUE")) #Conducting the One-Way ANOVA on the weight
+  ggplot(final, aes(x, (y))) +
+  geom_point(size = 5) +
+  geom_point(aes(col = Sig[,"2013_Urban_Influence_Code"]), size = 4) +
+  theme_hc() + 
+  ylab(titlevar) + 
+  xlab("Scumbags per 100,000")+
+  ggtitle(paste("Scumbags vs ",titlevar,"by County"))+
+  ggsave(file=paste(titlevar,"x~y.png",sep=""))
+}
 
 makeplot <- function(){
 
-
-plot(lm(Sig,x ~ .)) #Conducting the One-Way ANOVA on the weight
-
+  plot(lm(Sig,x ~ .)) #Conducting the One-Way ANOVA on the weight
   plot(lm(x ~ y)) #Conducting the One-Way ANOVA on the weight
   summary(aov(x ~ y)) #Conducting the One-Way ANOVA on the weight
   #loss by considering each category of diet.
+  boxplot(x ~ y,
+    col = c("red", "orange", "yellow", "green"),
+    main = "Distribution of Weight Loss\nfor Various Diets")
 }
-boxplot(x ~ y,
-          col = c("red", "orange", "yellow", "green"),
-          main = "Distribution of Weight Loss\nfor Various Diets")
 
 BuildPrettyPictures <- function(){
 	ggplot(iris, aes(y = Sepal.Length, x = Sepal.Width, color=Species),  auto.key=TRUE) +
@@ -661,8 +640,6 @@ BuildPrettyPictures <- function(){
 	  geom_rug(position = "jitter") +
 	  ggtitle("Sepal Length-Width")
 }
-
-
 
 Prettyqplot<-function(xs,ys){
   qplot(eval(xs), ys, geom = "smooth")
@@ -686,38 +663,240 @@ Prettyqplot<-function(xs,ys){
     theme_hc() + 
     ylab("Homeless Rate Change (percentage points)") + 
     xlab("Mental Health Budget Change (percentage points)")+
-    ggtitle("State Homeless Rate Change by MH Budget Change, 2009-2013")
+    ggtitle("State Homeless Rate Change by MH Budget Change, 2009-2013") 
+}
+
+PlotMarginals <- function(data,name,type){
+  # list("Histogram" = "hist", 
+  #  "Kernel Density" = "kd", 
+  #  "Combined" = "comb")) 
+
+  plot.new()
+  print(name)
+
+  if (type == "hist"){
+      p <- ggplot(data, aes_q(x = as.name(name))) + geom_histogram(fill = "deepskyblue2", alpha = 0.2, color = "white") + title("Marginal Distribution") + ylab('Counts')
+  } else if (type == "kd"){
+      p <- ggplot(data, aes_q(x = as.name(name))) + geom_density(fill = "blue" , alpha = 0.2) + title("Marginal Distribution") + ylab('Density')
+  } else {
+       p <- ggplot(data, aes_q(x = as.name(name))) + geom_histogram(aes(y = ..density..), fill = "deepskyblue2", color = "white", alpha = 0.2) + geom_density(fill = "blue" , alpha = 0.2) + title("Marginal Distribution") + ylab('Density')
+  }
+  p <- p + theme(text = element_text(size=20))
+  print(p)
+}
+
+Outliers <- function(data,cutoff_in){
+  #replace this with the function that CMakris showed us
+  plot.new()
+  num_cols <- dim(data)[1]
+
+  mahalanobis_dist <- mahalanobis(data,colMeans(data),cov(data), ,tol=1e-20)
   
+  cutoff <- qchisq(1 - cutoff_in / 100, dim(data)[2], ncp = 0, lower.tail = TRUE, log.p = FALSE)
+  
+  outlier <- mahalanobis_dist > cutoff
+  
+  df_outliers <<- data.frame(x = c(1:dim(data)[1]), y = log(sqrt(mahalanobis_dist)), z = outlier)
+  
+  show_outliers$Names <<- row_names[df_outliers[,3]]
+  show_outliers$Distances <<- mahalanobis_dist[df_outliers[,3]]
+    
+  p <- ggplot(df_outliers,aes(x = x,y = y))
+  
+  p <- p + geom_point(aes(colour = z)) + geom_abline(intercept = log(sqrt(cutoff)), slope = 0,linetype="dashed",colour = "red") + labs(x = "Observation Number",y = "log(Mahalanobis Distances)", title = paste("Outlier Plot")) + scale_colour_manual(name="Type", values = c("FALSE" = "blue","TRUE" = "#FF0080"), breaks=c("TRUE", "FALSE"), labels=c("Outlier", "Inlier"))  
+  
+  p <- p + theme(plot.title = element_text(vjust=2), text = element_text(size=20))
+  print(p)
+
+  return(list(df_outliers,p))
+}
+  
+Scree_Plot <- function(data){
+  plot.new()
+
+  result <- prcomp(data, center = TRUE, scale = TRUE)
+  retained_variance <- cumsum(unlist(result[1])^2) /  max(cumsum(unlist(result[1])^2))
+  
+  df <- data.frame(x = c(1:dim(data)[2]), y = retained_variance)
+  
+  p <- ggplot(df, aes(x = x,y = y)) + xlab('Retained Dimensions') + ylab('Explained Variance') + ggtitle('Scree Plot')
+  p <- p + geom_point() + geom_line() + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=45)) 
+
+  print(p)
+}
+  
+Correlation <- function(data){
+  plot.new()
+
+  #  data_t <- data[,order(colnames(data))]
+  temp <- cor(data)
+  temp[lower.tri(temp)] <- NA
+  temp <- melt(temp)
+  temp <- na.omit(temp)
+
+  p <- ggplot(temp, aes(x=Var1, y=Var2, fill = value)) + geom_tile(alpha = 0.75, colour = "white") + scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1,1), name = "Pearson\ncorrelation\n")
+
+  p <- p + theme_grey(base_size = base_size) + labs(x = "", y = "") + scale_x_discrete(expand = c(0, 0)) + scale_y_discrete(expand = c(0, 0)) + ggtitle("Correlation Heatmap")
+
+  p <- p + geom_text(aes(Var1, Var2, label = round(value,2)), color = "black", size = 4)+  
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_blank(),
+    legend.justification = c(0, 0),
+    legend.position = c(.5, 0),
+    legend.direction = "horizontal")+
+    guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
+    title.position = "right", title.hjust = 0.5))
+  print(p)
+}
+  
+Mean_Vectors <- function(data, type){
+  plot.new()
+  output_mean = c() #need to replace this with reactive shiny
+  output_se = c() #need to replace this with reactive shiny
+  #ranges <- reactiveValues(y = NULL)
+  ranges = c()
+  ranges$y = 100
+  ranges$x = 100
+
+  data=idata.NAs_replaced
+   num_vars <- dim(data)[2]
+  
+   for (i in c(1:num_vars)){
+    name <- colnames(data)[i]
+    
+    output_mean[i] <- mean(data[,i],na.rm = TRUE) 
+    output_se[i] <- sd(data[,i],na.rm = TRUE) / sqrt(length(data[,3][!is.na(data[,3])]))
+   }
+
+   index <- output_mean < 100
+   names_to_use <- colnames(data)
+   
+   df <- data.frame(names = names_to_use[index], means = output_mean[index])
+   
+   keep_data <- data[,index]
+   keep_data <- melt(keep_data)
+   
+   if (type == "Scatter"){
+    p <- ggplot(df, aes(x = names, y = means))
+     p <- p + geom_point() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)
+   } else if(type == "Scatter with error bars"){
+     limits <- aes(ymax = output_mean[index] + output_se[index], ymin=output_mean[index] - output_se[index])
+     p <- ggplot(df, aes(x = names, y = means))
+     p <- p + geom_point() + geom_errorbar(limits, width=0.3) + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)
+   } else if(type == "Violin Plot"){
+    p <- ggplot(keep_data,aes(x = variable, y = value)) + geom_violin() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)
+   } else{
+    p <- ggplot(keep_data,aes(x = variable, y = value)) + geom_boxplot() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)
+   }
+
+  print(p)
+}
+
+Clustering <- function(data,num){
+  plot.new()
+
+  clust <- hclust(dist(data), method = "complete")
+
+  memb <- cutree(clust, k = num)
+  
+  fit <- prcomp(data, center=TRUE, scale = TRUE)
+  
+  df <- data.frame(x = fit$x[,1], y = fit$x[,2], z = memb)
+  
+  p <- ggplot(df,aes(x = x,y = y, colour = factor(z)))
+  
+  p <- p + geom_point(size = 5) + xlab('First Principal Component') + ylab('Second Principle Component') + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x = element_text(vjust = 2)) + scale_colour_discrete(name = "Clusters")  
+
+  print(p)
+}
+
+Linear_Regression <- function(data,num){
+  plot.new()
+
+  print(p)
+}
+
+MultiVariate_Regression <- function(data,num){
+  plot.new()
+
+  print(p)
 }
 
 # depth = quakes$depth
-# > Depth = equal.count(depth, number=8,
-# overlap=.1)
-# • The shingle assigned to Depth has 8 intervals with
-# adjacent intervals having 10% of their values in
-# common.
-# Shingles
-# • A shingle contains the numerical values it was created
-# from and can be treated like a copy of that variable. For
-# example:
-# > range(Depth)
-# [1] 40 680
-# > range(depth)
-# [1] 40 680
-
-# Bankruptcy, Disparity, Education, Fruits_Vegetables, No_Exercise, NumCompanies, PopulationEstimates,SocialCapital,Unemployment, ZiptoFips
-
-
-#MySQL Community Server (GPL) Stinks
-
-# First off, this is a topic near and dear to my heart.  When I was 21 and first moved to the city I found out my GF was dating someone in Baltimore for 6 months.  I had a "tom-cruise" style jump on the couch moment. 
-
-#secondly, I'm using ZCTA as a proxy for Zip code.  of the 41k zip codes, 35k of them are identical to the ZCTA so, close enough. 
-
 # KXCD comics
 
 #my spotify playlist https://open.spotify.com/user/shanonlev/playlist/3mAMTVobhui7WNAnGowQQrFruits_Vegetables[,1]=as.numeric(Fruits_Vegetables[,1])
 
+ShinyServer <- function(){
+    show_outliers <<- reactiveValues(Names = NULL, Distances = NULL)
+    show_outliers = c();
+  }
 
+main <- function(){
+  load_Constants()
+  load_DataSets()
 
+  setwd(path)
+  save.image("am.RData")
+  #load("am.RData")
+
+  #Define DataSet and Independent Variable
+  AMData <- loadAllAMMysqlData()
+  dependentVariable <- "SBsPerCapita"
+  idata <- AMData
+  #idata <- titanic3  #missing data 
+  #idata <- airquality   #missing data 
+  #idata <- cars
+  #idata <- iris
+  #idata <- state.x77
+  #idata <- sleep
+  #idata <- chickwts
+
+  dependentVariable <- colnames(idata)[1]
+  row_names    <<- idata[,1]; 
+  column_names <<- idata[1,]; # store the column names for future reference 
+
+  #start analyzing the dataset
+  #Email_file_to_Slack(paste("I pity the foo'... Who tries to analyze a dataset with ",nrow(idata)," rows and ",ncol(idata), " columns by hand. Sucka.",sep=""),"")
+
+  #Check for missingness (blanks and NA's)
+  idata.Missing <- Missingness_Analysis(idata)
+
+  #run K_means on the remaining NA's in the data
+  idata.NAs_replaced <- K_means_Clustering(idata.Missing)
+
+  #Show histograms of data
+  PlotMarginals(idata.NAs_replaced,dependentVariable,"comb")
+
+  Outliers(idata.NAs_replaced,5)
+
+  Scree_Plot(idata.NAs_replaced)
+
+  Correlation(idata.NAs_replaced)
+
+  Mean_Vectors(idata.NAs_replaced,"Violin Plot")  #broken
+
+  Clustering(idata.NAs_replaced,2)  #broken
+
+  Linear_Regression(idata.NAs_replaced)  #broken
+
+  MultiVariate_Regression(idata.NAs_replaced)  #broken
+
+  #➢ Linearity
+  # Not linear? Does Tranform help?
+
+  #➢ Constant Variance
+  # Not linear? Does Tranform help?
+
+  #➢ Normality
+  #Checking for normality of Dependent Variable
+  #Run Box-Cox Transformation on dependent Variable
+
+  #➢ Independent Error
+}
 

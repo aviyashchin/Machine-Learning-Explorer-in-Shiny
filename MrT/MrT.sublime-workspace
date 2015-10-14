@@ -1,0 +1,1053 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				".",
+				"."
+			],
+			[
+				"missingness",
+				"Missingness_Analysis"
+			],
+			[
+				"Sbs",
+				"SBsPerCapita"
+			],
+			[
+				"ft",
+				"ft"
+			],
+			[
+				"x",
+				"x"
+			],
+			[
+				"FIPS",
+				"FIPS"
+			],
+			[
+				"allscumba",
+				"allscumbags"
+			],
+			[
+				"Fru",
+				"Fruits_Vegetables"
+			],
+			[
+				"con",
+				"con"
+			],
+			[
+				"bo",
+				"bootcamp003_student/"
+			],
+			[
+				"b",
+				"bootcamp003_student/"
+			],
+			[
+				"disp",
+				"Disparity"
+			],
+			[
+				"Fr",
+				"Fruits_Vegetables"
+			],
+			[
+				"Ashly",
+				"AshlyMadison/"
+			],
+			[
+				"year",
+				"yearID"
+			],
+			[
+				"sala",
+				"salaries_by_team_and_year"
+			],
+			[
+				"grou",
+				"group_by"
+			],
+			[
+				"faith",
+				"faithful_tbl"
+			],
+			[
+				"char",
+				"chartr"
+			],
+			[
+				"Aaw",
+				"AwayGoal"
+			],
+			[
+				"to",
+				"To"
+			],
+			[
+				"ann",
+				"Annualized"
+			],
+			[
+				"To",
+				"To"
+			],
+			[
+				"Job",
+				"JobsyAgency"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"OR",
+				"OR"
+			],
+			[
+				"id",
+				"DepartmentID"
+			],
+			[
+				"Depart",
+				"DepartmentID"
+			],
+			[
+				"de",
+				"DepartmentID"
+			],
+			[
+				"Empl",
+				"Employee"
+			],
+			[
+				"Emplo",
+				"EmployeeName"
+			],
+			[
+				"file",
+				"_numFields〔variable〕"
+			],
+			[
+				"a",
+				"a"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Users/avi/boxer/MrT/AviYashchin_project_1.1.R",
+			"settings":
+			{
+				"buffer_size": 39273,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/avi/boxer/MrT/shiny/server.r",
+			"settings":
+			{
+				"buffer_size": 9971,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/avi/boxer/MrT/shiny/ui.r",
+			"settings":
+			{
+				"buffer_size": 1749,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/avi/boxer/MrT/mrtquotes.dat",
+			"settings":
+			{
+				"buffer_size": 2908,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 87.0,
+		"last_filter": "git push",
+		"selected_items":
+		[
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git pull",
+				"Git: Pull"
+			],
+			[
+				"git commit",
+				"Git: Commit"
+			],
+			[
+				"git status",
+				"Git: Status"
+			],
+			[
+				"git add cur",
+				"Git: Add Current File"
+			],
+			[
+				"rb",
+				"R-Box: Choose Program"
+			],
+			[
+				"r-box",
+				"Build With: R-Box"
+			],
+			[
+				"git add ",
+				"Git: Add Current File"
+			],
+			[
+				"git add cu",
+				"Git: Add Current File"
+			],
+			[
+				"build ",
+				"Build With: R-Box"
+			],
+			[
+				"enable",
+				"Package Control: Enable Package"
+			],
+			[
+				"install packa",
+				"Package Control: Install Package"
+			],
+			[
+				"package control package",
+				"Package Control: Remove Package"
+			],
+			[
+				"disable",
+				"Package Control: Disable Package"
+			],
+			[
+				"install package",
+				"Package Control: Install Package"
+			],
+			[
+				"package",
+				"Package Control: Disable Package"
+			],
+			[
+				"toggle lint",
+				"SublimeLinter: Toggle Linter"
+			],
+			[
+				"lint this",
+				"SublimeLinter: Lint This View"
+			],
+			[
+				"lint this ",
+				"SublimeLinter: Lint This View"
+			],
+			[
+				"disable lint",
+				"SublimeLinter: Disable Linter"
+			],
+			[
+				"lint",
+				"SublimeLinter: Toggle Linter"
+			],
+			[
+				"lintr",
+				"SublimeLinter: Next Error"
+			],
+			[
+				"sublime linter",
+				"SublimeLinter: Lint This View"
+			],
+			[
+				"lint ",
+				"SublimeLinter: Toggle Linter"
+			],
+			[
+				"disab",
+				"Package Control: Disable Package"
+			],
+			[
+				"git add",
+				"Git: Add Current File"
+			],
+			[
+				"enable ",
+				"Package Control: Enable Package"
+			],
+			[
+				"enab",
+				"Package Control: Enable Package"
+			],
+			[
+				"packag",
+				"Package Control: Enable Package"
+			],
+			[
+				"disa",
+				"Package Control: Disable Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"git digg",
+				"Git: Diff Staged Files (Ignore Whitespace)"
+			],
+			[
+				"git commi",
+				"Git: Commit"
+			],
+			[
+				"git commit ",
+				"Git: Commit"
+			],
+			[
+				"git addu",
+				"Git: Add Current File"
+			],
+			[
+				"git pulL",
+				"Git: Pull"
+			],
+			[
+				"GIT COMMIT",
+				"Git: Commit"
+			],
+			[
+				"GIT ADD",
+				"Git: Add Current File"
+			],
+			[
+				"GIT PULL",
+				"Git: Pull"
+			],
+			[
+				"enable p",
+				"Package Control: Enable Package"
+			],
+			[
+				"package disa",
+				"Package Control: Disable Package"
+			],
+			[
+				"package disable",
+				"Package Control: Disable Package"
+			],
+			[
+				"package control: disab",
+				"Package Control: Disable Package"
+			],
+			[
+				"git delete",
+				"Git: Delete Branch"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"gitgutt",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"git add c",
+				"Git: Add Current File"
+			],
+			[
+				"git gut",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"git comit",
+				"Git: Commit Selected Hunk"
+			],
+			[
+				"git gutt",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"git gutter",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"git diff ",
+				"Git: Diff Current File"
+			],
+			[
+				"git all",
+				"Git: Log All"
+			],
+			[
+				"git diff",
+				"Git: Diff Current File"
+			],
+			[
+				"gutter",
+				"GitGutter: Compare Against HEAD"
+			],
+			[
+				"git commi	",
+				"Git: Commit"
+			],
+			[
+				"gitgu",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"git pul",
+				"Git: Pull"
+			],
+			[
+				"git update",
+				"Git: Update Project Ignored Files"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"package control dis",
+				"Package Control: Disable Package"
+			],
+			[
+				"terminal",
+				"Terminal: Open"
+			],
+			[
+				"package control di",
+				"Package Control: Disable Package"
+			],
+			[
+				"package control inst",
+				"Package Control: Install Package"
+			],
+			[
+				"package control ab",
+				"Package Control: Enable Package"
+			],
+			[
+				"gitgut",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"gitgutter",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"gitgi",
+				"GitGutter: Compare Against HEAD"
+			],
+			[
+				"quick",
+				"Git: Quick Commit"
+			],
+			[
+				"git gui",
+				"GitGutter: Compare Against Branch"
+			],
+			[
+				"git clone",
+				"Git: Diff Current File (Ignore Whitespace)"
+			],
+			[
+				"git conf",
+				"Git: Show Current File"
+			],
+			[
+				"r",
+				"SublimeREPL: R"
+			],
+			[
+				"git comi",
+				"Git: Commit"
+			],
+			[
+				"git log all",
+				"Git: Log All"
+			],
+			[
+				"git stauts",
+				"Git: Status"
+			],
+			[
+				"git",
+				"Git: Push"
+			],
+			[
+				"git p",
+				"Git: Pull"
+			],
+			[
+				"repl r",
+				"SublimeREPL: R"
+			],
+			[
+				"install pac",
+				"Package Control: Install Package"
+			],
+			[
+				"git:",
+				"Git: Status"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 593.0
+	},
+	"console":
+	{
+		"height": 144.0,
+		"history":
+		[
+			"git config --global push.default simple",
+			"it config --global push.default simple",
+			"import os; os.system('git --version')"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/avi/boxer",
+		"/Users/avi/boxer/MrT"
+	],
+	"file_history":
+	[
+		"/Users/avi/boxer/AshlyMadison/AviYashchin_project_1.1.R",
+		"/Users/avi/Dropbox (Personal)/programming/boxer/data/06GeneralizedLinearModelsCodeData.zip",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-08MultipleLinearRegression/aviyaschhin_multipleLinearRegression.Rmd",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-08MultipleLinearRegression/Samara_multiple_regression.Rmd",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-08MultipleLinearRegression/schlenker_mult_lin_reg_hw.R",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-08MultipleLinearRegression/sgp_hw_1008.Rmd",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-08MultipleLinearRegression/josephlee_multipleregression.R",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-08MultipleLinearRegression/JohnMontroy - W3H4 (Multiple Linear Regression).rmd",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-07SimpleLinearRegression/aviyashchin_simple_linear_regression.Rmd",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-07SimpleLinearRegression/jake.lm.Rmd",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-07SimpleLinearRegression/jfdarre_hw6.R",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-07SimpleLinearRegression/TamaraO_stats_hw3_linear_reg.Rmd",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-07SimpleLinearRegression/sgp_hw_1007.Rmd",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/Project2-Shiny/AviYashchin/ui.r",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/Project2-Shiny/AviYashchin/server.r",
+		"/Users/avi/Dropbox (Personal)/programming/boxer/AshlyMadison/AviYashchin_project_1.1.R",
+		"/Users/avi/Dropbox (Personal)/programming/boxer/AshlyMadison/mrtquotes.dat",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/Project2-Shiny/AviYashchin_project_1.1.R",
+		"/Users/avi/Dropbox (Personal)/programming/boxer/AshlyMadison/big-dog-master/Backup/server.r",
+		"/Users/avi/Dropbox (Personal)/programming/boxer/AshlyMadison/big-dog-master/Backup/ui.r",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/Project2-Shiny/AviYashchin_Server.R",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-07SimpleLinearRegression/aviyashchin_simple_linear_regression.R",
+		"/Users/avi/Dropbox (Personal)/programming/boxer/Avi_r_tools.R",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/Project1-ExploreVis/AviYashchin_project_1/AviYashchin_project_1.1.R",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-06MissingnessImputationAndKNN/JohnMontroy - W3H2 (Missingness, etc).R",
+		"/Users/avi/Dropbox (Personal)/programming/bootcamp003_student/10-06MissingnessImputationAndKNN/jfdarre_hw5.R",
+		"/Users/avi/boxer/data/Week3LectureCodeData/04 Multiple Linear Regression Lecture Code.R",
+		"/Users/avi/Dropbox (Personal)/programming/boxer/data/Week3LectureCodeData/03 Simple Linear Regression Lecture Code.R",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+		"/Users/avi/Dropbox (Personal)/programming/boxer/.git/COMMIT_EDITMSG",
+		"/Users/avi/boxer/bootcamp003_student/Project1-ExploreVis/AviYashchin_project_1/AviYashchin_project_1.R",
+		"/Users/avi/boxer/bootcamp003_student/10-06MissingnessImputationAndKNN/AviYashchinMissingnessImpute.R",
+		"/Users/avi/boxer/bootcamp003_student/10-07SimpleLinearRegression/aviyashchin_simple_linear_regression.R",
+		"/Users/avi/Desktop/f",
+		"/Users/avi/boxer/bootcamp003_student/10-07SimpleLinearRegression/empty.R",
+		"/Users/avi/boxer/bootcamp003_student/10-06MissingnessImputationAndKNN/jfdarre_hw5.R",
+		"/Users/avi/boxer/bootcamp003_student/10-06MissingnessImputationAndKNN/jake.missing.hw.R",
+		"/Users/avi/boxer/bootcamp003_student/10-05FoundationsOfStatistics/aviyashchin.R/Avi_Yashchin_Answer.R",
+		"/Users/avi/boxer/bootcamp003_student/Project1-ExploreVis/AviYashchin_project_1/#Make per capita",
+		"/Users/avi/boxer/bootcamp003_student/Project1-ExploreVis/Jake/Homelessness-Project.Rmd",
+		"/Users/avi/boxer/bootcamp003_student/Project1-ExploreVis/Jake/Presentation1.pptx",
+		"/Users/avi/boxer/data/Week3LectureCodeData/01 Foundations of Statistics Lecture Code.R",
+		"/Users/avi/boxer/data/Week3LectureCodeData/01temp.txt",
+		"/Users/avi/boxer/AshlyMadison/Column variable name Descriptions",
+		"/Users/avi/boxer/bootcamp003_student/09-28DataVisualizationWithggplot2/aviyashchin.R",
+		"/Users/avi/boxer/AshlyMadison/AshlyMadison.sql",
+		"/Users/avi/boxer/AshlyMadison/AshleyMadison.SQL",
+		"/Users/avi/boxer/Moneyball_Lab/Moneyball.R",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/SublimeREPL.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/SublimeREPL.sublime-settings",
+		"/Users/avi/boxer/AshlyMadison/AshleyMadison.R",
+		"/Users/avi/boxer/bootcamp003_student/09-28DataVisualizationWithggplot2/Data_Visualization_josephlee.R",
+		"/Users/avi/boxer/bootcamp003_student/09-28DataVisualizationWithggplot2/jfdarre_hw3.R",
+		"/Users/avi/boxer/bootcamp003_student/09-28DataVisualizationWithggplot2/davidcomfort_09-28DataVisualization.R",
+		"/Users/avi/boxer/Shiny/server.R",
+		"/Users/avi/boxer/Shiny/ui.R",
+		"/Users/avi/boxer/bootcamp003_student/09-25ManipulatingDataWithDplyr/aviyashchin.R",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/avi/boxer/bootcamp003_student/sql_quiz_part2/aviyashchin_sql_quiz2.sql",
+		"/Users/avi/boxer/bootcamp003_student/09-23BasicProgrammingElementsInR/aviyashchin.R",
+		"/Users/avi/boxer/bootcamp003_student/09-23BasicProgrammingElementsInR/*REPL* [r]",
+		"/Users/avi/boxer/bootcamp003_student/sql_quiz_part2/Nitzan_sql_quiz2.sql",
+		"/Users/avi/boxer/bootcamp003_student/sql_quiz_part2/gordonfleetwood_sql_quiz2.sql",
+		"/Users/avi/boxer/bootcamp003_student/sql_quiz_part2/bzsaindon_sql_quiz2.sql",
+		"/Users/avi/boxer/data_science_challenge_1/codetest_instructions.txt",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/Terminal/Terminal.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/Terminal.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Default (OSX).sublime-keymap",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/Git/Git.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/Git.sublime-settings",
+		"/Users/avi/boxer/Avi_r_tools.R",
+		"/Users/avi/boxer/NYCDSA_Submission/09-23BasicProgrammingElementsInR/AviYashchin1.1.R",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/R/Default.sublime-commands",
+		"/Users/avi/boxer/NYCDSA/hw1/Github HW Answers",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/R.sublime-settings",
+		"/Users/avi/boxer/NYCDSA/hw2/aviyashchin_sql_quiz.sql",
+		"/Users/avi/boxer/test/Github HW Answers",
+		"/Users/avi/Downloads/stocklist_etf_active.txt",
+		"/Users/avi/boxer/NYCDSA/hw2/hw2.r",
+		"/Users/avi/boxer/NYCDSA/hw2/HW2",
+		"/Users/avi/caffe/Makefile.config",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/swarm_description.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/swarm.py",
+		"/Users/avi/Programming/GitHub/nupic/nupic/frameworks/opf/clamodel.py",
+		"/Users/avi/Programming/GitHub/nupic/nupic/frameworks/opf/modelfactory.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/run.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/nupic_output.py",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/User/GitGutter.sublime-settings",
+		"/Users/avi/Library/Application Support/Sublime Text 3/Packages/GitGutter/GitGutter.sublime-settings",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/README.md",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/rec-center-hourly.csv",
+		"/Users/avi/Programming/GitHub/nupic/examples/opf/clients/cpu/numpy cpu example.sublime-project",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/mongodb/DummyData.json",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/cleanup.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/nupic_output.pyc",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/mongodb/loadDDTest.py",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/swarm_description.pyc",
+		"/Users/avi/Programming/GitHub/TorchToNumenta/mongodb/TestData.json",
+		"/Users/avi/Programming/GitHub/nupic/examples/opf/clients/cpu/cpu.py",
+		"/Users/avi/Programming/GitHub/nupic/examples/opf/clients/cpu/README.md",
+		"/Users/avi/Programming/GitHub/nupic/examples/opf/clients/cpu/model_params.py",
+		"/Users/avi/foo.avi"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"",
+			"AshlyMadison.sql",
+			"ashlymadison.sql",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"the overall",
+			"model.3vars",
+			"model",
+			"model.3",
+			"model.2",
+			"service",
+			"model.3",
+			"mode.3",
+			"model.3",
+			" = ",
+			"=",
+			"vif",
+			"linearity",
+			"##",
+			"###",
+			"nycr",
+			"redraw",
+			"residuals",
+			"assumptions of ",
+			"construct",
+			"segment",
+			"Add a visualization of",
+			"f.",
+			"segments",
+			"ggplot",
+			"ranges",
+			"theme",
+			"x2",
+			"Missing_cols_for_removal",
+			"data <-",
+			"cars",
+			"cats",
+			"path",
+			"mypath",
+			"which",
+			"where",
+			"eval",
+			"titianic3",
+			"fare.imp.rand",
+			"for ",
+			"for",
+			"mice",
+			"densityplot",
+			"3",
+			"1",
+			"`",
+			"\"",
+			"'",
+			"plots",
+			"emailmessage",
+			"fuke",
+			"file_name",
+			"file_name\n",
+			"myplot_",
+			"badcols",
+			"getconn",
+			"getConnectionGoogleMySql",
+			"alldata",
+			"rs",
+			"loadAllAMMysqlData",
+			"ashly",
+			"print",
+			"tempsql",
+			"getConnection",
+			"as.numeric",
+			")))",
+			"- .)))",
+			"getconnection",
+			"getConnection",
+			"getConnectionGoogleMySql",
+			"lint",
+			"install",
+			"lintr",
+			"R",
+			"box",
+			"`",
+			"ci",
+			"mice",
+			"missing",
+			"model.full",
+			"model.empty",
+			"vif(model.sat",
+			"vif",
+			"factor",
+			"boxCox",
+			"2013_",
+			"POV",
+			"POV05",
+			"POV05_2013",
+			"annual_payroll",
+			"Paid employees for pay period including March 12 (number)",
+			"annual",
+			"annual_payroll",
+			"getconnect",
+			"mysql",
+			"res",
+			"theme_hc",
+			"titanic3.imputed.age.random",
+			"cov",
+			"wtemp",
+			"avgw",
+			"wtemp",
+			"theme_",
+			"MEDHHINC_2013",
+			"payrol",
+			"  ",
+			"\"",
+			"}",
+			"renae",
+			"rename",
+			"povertyestimates",
+			"'",
+			"teamid",
+			"diamond",
+			"summary",
+			"csv",
+			"home.tbl",
+			"by_win",
+			"win.data",
+			"auto",
+			"refine the basic",
+			"save",
+			"sort",
+			"agenc",
+			"●",
+			"”",
+			"“",
+			"’"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"model.3vars",
+			"model.2vars",
+			" <- ",
+			"<-",
+			"#",
+			"##",
+			"NYCRestaurants",
+			"\"",
+			"SBmodel.full",
+			"SBmodel.empty",
+			"",
+			"`",
+			"knicks",
+			"-",
+			"\"",
+			"",
+			","
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/avi/boxer/MrT/AviYashchin_project_1.1.R",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 39273,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/R-Box/syntax/R Extended.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Users/avi/boxer/MrT/shiny/server.r",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9971,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/R-Box/syntax/R Extended.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/avi/boxer/MrT/shiny/ui.r",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1749,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/R-Box/syntax/R Extended.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Users/avi/boxer/MrT/mrtquotes.dat",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2908,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 30.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 23.0
+	},
+	"pinned_build_system": "",
+	"project": "MrT.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"*REPL* [r]"
+			],
+			[
+				"inupic_out",
+				"~/Programming/GitHub/TorchToNumenta/hotgym/prediction/one_gym/nupic_output.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 255.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
