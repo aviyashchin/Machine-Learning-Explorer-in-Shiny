@@ -1,4 +1,5 @@
-outlier# /** 
+
+# /** 
 #  * [I PITY THE FOOL Project]
 #  * @type {[R Script]}
 #  *
@@ -9,6 +10,7 @@ outlier# /**
 
 #Load Dependency Libraries
   library(dplyr)
+  library(slackr)
   library(reshape2)
   library(ggplot2)
   library(lattice)
@@ -185,6 +187,7 @@ Email_file_to_Slack <- function(Body,File_Location){
   if (File_Location==""){
       send.mail(from = "mrtdatascientist@gmail.com",
       to = c("mrt.9msiu@zapiermail.com"),
+#      to = c("avi.yashchin@gmail.com"),
       subject = "Hello sucka",
       body = Body,
       html = FALSE,
@@ -193,6 +196,7 @@ Email_file_to_Slack <- function(Body,File_Location){
       send = TRUE)
   }else{
       send.mail(from = "mrtdatascientist@gmail.com",
+#      to = c("avi.yashchin@gmail.com"),
       to = c("mrt.9msiu@zapiermail.com"),
       subject = "Hello sucka",
       body = Body,
@@ -742,10 +746,10 @@ PlotMarginals <- function(data,name,type){
 }
 
 Outliers <- function(data,cutoff_in){
-#numeric only
-  
-#replace this with the function that CMakris showed us
-#data <- cars
+  #numeric only
+
+  #replace this with the function that CMakris showed us
+  #data <- cars
 
   plot.new()
   num_cols <- dim(data)[1]
@@ -942,6 +946,11 @@ ShinyServer <- function(){
 main <- function(){
   load_Constants()
   load_DataSets()
+  slackrSetup(config_file = 'slackr.dcf')  #to send txt to slack.
+
+  #slackr(str(iris))
+  #slackr("@jayjacobs")
+  #slackr("http://www.youtube.com/watch?v=wq1R93UMqlk")
 
   setwd(PATH)
   save.image("am.RData")
@@ -959,12 +968,16 @@ main <- function(){
   #idata <- sleep
   #idata <- chickwts
 
+  #need to build function to split numeric and factor values.
+
   dependentVariable <- colnames(idata)[1]
   row_names    <<- idata[,1]; 
   column_names <<- idata[1,]; # store the column names for future reference 
 
   #start analyzing the dataset
   #Email_file_to_Slack(paste("I pity the foo'... Who tries to analyze a dataset with ",nrow(idata)," rows and ",ncol(idata), " columns by hand. Sucka.",sep=""),"")
+
+#FORMAT DATA
 
   #Check for missingness (blanks and NA's)
   idata.Missing <- Missingness_Analysis(idata)
@@ -973,7 +986,9 @@ main <- function(){
   idata.NAs_replaced <- K_means_Clustering(idata.Missing)
 
   data <- idata.NAs_replaced
-  #Show histograms of data
+
+#VISUALIZE DATA
+
   PlotMarginals(idata.NAs_replaced,dependentVariable,"comb")
 
   Outliers(idata.NAs_replaced,OUTLIER_CUTOFF_P_VALUE)
@@ -989,6 +1004,8 @@ main <- function(){
   Linear_Regression(idata.NAs_replaced)  #broken
 
   MultiVariate_Regression(idata.NAs_replaced)  #broken
+
+#ANALYZE DATA
 
   #➢ Linearity
   # Not linear? Does Tranform help?

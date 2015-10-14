@@ -90,7 +90,6 @@ DataScrubbing <- function(file_name)
   return(list(dataTypes,df))
 }
 
-#input <- DataScrubbing("Census_Demographics_2010")#../../../../home/ec2-user/big-dog/public/data/bbqpizza
 input <- DataScrubbing("bbqpizza")#../../../../home/ec2-user/big
 
 input_data <- input[[2]]

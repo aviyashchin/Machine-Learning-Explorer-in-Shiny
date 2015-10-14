@@ -1,0 +1,1279 @@
+removedColumns
+removedColumns = do.call(cbind,removedColumns)
+removedColumns
+# we now look to convert to factors #
+  j = 1#
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+        removedColumns[[j]] <- df[,i]#
+        j <- j+1#
+      }      #
+    }#
+  }#
+  removedColumns = do.call(cbind,removedColumns)
+str(titanic3)
+slackr(str(idata))
+idata <- titanic3
+slackr(str(idata))
+slackr("asdfadsf",str(idata))
+slackr("Here's the Jibber Jabber we're starting with:",str(idata))
+removedColumns = NULL#
+  removedColumns = as.data.frame(removedColumns)
+removedColumns[[j]] <- df[,i]
+removedColumns[j] <- df[,i]
+removedColumns$j <- df[,i]
+df[,i]
+removedColumns$j
+removedColumns$j <- df[,i]
+removedColumns = idata#
+  removedColumns = null
+removedColumns = idata#
+  removedColumns = NULL
+removedColumns$j <- df[,i]
+removedColumns = idata#
+  removedColumns = NULL
+removedColumns[,j] <- df[,i]
+removedColumns[,j]
+removedColumns = df#
+  removedColumns = NULL
+removedColumns[,j] <- df[,i]
+removedColumns[j] <- df[,i]
+removedColumns <- df[,i]
+removedColumns <- df[,c(r_indi)]
+removedColumns
+slackr("Here's the factors we deleted:",removedColumns)
+slackr("Here's the factors we deleted:",str(removedColumns))
+SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'. Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep="")#
+  slackr(eval(SUCKAtxt),str(removedColumns))
+slackr(str(df))
+slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to kee#
+  r_indi <- which(dataTypes == 0)#
+  df <- df[,-c(r_indi)]#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'. Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep="")#
+  slackr(eval(SUCKAtxt))#
+#
+  slackr(str(removedColumns))#
+#
+  slackr(str(df))#
+#
+  return(df)
+r_indi
+removeTextAndWhitespace <- function(df){#
+  #REmove factors with more than NUM_FACTORS_WE_CAN_HANDLE factors#
+  #  df <- titanic3#
+#
+  #  columns <- df[1,]; # store the column names for future reference #
+  #  row_names <- df[,1]; #
+  #  names(df) <- colnames(df) #
+    # cut rows beyond 100 #
+  #  if (dim(df)[2]>100)#
+  #  {#
+  #  df <- df[,1:100] # chop dataframe down #
+  #  }#
+#
+  slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  if(i_indi>0){#
+    SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'. Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))#
+  }#
+#
+  #Only keep Integers, Logical, and factors <NUM_FACTORS_WE_CAN_HANDLE columns#
+  df <- df[,-c(r_indi)]#
+#
+  return(df)#
+}
+removeTextAndWhitespace(titanic3)
+removeTextAndWhitespace <- function(df){#
+  #REmove factors with more than NUM_FACTORS_WE_CAN_HANDLE factors#
+  #  df <- titanic3#
+#
+  #  columns <- df[1,]; # store the column names for future reference #
+  #  row_names <- df[,1]; #
+  #  names(df) <- colnames(df) #
+    # cut rows beyond 100 #
+  #  if (dim(df)[2]>100)#
+  #  {#
+  #  df <- df[,1:100] # chop dataframe down #
+  #  }#
+#
+  slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  if(r_indi>0){#
+    SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'. Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))#
+  }#
+#
+  #Only keep Integers, Logical, and factors <NUM_FACTORS_WE_CAN_HANDLE columns#
+  df <- df[,-c(r_indi)]#
+#
+  return(df)#
+}
+removeTextAndWhitespace(titanic3)
+df <- titanic3
+removeTextAndWhitespace(df)
+df <- titanic3
+slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]
+SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'. Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep="")
+SUCKAtxt
+colnames(df)[dataTypes == 0]
+str(colnames(df)[dataTypes == 0])
+SUCKAtxt = paste("I'm removing columns '",str(colnames(df)[dataTypes == 0]),"'. Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep="")
+SUCKAtxt
+str(colnames(df)[dataTypes == 0])
+colnames(df)[dataTypes == 0]
+SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'. Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep="",collapse='')
+SUCKAtxt
+SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'.",sep="",collapse='')
+SUCKAtxt
+SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'.",sep="",collapse='\n')
+SUCKAtxt
+SUCKAtxt = paste(strwrap("I'm removing columns '",colnames(df)[dataTypes == 0],"'.",sep="",collapse=''))
+SUCKAtxt = paste(strwrap("I'm removing columns '",colnames(df)[dataTypes == 0]),"'.",sep="",collapse='')
+SUCKAtxt = paste(strwrap("I'm removing columns '",colnames(df)[dataTypes == 0]),"'.",sep="",collapse='')
+slackr(eval(SUCKAtxt))
+SUCKAtxt = paste(strwrap("I'm removing columns '",colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")
+slackr(eval(SUCKAtxt))
+SUCKAtxt = paste(strwrap("I'm removing columns '",colnames(df)[dataTypes == 0],"'."),sep="",collapse="\n")
+SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'.",sep="",collapse="\n")
+SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'.",sep="",collapse="\n")
+SUCKAtxt
+SUCKAtxt = cat("I'm removing columns '",colnames(df)[dataTypes == 0],"'.",sep="",collapse="\n")
+SUCKAtxt = cat("I'm removing columns '",pate(colnames(df)[dataTypes == 0],sep=","),"'.",sep="",collapse="\n")
+SUCKAtxt = cat("I'm removing columns '",paste(colnames(df)[dataTypes == 0],sep=","),"'.",sep="",collapse="\n")
+SUCKAtxt = cat("I'm removing columns '",eval(paste(colnames(df)[dataTypes == 0],sep=",")),"'.",sep="",collapse="\n")
+SUCKAtxt
+SUCKAtxt = sprintf("I'm removing columns '",colnames(df)[dataTypes == 0],"'.",sep="",collapse="\n")
+SUCKAtxt
+SUCKAtxt = paste("I'm removing columns '",colnames(df)[dataTypes == 0],"'.",sep="",collapse="\n")
+SUCKAtxt
+SUCKAtxt = sprintf("I'm removing columns '",colnames(df)[dataTypes == 0],"'.")
+SUCKAtxt
+colnames(df)[dataTypes == 0]
+list(colnames(df)[dataTypes == 0])
+unlist(colnames(df)[dataTypes == 0])
+unlist(colnames(df)[dataTypes == 0])
+paste(unlist(colnames(df)[dataTypes == 0]))
+paste(list(colnames(df)[dataTypes == 0]))
+SUCKAtxt = paste("I'm removing columns '",paste(list(colnames(df)[dataTypes == 0])),"'.",sep="",collapse="\n")
+SUCKAtxt
+SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")
+SUCKAtxt
+SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    slackr("  Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",str(removedColumns))
+SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    slackr(paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep=""),str(removedColumns))
+SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep=""),str(removedColumns)#
+    slackr(eval(SUCKAtxt))
+SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",str(removedColumns),sep="")
+SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",str(removedColumns),sep="")#
+    slackr(eval(SUCKAtxt))
+SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))
+removeTextAndWhitespace <- function(df){#
+  #REmove factors with more than NUM_FACTORS_WE_CAN_HANDLE factors#
+  #  df <- titanic3#
+#
+  #  columns <- df[1,]; # store the column names for future reference #
+  #  row_names <- df[,1]; #
+  #  names(df) <- colnames(df) #
+    # cut rows beyond 100 #
+  #  if (dim(df)[2]>100)#
+  #  {#
+  #  df <- df[,1:100] # chop dataframe down #
+  #  }#
+#
+  slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  if(r_indi>0){#
+    SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.  Here's what was taken out:",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))#
+  }#
+#
+  #Only keep Integers, Logical, and factors <NUM_FACTORS_WE_CAN_HANDLE columns#
+  df <- df[,-c(r_indi)]#
+#
+  return(df)#
+}
+idata <- titanic3
+idata <- removeTextAndWhitespace(idata)
+lapply(idata, class)
+idata <- Missingness_Analysis(idata)
+idata <- K_means_Clustering(idata)
+dependentVariable <- colnames(idata)[1]
+PlotMarginals(idata,dependentVariable,"comb")
+Outliers(idata,OUTLIER_CUTOFF_P_VALUE)
+data <- idata
+plot.new()
+data = data[sapply(data, class)=="numeric"]
+mahalanobis_dist <- mahalanobis(data,colMeans(data),cov(data), ,tol=1e-20)
+cutoff <- qchisq(1 - cutoff_in / 100, dim(data)[2], ncp = 0, lower.tail = TRUE, log.p = FALSE)
+outlier <- mahalanobis_dist > cutoff
+df_outliers <<- data.frame(x = c(1:dim(data)[1]), y = log(sqrt(mahalanobis_dist)), z = outlier)
+outlier_list <- df_outliers[df_outliers$z==TRUE,]
+p <- ggplot(df_outliers,aes(x = x,y = y))
+p <- p + geom_point(aes(colour = z)) + geom_abline(intercept = log(sqrt(cutoff)), slope = 0,linetype="dashed",colour = "red") + labs(x = "Observation Number",y = "log(Mahalanobis Distances)", title = paste("Outlier Plot")) + scale_colour_manual(name="Type", values = c("FALSE" = "blue","TRUE" = "#FF0080"), breaks=c("TRUE", "FALSE"), labels=c("Outlier", "Inlier"))  #
+  p <- p + theme(plot.title = element_text(vjust=2), text = element_text(size=20))#
+#
+  #Saves the file to the drive, and emails the file out & to slack. #
+  fileloc <- paste(IMGPATH,"/","PlotOutliers.jpg",sep="")#
+  ggsave(filename = fileloc, plot = p)
+print(p)
+idata <- titanic3
+#make factors, remove whitespace#
+  idata <- removeTextAndWhitespace(idata)#
+#
+  #check column types#
+  lapply(idata, class)#
+  #Check for missingness (NA's, remove columns if there's too much missing data)#
+  idata <- Missingness_Analysis(idata)#
+#
+  #run K_means on the remaining NA's in the data#
+  idata <- K_means_Clustering(idata)#
+#
+#VISUALIZE DATA#
+  dependentVariable <- colnames(idata)[1]#
+#
+  PlotMarginals(idata,dependentVariable,"comb")
+View(idata)
+Outliers(idata,OUTLIER_CUTOFF_P_VALUE)
+data <- idata
+colnames(data)
+data = data[sapply(data, class)=="numeric"]
+colnames(data)
+mahalanobis_dist <- mahalanobis(data,colMeans(data),cov(data), ,tol=1e-20)
+cutoff <- qchisq(1 - cutoff_in / 100, dim(data)[2], ncp = 0, lower.tail = TRUE, log.p = FALSE)#
+  outlier <- mahalanobis_dist > cutoff#
+  df_outliers <<- data.frame(x = c(1:dim(data)[1]), y = log(sqrt(mahalanobis_dist)), z = outlier)#
+#
+  outlier_list <- df_outliers[df_outliers$z==TRUE,]#
+#
+  #show_outliers$Names <<- row_names[df_outliers[,3]]#
+  #show_outliers$Distances <<- mahalanobis_dist[df_outliers[,3]]#
+#
+  p <- ggplot(df_outliers,aes(x = x,y = y))#
+  p <- p + geom_point(aes(colour = z)) + geom_abline(intercept = log(sqrt(cutoff)), slope = 0,linetype="dashed",colour = "red") + labs(x = "Observation Number",y = "log(Mahalanobis Distances)", title = paste("Outlier Plot")) + scale_colour_manual(name="Type", values = c("FALSE" = "blue","TRUE" = "#FF0080"), breaks=c("TRUE", "FALSE"), labels=c("Outlier", "Inlier"))  #
+  p <- p + theme(plot.title = element_text(vjust=2), text = element_text(size=20))#
+#
+  #Saves the file to the drive, and emails the file out & to slack. #
+  fileloc <- paste(IMGPATH,"/","PlotOutliers.jpg",sep="")#
+  ggsave(filename = fileloc, plot = p)#
+#
+  Email_file_to_Slack(paste("Based on your cutoff, you have ",nrow(df_outliers[df_outliers$z==TRUE,])," outliers. ",sep=""),fileloc)
+Outliers <- function(data,cutoff_in){#
+  #numeric only#
+#data <- idata#
+  #replace this with the function that CMakris showed us#
+  #data <- cars#
+  #data <- idata#
+  plot.new()#
+#
+  #select only numeric columns#
+  data <- data[sapply(data, class)=="numeric"]#
+#
+  mahalanobis_dist <- mahalanobis(data,colMeans(data),cov(data), ,tol=1e-20)#
+  cutoff <- qchisq(1 - cutoff_in / 100, dim(data)[2], ncp = 0, lower.tail = TRUE, log.p = FALSE)#
+  outlier <- mahalanobis_dist > cutoff#
+  df_outliers <<- data.frame(x = c(1:dim(data)[1]), y = log(sqrt(mahalanobis_dist)), z = outlier)#
+#
+  outlier_list <- df_outliers[df_outliers$z==TRUE,]#
+#
+  #show_outliers$Names <<- row_names[df_outliers[,3]]#
+  #show_outliers$Distances <<- mahalanobis_dist[df_outliers[,3]]#
+#
+  p <- ggplot(df_outliers,aes(x = x,y = y))#
+  p <- p + geom_point(aes(colour = z)) + geom_abline(intercept = log(sqrt(cutoff)), slope = 0,linetype="dashed",colour = "red") + labs(x = "Observation Number",y = "log(Mahalanobis Distances)", title = paste("Outlier Plot")) + scale_colour_manual(name="Type", values = c("FALSE" = "blue","TRUE" = "#FF0080"), breaks=c("TRUE", "FALSE"), labels=c("Outlier", "Inlier"))  #
+  p <- p + theme(plot.title = element_text(vjust=2), text = element_text(size=20))#
+#
+  #Saves the file to the drive, and emails the file out & to slack. #
+  fileloc <- paste(IMGPATH,"/","PlotOutliers.jpg",sep="")#
+  ggsave(filename = fileloc, plot = p)#
+#
+  Email_file_to_Slack(paste("Based on your cutoff, you have ",nrow(df_outliers[df_outliers$z==TRUE,])," outliers. ",sep=""),fileloc)#
+#
+  print(p)#
+}
+Outliers(idata,OUTLIER_CUTOFF_P_VALUE)
+Scree_Plot(idata)
+data <- data[sapply(data, class)=="numeric"]
+result <- prcomp(data, center = TRUE, scale = TRUE)#
+  retained_variance <- cumsum(unlist(result[1])^2) /  max(cumsum(unlist(result[1])^2))#
+  df <- data.frame(x = c(1:dim(data)[2]), y = retained_variance)#
+  p <- ggplot(df, aes(x = x,y = y)) + xlab('Retained Dimensions') + ylab('Explained Variance') + ggtitle('Scree Plot')#
+  p <- p + geom_point() + geom_line() + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=45)) #
+#
+  #Saves the file to the drive, and emails the file out & to slack. #
+  fileloc <- paste(IMGPATH,"/","PlotScreePlot.jpg",sep="")#
+  ggsave(filename = fileloc, plot = p)#
+  Email_file_to_Slack(paste("Scree Plots Incoming! ",sep=""),fileloc)
+plot(p)#
+  print(p)
+Scree_Plot <- function(data){#
+#
+  plot.new()#
+  #select only numeric columns#
+  data <- data[sapply(data, class)=="numeric"]#
+#
+  result <- prcomp(data, center = TRUE, scale = TRUE)#
+  retained_variance <- cumsum(unlist(result[1])^2) /  max(cumsum(unlist(result[1])^2))#
+  df <- data.frame(x = c(1:dim(data)[2]), y = retained_variance)#
+  p <- ggplot(df, aes(x = x,y = y)) + xlab('Retained Dimensions') + ylab('Explained Variance') + ggtitle('Scree Plot')#
+  p <- p + geom_point() + geom_line() + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=45)) #
+#
+  #Saves the file to the drive, and emails the file out & to slack. #
+  fileloc <- paste(IMGPATH,"/","PlotScreePlot.jpg",sep="")#
+  ggsave(filename = fileloc, plot = p)#
+  Email_file_to_Slack(paste("Scree Plots Incoming! ",sep=""),fileloc)#
+#
+  plot(p)#
+  print(p)#
+}
+Scree_Plot(idata)
+Correlation(idata)
+Correlation <- function(data){#
+  plot.new()#
+#
+  #select only numeric columns#
+  data <- data[sapply(data, class)=="numeric"]#
+#
+  #  data_t <- data[,order(colnames(data))]#
+  temp <- cor(data)#
+  temp[lower.tri(temp)] <- NA#
+  temp <- melt(temp)#
+  temp <- na.omit(temp)#
+#
+  p <- ggplot(temp, aes(x=Var1, y=Var2, fill = value)) + geom_tile(alpha = 0.75, colour = "white") + scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1,1), name = "Pearson\ncorrelation\n")#
+#
+  p <- p + theme_grey(base_size = base_size) + labs(x = "", y = "") + scale_x_discrete(expand = c(0, 0)) + scale_y_discrete(expand = c(0, 0)) + ggtitle("Correlation Heatmap")#
+#
+  p <- p + geom_text(aes(Var1, Var2, label = round(value,2)), color = "black", size = 4)+  #
+  theme(#
+    axis.title.x = element_blank(),#
+    axis.title.y = element_blank(),#
+    panel.grid.major = element_blank(),#
+    panel.border = element_blank(),#
+    panel.background = element_blank(),#
+    axis.ticks = element_blank(),#
+    legend.justification = c(0, 0),#
+    legend.position = c(.5, 0),#
+    legend.direction = "horizontal")+#
+    guides(fill = guide_colorbar(barwidth = 7, barheight = 1,#
+    title.position = "right", title.hjust = 0.5))#
+#
+  #Saves the file to the drive, and emails the file out & to slack. #
+  fileloc <- paste(IMGPATH,"/","CorrelationPlots.jpg",sep="")#
+  ggsave(filename = fileloc, plot = p)#
+  Email_file_to_Slack(paste("Look at your correlations fool! ",sep=""),fileloc)#
+#
+  print(p)#
+}
+Correlation(idata)
+Mean_Vectors(idata,"Violin Plot")
+plot.new()#
+  output_mean = c() #need to replace this with reactive shiny#
+  output_se = c() #need to replace this with reactive shiny#
+  #ranges <- reactiveValues(y = NULL)#
+  ranges = c()#
+  ranges$y <- c(brush$ymin, brush$ymax)#
+  ranges$y <- c(0, 100)#
+  ranges$x = 1#
+  brush <- ranges#
+#
+  #data <- sleep#
+   num_vars <- dim(data)[2]#
+   for (i in c(1:num_vars)){#
+#
+    name <- colnames(data)[i]#
+    output_mean[i] <- mean(data[,i],na.rm = TRUE) #
+    output_se[i] <- sd(data[,i],na.rm = TRUE) / sqrt(length(data[,3][!is.na(data[,3])]))#
+   }#
+#
+   index <- output_mean < 100#
+   names_to_use <- colnames(data)#
+   df <- data.frame(names = names_to_use[index], means = output_mean[index])#
+   keep_data <- data[,index]#
+   keep_data <- melt(keep_data)#
+   if (type == "Scatter"){#
+    p <- ggplot(df, aes(x = names, y = means))#
+     p <- p + geom_point() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   } else if(type == "Scatter with error bars"){#
+     limits <- aes(ymax = output_mean[index] + output_se[index], ymin=output_mean[index] - output_se[index])#
+     p <- ggplot(df, aes(x = names, y = means))#
+     p <- p + geom_point() + geom_errorbar(limits, width=0.3) + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   } else if(type == "Violin Plot"){#
+    p <- ggplot(keep_data,aes(x = variable, y = value)) + geom_violin() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   } else{#
+    p <- ggplot(keep_data,aes(x = variable, y = value)) + geom_boxplot() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   }#
+#
+  #Saves the file to the drive, and emails the file out & to slack. #
+  fileloc <- paste(IMGPATH,"/","MeanVectors.jpg",sep="")#
+  ggsave(filename = fileloc, plot = p)#
+  Email_file_to_Slack(paste("Be Somebody or Be Somebody's Fool.  Know what your data looks like! ",sep=""),fileloc)
+print(p)
+plot.new()#
+  output_mean = c() #need to replace this with reactive shiny#
+  output_se = c() #need to replace this with reactive shiny#
+  #ranges <- reactiveValues(y = NULL)#
+  ranges = c()#
+  ranges$y <- c(brush$ymin, brush$ymax)#
+  ranges$y <- c(0, 10)#
+  ranges$x = 1#
+  brush <- ranges#
+#
+  #data <- sleep#
+   num_vars <- dim(data)[2]#
+   for (i in c(1:num_vars)){#
+#
+    name <- colnames(data)[i]#
+    output_mean[i] <- mean(data[,i],na.rm = TRUE) #
+    output_se[i] <- sd(data[,i],na.rm = TRUE) / sqrt(length(data[,3][!is.na(data[,3])]))#
+   }#
+#
+   index <- output_mean < 100#
+   names_to_use <- colnames(data)#
+   df <- data.frame(names = names_to_use[index], means = output_mean[index])#
+   keep_data <- data[,index]#
+   keep_data <- melt(keep_data)#
+   if (type == "Scatter"){#
+    p <- ggplot(df, aes(x = names, y = means))#
+     p <- p + geom_point() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   } else if(type == "Scatter with error bars"){#
+     limits <- aes(ymax = output_mean[index] + output_se[index], ymin=output_mean[index] - output_se[index])#
+     p <- ggplot(df, aes(x = names, y = means))#
+     p <- p + geom_point() + geom_errorbar(limits, width=0.3) + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   } else if(type == "Violin Plot"){#
+    p <- ggplot(keep_data,aes(x = variable, y = value)) + geom_violin() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   } else{#
+    p <- ggplot(keep_data,aes(x = variable, y = value)) + geom_boxplot() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   }#
+#
+  #Saves the file to the drive, and emails the file out & to slack. #
+  fileloc <- paste(IMGPATH,"/","MeanVectors.jpg",sep="")#
+  ggsave(filename = fileloc, plot = p)#
+  Email_file_to_Slack(paste("Be Somebody or Be Somebody's Fool.  Know what your data looks like! ",sep=""),fileloc)#
+#
+  print(p)
+Mean_Vectors <- function(data, type){#
+  plot.new()#
+  output_mean = c() #need to replace this with reactive shiny#
+  output_se = c() #need to replace this with reactive shiny#
+  #ranges <- reactiveValues(y = NULL)#
+  ranges = c()#
+  ranges$y <- c(brush$ymin, brush$ymax)#
+  ranges$y <- c(0, 10)#
+  ranges$x = 1#
+  brush <- ranges#
+#
+  #data <- sleep#
+   num_vars <- dim(data)[2]#
+   for (i in c(1:num_vars)){#
+#
+    name <- colnames(data)[i]#
+    output_mean[i] <- mean(data[,i],na.rm = TRUE) #
+    output_se[i] <- sd(data[,i],na.rm = TRUE) / sqrt(length(data[,3][!is.na(data[,3])]))#
+   }#
+#
+   index <- output_mean < 100#
+   names_to_use <- colnames(data)#
+   df <- data.frame(names = names_to_use[index], means = output_mean[index])#
+   keep_data <- data[,index]#
+   keep_data <- melt(keep_data)#
+   if (type == "Scatter"){#
+    p <- ggplot(df, aes(x = names, y = means))#
+     p <- p + geom_point() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   } else if(type == "Scatter with error bars"){#
+     limits <- aes(ymax = output_mean[index] + output_se[index], ymin=output_mean[index] - output_se[index])#
+     p <- ggplot(df, aes(x = names, y = means))#
+     p <- p + geom_point() + geom_errorbar(limits, width=0.3) + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   } else if(type == "Violin Plot"){#
+    p <- ggplot(keep_data,aes(x = variable, y = value)) + geom_violin() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   } else{#
+    p <- ggplot(keep_data,aes(x = variable, y = value)) + geom_boxplot() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)#
+   }#
+#
+  #Saves the file to the drive, and emails the file out & to slack. #
+  fileloc <- paste(IMGPATH,"/","MeanVectors.jpg",sep="")#
+  ggsave(filename = fileloc, plot = p)#
+  Email_file_to_Slack(paste("Be Somebody or Be Somebody's Fool.  Know what your data looks like! ",sep=""),fileloc)#
+#
+  print(p)#
+}
+Clustering(idata,NUM_CLUSTERS)
+removeTextAndWhitespace <- function(df){#
+  #REmove factors with more than NUM_FACTORS_WE_CAN_HANDLE factors#
+  #  df <- titanic3#
+#
+  #  columns <- df[1,]; # store the column names for future reference #
+  #  row_names <- df[,1]; #
+  #  names(df) <- colnames(df) #
+    # cut rows beyond 100 #
+  #  if (dim(df)[2]>100)#
+  #  {#
+  #  df <- df[,1:100] # chop dataframe down #
+  #  }#
+#
+  slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  if(r_indi>0){#
+    SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.  Here's what was taken out:",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))#
+  }#
+#
+  #Only keep Integers, Logical, and factors <NUM_FACTORS_WE_CAN_HANDLE columns#
+  df <- df[,-c(r_indi)]#
+#
+  return(c(df,removedColumns))#
+}
+(idata.NumAndFact,idata.text) <- removeTextAndWhitespace(idata)
+c(idata.NumAndFact,idata.text) <- removeTextAndWhitespace(idata)
+view(idata.NumAndfact)
+View(idata.NumAndfact)
+View(idata.NumAndFact)
+idata.NumAndFact
+[idata.NumAndFact,idata.text] <- removeTextAndWhitespace(idata)
+idata.NumAndFact,idata.text <- removeTextAndWhitespace(idata)
+list[idata.NumAndFact,idata.text] <- removeTextAndWhitespace(idata)
+idata.NumAndFact
+idata.NumAndFact
+removeTextAndWhitespace <- function(df){#
+  #REmove factors with more than NUM_FACTORS_WE_CAN_HANDLE factors#
+  #  df <- titanic3#
+#
+  #  columns <- df[1,]; # store the column names for future reference #
+  #  row_names <- df[,1]; #
+  #  names(df) <- colnames(df) #
+    # cut rows beyond 100 #
+  #  if (dim(df)[2]>100)#
+  #  {#
+  #  df <- df[,1:100] # chop dataframe down #
+  #  }#
+#
+  slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  if(r_indi>0){#
+    SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.  Here's what was taken out:",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))#
+  }#
+#
+  #Only keep Integers, Logical, and factors <NUM_FACTORS_WE_CAN_HANDLE columns#
+  df <- df[,-c(r_indi)]#
+#
+  return(c(df,removedColumns))#
+}
+list[idata.NumAndFact,idata.text] <- removeTextAndWhitespace(idata)
+idata.NumAndFact
+idata.text
+r <- removeTextAndWhitespace(idata)
+r
+r
+c(df,removedColumns)
+slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  if(r_indi>0){#
+    SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.  Here's what was taken out:",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))#
+  }#
+#
+  #Only keep Integers, Logical, and factors <NUM_FACTORS_WE_CAN_HANDLE columns#
+  dfreturn <- df[,-c(r_indi)]#
+#
+  return(c(dfreturn,removedColumns))
+df <- titanic
+slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  if(r_indi>0){#
+    SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.  Here's what was taken out:",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))#
+  }#
+#
+  #Only keep Integers, Logical, and factors <NUM_FACTORS_WE_CAN_HANDLE columns#
+  dfreturn <- df[,-c(r_indi)]
+c(dfreturn,removedColumns)
+c(dfreturn,removedColumns)
+r
+returnObject <- removeTextAndWhitespace(idata)
+idata.NumAndFact <- returnObject[1]#
+  idata.text <- returnObject[2]
+returnObject <- removeTextAndWhitespace(idata)
+returnObject <- c(dfreturn,removedColumns)
+returnObject[1]
+returnObject[2]
+returnObject[[2]]
+returnObject[[1]]
+returnObject
+c(dfreturn,removedColumns)
+list[dfreturn,removedColumns]
+list(dfreturn,removedColumns)
+list(dfreturn,removedColumns)
+returnObject <- list(dfreturn,removedColumns)
+returnObject[1]
+returnObject[2]
+returnObject[3]
+returnObject[1]
+colnames(returnObject[1])
+colnames(returnObject[2])
+returnObject[2]
+returnObject
+colnames(returnObject)
+returnObject
+returnObject <- c(dfreturn,removedColumns)
+colnames(returnObject)
+colnames(returnObject[1])
+colnames(returnObject[2])
+colnames(returnObject[,1])
+colnames(returnObject[1,])
+nreturnObject[1]
+returnObject[1]
+returnObject[,1]
+returnObject[1.]
+returnObject[1,]
+dfreturn
+colnames(dfreturn)
+colnames(removedColumns)
+returnObject <- c(returncol=dfreturn,removedcol=removedColumns)
+returnObject$returncol
+returnObject$removedcol
+dfreturn
+removedColumns
+returnObject <- cbind(returncol=dfreturn,removedcol=removedColumns)
+removedColumns
+returnObject$removedcol
+returnObject$returncol
+returnObject[,1]
+returnObject[,2]
+returnObject[,"returncol"]
+returnObject["returncol"]
+returnObject["returncol",]
+returnObject["returncol",]
+returnObject <- data.frame(returncol=dfreturn,removedcol=removedColumns)
+returnObject["returncol",]
+returnObject["returncol"]
+returnObject$returncol
+returnObject[returncol]
+returnObject[returncol,]
+returnObject[,returncol]
+returnObject[,"returncol"]
+returnObject["returncol",]
+returnObject["returncol",]
+returnObject <- list(foo=dfreturn,bar=removedColumns)
+returnObject
+returnObject$foo
+colnames(returnObject$foo)
+colnames(returnObject$bar)
+removeTextAndWhitespace <- function(df){#
+  #REmove factors with more than NUM_FACTORS_WE_CAN_HANDLE factors#
+  #  df <- titanic3#
+#
+  #  columns <- df[1,]; # store the column names for future reference #
+  #  row_names <- df[,1]; #
+  #  names(df) <- colnames(df) #
+    # cut rows beyond 100 #
+  #  if (dim(df)[2]>100)#
+  #  {#
+  #  df <- df[,1:100] # chop dataframe down #
+  #  }#
+#
+  slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  if(r_indi>0){#
+    SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.  Here's what was taken out:",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))#
+  }#
+#
+  #Only keep Integers, Logical, and factors <NUM_FACTORS_WE_CAN_HANDLE columns#
+  dfreturn <- df[,-c(r_indi)]#
+#
+  return(list(foo=dfreturn,bar=removedColumns))#
+}
+foobar <- removeTextAndWhitespace(idata)
+idata.NumAndFact <- foobar$foo#
+  idata.text <- foobar$bar
+foobar <- removeTextAndWhitespace(idata)
+foobar
+foobar=list()
+foobar <- removeTextAndWhitespace(idata)
+foobar$foo
+foobar$bar
+foobar
+idata.NumAndFact <- removeTextAndWhitespace(idata)
+idata.NumAndFact
+removeTextAndWhitespace <- function(df){#
+  #REmove factors with more than NUM_FACTORS_WE_CAN_HANDLE factors#
+  #  df <- titanic3#
+#
+  #  columns <- df[1,]; # store the column names for future reference #
+  #  row_names <- df[,1]; #
+  #  names(df) <- colnames(df) #
+    # cut rows beyond 100 #
+  #  if (dim(df)[2]>100)#
+  #  {#
+  #  df <- df[,1:100] # chop dataframe down #
+  #  }#
+#
+  slackr("Here's the Jibber Jabber we're starting with:",str(df))#
+#
+  dataTypes <- vector(mode="character", length=dim(df)[2])  # define a vector to hold each columns data type #
+  # we loop through each column and determine its type #
+#
+  for (i in 1:dim(df)[2]){#
+    # first task is to scrub the data #
+    df[,i] <- gsub(" ", "", df[,i]) # remove spaces #
+    df[,i] <- tolower(df[,i])#
+    # check to make sure there are no na n/a and we missed this as continuous data #
+    na_indi <- which(df[,i] =="na" | df[,i]=="n/a")#
+    if (length(na_indi) > 0 ){ # we found some Nas#
+      df[na_indi,i] <- NA#
+    }#
+    na_indi <- sum(is.na(df[,i])) # get initial count of na indices #
+    # check if it is numeric by converting to it #
+    test <- df[,i] # holder variable #
+    test <- as.numeric(test) #
+    na_indi2 <- sum(is.na(test))#
+    if (na_indi2>na_indi){ #must be characters #
+      dataTypes[i] <- "character"  #
+    } else { #
+      dataTypes[i] <- "double"#
+      df[,i] <- test#
+      #add function so if data is only 0 or 1 is cast to a factor.  #
+      if(class(df[1,i])=="integer"){#
+        if(max(df[,i])==1 && min(df[,i])==0)#
+          df[,i] <- (df[,i]==1) #cast the DF column into a logical factor#
+      }#
+    }#
+  }#
+  # we now look to convert to factors #
+  for (i in 1:(dim(df)[2])){#
+    if (dataTypes[i] == "character"){#
+      dataTypes[i] = "factor"#
+      df[,i] <- as.factor(df[,i])#
+      if (nlevels(df[,i]) > NUM_FACTORS_WE_CAN_HANDLE){ # bad column and we delete #
+        # df[,i] <- NULL # remove column #
+        dataTypes[i] <- 0 # mark to remove data type#
+      }      #
+    }#
+  }#
+#
+  #Columns to remove#
+  r_indi <- which(dataTypes == 0)#
+#
+  #Rejected columns go to "removedColumns"#
+  removedColumns <- df[,c(r_indi)]#
+#
+  if(r_indi>0){#
+    SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'.",sep="",collapse="\n")#
+    slackr(eval(SUCKAtxt))#
+    SUCKAtxt = paste("Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot, or try H2o or cortical.io.  Here's what was taken out:",sep="")#
+    slackr(eval(SUCKAtxt))#
+    slackr(str(removedColumns))#
+  }#
+#
+  #Only keep Integers, Logical, and factors <NUM_FACTORS_WE_CAN_HANDLE columns#
+  dfreturn <- df[,-c(r_indi)]#
+#
+  return(dfreturn)#
+}
+idata.NumAndFact <- removeTextAndWhitespace(idata)
+idata.NumAndFact
