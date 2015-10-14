@@ -23,25 +23,37 @@
   library(mailR)
   library(kknn)
   library(PASWR)
-  library(Hmisc)
+  library(Hmisc)  
+  library(shiny)
   library("ggthemes")
-  source("/Users/avi/Dropbox/programming/boxer/Avi_r_tools.R")
   #rm(list = ls())    <- DELETES ALL OBJECTS
 
-load_Constants <- function(){
+.load_Constants <- function(){
   #These should be monitored from Shiny
   DEBUG <<- FALSE   #Clear workspace with rm(list=objects()) 
   PATH <<- "/Users/avi/boxer/MrT"
   IMGPATH <<- "/Users/avi/boxer/MrT/plots"
+  BASE_SIZE <<- 100
+#  source("/Users/avi/Dropbox/programming/boxer/MrT/source/")
 
   #If missing data for a certain feature or sample is more than 5% then you probably should leave that feature or sample out. We therefore check for features (columns) and samples (rows) where more than 5% of the data is missing using a simple function
-  MISSING_COLS_FOR_REMOVAL <<- 5
-  MISSING_ROWS_FOR_REMOVAL <<- 5
+  MISSING_COLS_FOR_REMOVAL <<- 15
+  MISSING_ROWS_FOR_REMOVAL <<- 15
   OUTLIER_CUTOFF_P_VALUE <<- 5
   NUM_CLUSTERS <<- 4
   TYPE <<- "violin"  #Options: c("kd","hist","Violin Plot")
   NUM_FACTORS_WE_CAN_HANDLE <<- 6
 }
+
+loadSourceRFiles <- function(trace = TRUE, ...) {
+  .load_Constants()
+  for (nm in list.files(paste(PATH,"/source/",sep=""), pattern = "[.][RrSsQq]$")) {
+     if(trace) cat(nm,":")
+     source(file.path(paste(PATH,"/source/",sep=""), nm), ...)
+     if(trace) cat("\n")
+  }
+}
+
 
 #Delete me? 
 LinearModelAnalysis <- function(){
@@ -285,20 +297,148 @@ Prettyqplot<-function(xs,ys){
     ggtitle("State Homeless Rate Change by MH Budget Change, 2009-2013") 
 }
 
-Linear_Regression <- function(data,num){
+# Linear_Regression <- function(data,num){
+#   plot.new()
+
+
+#   #Saves the file to the drive, and emails the file out & to slack. 
+#   fileloc <- paste(IMGPATH,"/","Linear_Regression.jpg",sep="")
+#   ggsave(filename = fileloc, plot = p)
+#   Email_file_to_Slack(paste("Linear Regression Model goes here ",sep=""),fileloc)
+
+#   print(p)
+# }
+
+MultiVariate_Regression <- function(data,dependentVar){
+# data = idata.notText
+# depend = dependentVar
+data = read.table("04NYCRestaurants.txt")
+data = removeTextAndWhitespace(data)
+dependentVar = "Price"
+
   plot.new()
 
+model.empty.text <- paste(dependentVar," ~ ")
+mycolnames <- colnames(data)[colnames(data) != "Temp"]
+model.saturated.text <- paste(model.empty.text,paste(mycolnames,collapse=" + "),sep="")
 
-  #Saves the file to the drive, and emails the file out & to slack. 
-  fileloc <- paste(IMGPATH,"/","Linear_Regression.jpg",sep="")
-  ggsave(filename = fileloc, plot = p)
-  Email_file_to_Slack(paste("Linear Regression Model goes here ",sep=""),fileloc)
+model.saturated = lm(model.saturated.text, data = data)
+model.empty = lm(paste(model.empty.text," 1",sep=""), data = data)
 
-  print(p)
-}
+summary(model.saturated)
+#3
+par(mfrow=c(2,2))
+plot(model.saturated)
 
-MultiVariate_Regression <- function(data,num){
-  plot.new()
+#No overt deviations from any of the assumptions.
+
+#4
+library(car)
+influencePlot(model.saturated)
+
+#There are a few points that surface with either high residuals or high hat-values,
+#but there are none that have a severe negative influence on the regression surface.
+
+#5
+vif(model.saturated)
+
+#The VIF of Service is about 3.6, which is decently high. As we saw in the
+#scatterplot matrix above, we might be cautious about multicollinearity in our
+#data because of correlations among our predictor variables.
+
+#6
+avPlots(model.saturated)
+
+#The food, decor, and location variables all seem to add some type of information
+#to our model; however, the service variable doesn't seem to add any information
+#when among the other predictors in this model.
+
+#7
+model.service = lm(Price ~ Service, data = restaurants)
+summary(model.service)
+
+#In the simple linear regression model, service is a highly significant variable
+#that helps to predict the price of dinner; however, because of multicollinearity
+#with other variables such as the food rating, in a multiple regression setting
+#this variable tends to fall out of significance because it doesn't add any
+#additional information.
+
+
+
+#####################
+#####Question #2#####
+#####################
+
+#1abcde
+model2 = lm(Price ~ Food + Decor + Location, data = restaurants)
+summary(model2)
+plot(model2)
+influencePlot(model2)
+vif(model2)
+avPlots(model2)
+
+#All coefficients are significant, and the overall regression is significant. The
+#adjusted R^2 value increased a bit while the RSE decreased slightly. There are
+#a couple observations that are outliers but there are no extreme deviations from
+#any of the regression assumptions. The VIF and added variable plots show that
+#we don't have any cause for concern of multicollinearity in our model.
+
+#2
+anova(model2, model.saturated)
+
+#The p-value for this partial F-test is 0.995, indicating that we should retain
+#the null hypothesis. Thus, we have no reason to believe that the coefficient
+#of the service variable is non-zero, and we should use the model that does not
+#contain this variable.
+
+#3
+model.reduced = lm(Price ~ Food + Decor, data = restaurants)
+summary(model.reduced)
+plot(model.reduced)
+influencePlot(model.reduced)
+vif(model.reduced)
+avPlots(model.reduced)
+
+#The reduced model doesn't violate any assumptions.
+
+#4
+AIC(model.saturated, model2, model.reduced)
+
+#The AIC for the saturated model without the service variable is lowest.
+
+#5
+BIC(model.saturated, model2, model.reduced)
+
+#The BIC for the reduced model is the lowest.
+
+#6
+
+#We would expect to see these results since BIC tends to prefer a more
+#parsimonious model; however, we note that the BIC for the saturated model
+#missing the service variable and the BIC for the reduced model are very close.
+
+  forwardAIC = step(SBmodel.empty, scope, direction = "forward", k = 2)
+  #best model - SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita + pol09 + Rural_urban_continuum_code_2013 + `VarCoe1990: Coef of var for household income, 1990` + respn10 + GQ_ESTIMATES_2014PerCapita + golf09 + POV517_2013PerCapita + PCTPOVALL_2013
+
+  backwardAIC = step(SBmodel.full, scope, direction = "backward", k = 2)
+  bothAIC.empty = step(SBmodel.empty, scope, direction = "both", k = 2)
+  bothAIC.full = step(SBmodel.full, scope, direction = "both", k = 2)
+
+  #Stepwise regression using BIC as the criteria (the penalty k = log(n)).
+  forwardBIC = step(SBmodel.empty, scope, direction = "forward", k = log(50))
+  #simple model - SBsPerCapita ~ PCTPOV017_2013 + R_death_2014 + INTERNATIONAL_MIG_2014PerCapita
+  backwardBIC = step(SBmodel.full, scope, direction = "backward", k = log(50))
+  bothBIC.empty = step(SBmodel.empty, scope, direction = "both", k = log(50))
+  bothBIC.full = step(SBmodel.full, scope, direction = "both", k = log(50))
+
+
+
+
+
+
+
+
+
 
   #Saves the file to the drive, and emails the file out & to slack. 
   fileloc <- paste(IMGPATH,"/","MultiVariate_Regression.jpg",sep="")
@@ -327,18 +467,7 @@ Logistic_Regression <- function(data,num){
 #   }
 
 main <- function(){
-  load_Constants()
-  load_DataSets()
-  slackrSetup(config_file = 'slackr.dcf')  #to send txt to slack.
-
-  setwd(PATH)
-  save.image("am.RData")
-  #load("am.RData")
-
-  #Define DataSet and Independent Variable
-  AMData <- loadAllAMMysqlData()
-  dependentVariable <- "SBsPerCapita"
-
+  loadSourceRFiles()
   #idata <- titanic3  #missing data 
   #idata <- airquality   #missing data 
   #idata <- cars
@@ -347,10 +476,18 @@ main <- function(){
   #idata <- sleep
   #idata <- chickwts
 
+  slackrSetup(config_file = paste(PATH,'/gitignore/slackr.dcf',sep=""))  #to send txt to slack.
+
+  setwd(PATH)
+  save.image("MrT.RData")
+  #load("am.RData")
+
+  #Define DataSet and Independent Variable
+  #AMData <- loadAllAMMysqlData()
+  #dependentVariable <- "SBsPerCapita"
+
 #DATAMUNGING
   #idata <- airquality
-  #select only numeric columns
-  idata.numeric <- data[sapply(data, class)=="numeric"]
 
   #check column types
   lapply(idata, class)
@@ -358,34 +495,44 @@ main <- function(){
   #Check for missingness (NA's, remove columns if there's too much missing data)
   idata <- Missingness_Analysis(idata)
 
+  #select only numeric columns
+  idata.num <- idata[sapply(idata, class)=="numeric"]
+  idata.int <- idata[sapply(idata, class)=="integer"]
+  idata.float <- idata[sapply(idata, class)=="complex"]
+  idata.logic <- idata[sapply(idata, class)=="logical"]
+
+  idata.notText <- cbind(idata.num,idata.int,idata.float,idata.logic)
+
   #make factors, remove whitespace
   idata.NumAndFact <- removeTextAndWhitespace(idata)
+
+  idata.Removed <- NULL #I should get this from removeTextAdnWhitespace function
 
   #run K_means on the remaining NA's in the data
   idata <- K_means_Clustering(idata)
 
 #DATAVISUALIZATION
-  dependentVariable <- colnames(idata)[1]
+  dependentVariable <- colnames(idata)[1]  #SHOULD BE A FUNCTION IN SHINY
 
   PlotMarginals(idata,dependentVariable,"comb")
 
-  Outliers(idata.numeric,OUTLIER_CUTOFF_P_VALUE)
+  Outliers(idata.notText,OUTLIER_CUTOFF_P_VALUE)
 
-  Scree_Plot(idata.numeric)
+  Scree_Plot(idata.notText)
 
-  Correlation(idata.numeric)
+  Correlation(idata.notText)
 
-  Mean_Vectors(idata.numeric,"Violin Plot")
+  Mean_Vectors(idata.notText,"Violin Plot")
 
-  Clustering(idata.numeric,NUM_CLUSTERS)
+  Clustering(idata.notText,NUM_CLUSTERS)
 
 #LINEAR REGRESSION ANALYZE DATA/MODEL BUILDING
 
-  Linear_Regression(idata,idata.numeric)  #broken
+#  Linear_Regression(idata,idata.notText)  #broken
 
-  MultiVariate_Regression(idata,idata.numeric)  #broken
+  MultiVariate_Regression(idata.notText,dependentVariable)  #broken
 
-  Generalized_Linear_Models(idata,idata.numeric)  #broken
+  Generalized_Linear_Models(idata,idata.notText)  #broken
 
   #Check for time series
   ARIMATests(idata)  #broken

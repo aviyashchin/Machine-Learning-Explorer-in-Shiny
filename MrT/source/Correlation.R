@@ -12,7 +12,7 @@ Correlation <- function(data){
 
   p <- ggplot(temp, aes(x=Var1, y=Var2, fill = value)) + geom_tile(alpha = 0.75, colour = "white") + scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1,1), name = "Pearson\ncorrelation\n")
 
-  p <- p + theme_grey(base_size = base_size) + labs(x = "", y = "") + scale_x_discrete(expand = c(0, 0)) + scale_y_discrete(expand = c(0, 0)) + ggtitle("Correlation Heatmap")
+  p <- p + theme_grey(base_size = BASE_SIZE) + labs(x = "", y = "") + scale_x_discrete(expand = c(0, 0)) + scale_y_discrete(expand = c(0, 0)) + ggtitle("Correlation Heatmap")
 
   p <- p + geom_text(aes(Var1, Var2, label = round(value,2)), color = "black", size = 4)+  
   theme(
