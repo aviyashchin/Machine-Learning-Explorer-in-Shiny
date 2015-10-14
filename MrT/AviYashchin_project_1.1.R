@@ -1,4 +1,4 @@
-# /** 
+outlier# /** 
 #  * [I PITY THE FOOL Project]
 #  * @type {[R Script]}
 #  *
@@ -26,13 +26,15 @@
   source("/Users/avi/Dropbox/programming/boxer/Avi_r_tools.R")
 
 load_Constants <- function(){
-  path <<- "/Users/avi/boxer/MrT"
-  imgpath <<- "/Users/avi/boxer/MrT/plots"
+  PATH <<- "/Users/avi/boxer/MrT"
+  IMGPATH <<- "/Users/avi/boxer/MrT/plots"
 
   #If missing data for a certain feature or sample is more than 5% then you probably should leave that feature or sample out. We therefore check for features (columns) and samples (rows) where more than 5% of the data is missing using a simple function
-  Missing_cols_for_removal <<- 5
-  Missing_rows_for_removal <<- 5
-  type <<- "violin"  #Options: c("kd","hist","Violin Plot")
+  MISSING_COLS_FOR_REMOVAL <<- 5
+  MISSING_ROWS_FOR_REMOVAL <<- 5
+  OUTLIER_CUTOFF_P_VALUE <<- 5
+  NUM_CLUSTERS <<- 4
+  TYPE <<- "violin"  #Options: c("kd","hist","Violin Plot")
 
 }
 
@@ -207,58 +209,58 @@ print_and_save_graph <- function(execute_function,new_data,file_name){
   print("test")
 
   if (execute_function == "aggr"){
-    mypath <- file.path(imgpath,file_name)
-    print(mypath)
-    jpeg(file=mypath)
+    myPATH <- file.path(IMGPATH,file_name)
+    print(myPATH)
+    jpeg(file=myPATH)
     print("AGGR!")
     eval(call(execute_function,data2,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data2)))
     dev.off()
 
-  } else if (execute_function == "density"){
+  }else if (execute_function == "density"){
       ggplot(data2)+ 
         aes_string(x=colnames(data2)[1],group="type",color="type") + 
         geom_density(fill=NA)
       print("DENSITY!")
-      ggsave(filename = paste(imgpath,"/",file_name,sep=""), plot = last_plot())
-
-  } else if (execute_function == "density"){
-      ggplot(data2)+ 
-        aes_string(x=colnames(data2)[1],group="type",color="type") + 
-        geom_density(fill=NA)
-      print("DENSITY!")
-      ggsave(filename = paste(imgpath,"/",file_name,sep=""), plot = last_plot())
+      ggsave(filename = paste(IMGPATH,"/",file_name,sep=""), plot = last_plot())
 
   }else if (execute_function == "density"){
       ggplot(data2)+ 
         aes_string(x=colnames(data2)[1],group="type",color="type") + 
         geom_density(fill=NA)
       print("DENSITY!")
-      ggsave(filename = paste(imgpath,"/",file_name,sep=""), plot = last_plot())
+      ggsave(filename = paste(IMGPATH,"/",file_name,sep=""), plot = last_plot())
 
   }else if (execute_function == "density"){
       ggplot(data2)+ 
         aes_string(x=colnames(data2)[1],group="type",color="type") + 
         geom_density(fill=NA)
       print("DENSITY!")
-      ggsave(filename = paste(imgpath,"/",file_name,sep=""), plot = last_plot())
+      ggsave(filename = paste(IMGPATH,"/",file_name,sep=""), plot = last_plot())
 
   }else if (execute_function == "density"){
       ggplot(data2)+ 
         aes_string(x=colnames(data2)[1],group="type",color="type") + 
         geom_density(fill=NA)
       print("DENSITY!")
-      ggsave(filename = paste(imgpath,"/",file_name,sep=""), plot = last_plot())
+      ggsave(filename = paste(IMGPATH,"/",file_name,sep=""), plot = last_plot())
 
   }else if (execute_function == "density"){
       ggplot(data2)+ 
         aes_string(x=colnames(data2)[1],group="type",color="type") + 
         geom_density(fill=NA)
       print("DENSITY!")
-      ggsave(filename = paste(imgpath,"/",file_name,sep=""), plot = last_plot())
+      ggsave(filename = paste(IMGPATH,"/",file_name,sep=""), plot = last_plot())
+
+  }else if (execute_function == "density"){
+      ggplot(data2)+ 
+        aes_string(x=colnames(data2)[1],group="type",color="type") + 
+        geom_density(fill=NA)
+      print("DENSITY!")
+      ggsave(filename = paste(IMGPATH,"/",file_name,sep=""), plot = last_plot())
   }
 
 
-  return(paste(imgpath,"/",file_name,sep=""))
+  return(paste(IMGPATH,"/",file_name,sep=""))
 }
 
 Missingness_Analysis <- function(FIPS){
@@ -268,7 +270,7 @@ Missingness_Analysis <- function(FIPS){
 
   #data <- titanic3
   #data <- airquality
-  data <- cars
+  #data <- cars
   data <- FIPS
   Message_if_you_have_clean_data=""
 
@@ -288,31 +290,31 @@ Missingness_Analysis <- function(FIPS){
   badcols = apply(data,2,pMiss)
 
   if(sum(badcols)>0){
-    #columns to remove, if more than Missing_cols_for_removal % of columsn are NA
-    removecols=names(badcols[badcols>=Missing_cols_for_removal])
+    #columns to remove, if more than MISSING_COLS_FOR_REMOVAL % of columsn are NA
+    removecols=names(badcols[badcols>=MISSING_COLS_FOR_REMOVAL])
     data <- data[,-which(names(data) %in% removecols)]
 
     fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")
-    Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",Missing_cols_for_removal,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)
+    Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",MISSING_COLS_FOR_REMOVAL,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)
   } else {
-    Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," No columns have more than ",Missing_cols_for_removal,"% of their data missing. ")
+    Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," No columns have more than ",MISSING_COLS_FOR_REMOVAL,"% of their data missing. ")
   }
 
   #Checking for more than 5% missing values in rows
   badrows = apply(data,1,pMiss)
-  if(sum(badrows[which(badrows>=Missing_rows_for_removal)])){
+  if(sum(badrows[which(badrows>=MISSING_ROWS_FOR_REMOVAL)])){
 
     #only keep the good rows
-    data <- data[which(badrows<=Missing_rows_for_removal),]
+    data <- data[which(badrows<=MISSING_ROWS_FOR_REMOVAL),]
 
     fileloc <- print_and_save_graph("aggr",data,"After_Row_Removal.jpg")
-    Email_file_to_Slack(paste(" WHOHA.  More than ",Missing_rows_for_removal,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>Missing_rows_for_removal)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)
+    Email_file_to_Slack(paste(" WHOHA.  More than ",MISSING_ROWS_FOR_REMOVAL,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>MISSING_ROWS_FOR_REMOVAL)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)
   } else {
-        Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," You're not missing more than ",Missing_rows_for_removal,"% of data points in any your rows.")
+        Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," You're not missing more than ",MISSING_ROWS_FOR_REMOVAL,"% of data points in any your rows.")
   }
 
   if(Message_if_you_have_clean_data!=""){
-    Email_file_to_Slack(Message_if_you_have_clean_data, paste(path,"/MrTImages/reuse these tools.jpg",sep=""))
+    Email_file_to_Slack(Message_if_you_have_clean_data, paste(PATH,"/MrTImages/reuse these tools.jpg",sep=""))
   }
 
   # for (i in 1:39487) {
@@ -369,10 +371,10 @@ K_means_Clustering <- function(FIPS){
       kknn2  = kknn(regression_formula, train, test, k = 1, distance = 2)
       kknn5  = kknn(regression_formula, train, test, k = 1, distance = 5)
 
-      a1 = data.frame(test = kknn1$fitted.values, type = "kmeans k=1 dist=1")
-      a2 = data.frame(test = kknn2$fitted.values, type = "kmeans k=1 dist=2")
-      a3 = data.frame(test = kknn5$fitted.values, type = "kmeans k=1 dist=5")
-      a4 = data.frame(test = c(train[current_var]),type="original")
+      a1 = data.frame(test = kknn1$fitted.values, TYPE = "kmeans k=1 dist=1")
+      a2 = data.frame(test = kknn2$fitted.values, TYPE = "kmeans k=1 dist=2")
+      a3 = data.frame(test = kknn5$fitted.values, TYPE = "kmeans k=1 dist=5")
+      a4 = data.frame(test = c(train[current_var]),TYPE="original")
 
       colnames(a1)[1]=current_var
       colnames(a2)[1]=current_var
@@ -732,15 +734,19 @@ PlotMarginals <- function(data,name,type){
   p <- p + theme(text = element_text(size=20))
   
   #Saves the file to the drive, and emails the file out & to slack. 
-  fileloc <- paste(imgpath,"/","PlotMarginals.jpg",sep="")
+  fileloc <- paste(IMGPATH,"/","PlotMarginals.jpg",sep="")
   ggsave(filename = fileloc, plot = p)
-  Email_file_to_Slack(paste("Here's a histogram of your independent variable. ",sep=""),fileloc)
+  Email_file_to_Slack(paste("Let's take a look at how your independent variable (",name,") is distributed ",sep=""),fileloc)
 
   print(p)
 }
 
 Outliers <- function(data,cutoff_in){
-  #replace this with the function that CMakris showed us
+#numeric only
+  
+#replace this with the function that CMakris showed us
+#data <- cars
+
   plot.new()
   num_cols <- dim(data)[1]
 
@@ -751,10 +757,12 @@ Outliers <- function(data,cutoff_in){
   outlier <- mahalanobis_dist > cutoff
   
   df_outliers <<- data.frame(x = c(1:dim(data)[1]), y = log(sqrt(mahalanobis_dist)), z = outlier)
-  
-  show_outliers$Names <<- row_names[df_outliers[,3]]
-  show_outliers$Distances <<- mahalanobis_dist[df_outliers[,3]]
-    
+
+  outlier_list <- df_outliers[df_outliers$z==TRUE,]
+
+  #show_outliers$Names <<- row_names[df_outliers[,3]]
+  #show_outliers$Distances <<- mahalanobis_dist[df_outliers[,3]]
+
   p <- ggplot(df_outliers,aes(x = x,y = y))
   
   p <- p + geom_point(aes(colour = z)) + geom_abline(intercept = log(sqrt(cutoff)), slope = 0,linetype="dashed",colour = "red") + labs(x = "Observation Number",y = "log(Mahalanobis Distances)", title = paste("Outlier Plot")) + scale_colour_manual(name="Type", values = c("FALSE" = "blue","TRUE" = "#FF0080"), breaks=c("TRUE", "FALSE"), labels=c("Outlier", "Inlier"))  
@@ -762,16 +770,16 @@ Outliers <- function(data,cutoff_in){
   p <- p + theme(plot.title = element_text(vjust=2), text = element_text(size=20))
 
   #Saves the file to the drive, and emails the file out & to slack. 
-  fileloc <- paste(imgpath,"/","PlotOutliers.jpg",sep="")
+  fileloc <- paste(IMGPATH,"/","PlotOutliers.jpg",sep="")
   ggsave(filename = fileloc, plot = p)
-  Email_file_to_Slack(paste("Here's your outliers. ",sep=""),fileloc)
+
+  Email_file_to_Slack(paste("Based on your cutoff, you have ",nrow(df_outliers[df_outliers$z==TRUE,])," outliers. ",sep=""),fileloc)
 
   print(p)
-
-  return(list(df_outliers,p))
 }
   
 Scree_Plot <- function(data){
+
   plot.new()
 
   result <- prcomp(data, center = TRUE, scale = TRUE)
@@ -783,10 +791,11 @@ Scree_Plot <- function(data){
   p <- p + geom_point() + geom_line() + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=45)) 
 
   #Saves the file to the drive, and emails the file out & to slack. 
-  fileloc <- paste(imgpath,"/","PlotScreePlot.jpg",sep="")
+  fileloc <- paste(IMGPATH,"/","PlotScreePlot.jpg",sep="")
   ggsave(filename = fileloc, plot = p)
   Email_file_to_Slack(paste("Scree Plots Incoming! ",sep=""),fileloc)
 
+  plot(p)
   print(p)
 }
   
@@ -816,6 +825,12 @@ Correlation <- function(data){
     legend.direction = "horizontal")+
     guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
     title.position = "right", title.hjust = 0.5))
+
+  #Saves the file to the drive, and emails the file out & to slack. 
+  fileloc <- paste(IMGPATH,"/","CorrelationPlots.jpg",sep="")
+  ggsave(filename = fileloc, plot = p)
+  Email_file_to_Slack(paste("Look at your correlations fool! ",sep=""),fileloc)
+
   print(p)
 }
   
@@ -825,15 +840,16 @@ Mean_Vectors <- function(data, type){
   output_se = c() #need to replace this with reactive shiny
   #ranges <- reactiveValues(y = NULL)
   ranges = c()
-  ranges$y = 100
-  ranges$x = 100
+  ranges$y <- c(brush$ymin, brush$ymax)
+  ranges$y <- c(0, 100)
+  ranges$x = 1
 
-  data=idata.NAs_replaced
+  #data <- sleep
    num_vars <- dim(data)[2]
   
    for (i in c(1:num_vars)){
+
     name <- colnames(data)[i]
-    
     output_mean[i] <- mean(data[,i],na.rm = TRUE) 
     output_se[i] <- sd(data[,i],na.rm = TRUE) / sqrt(length(data[,3][!is.na(data[,3])]))
    }
@@ -859,6 +875,11 @@ Mean_Vectors <- function(data, type){
     p <- ggplot(keep_data,aes(x = variable, y = value)) + geom_boxplot() + ylab("Mean") + xlab("") + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x=element_text(angle=90, vjust = 0.6)) + ggtitle('Column Means') + coord_cartesian(ylim = ranges$y)
    }
 
+  #Saves the file to the drive, and emails the file out & to slack. 
+  fileloc <- paste(IMGPATH,"/","MeanVectors.jpg",sep="")
+  ggsave(filename = fileloc, plot = p)
+  Email_file_to_Slack(paste("Be Somebody or Be Somebody's Fool.  Know what your data looks like! ",sep=""),fileloc)
+
   print(p)
 }
 
@@ -877,17 +898,33 @@ Clustering <- function(data,num){
   
   p <- p + geom_point(size = 5) + xlab('First Principal Component') + ylab('Second Principle Component') + theme(plot.title = element_text(vjust=2), text = element_text(size=20), axis.text.x = element_text(vjust = 2)) + scale_colour_discrete(name = "Clusters")  
 
+  #Saves the file to the drive, and emails the file out & to slack. 
+  fileloc <- paste(IMGPATH,"/","Clustering.jpg",sep="")
+  ggsave(filename = fileloc, plot = p)
+  Email_file_to_Slack(paste("Life's tough, but I'm tougher!  Check out these clusters. ",sep=""),fileloc)
+
   print(p)
 }
 
 Linear_Regression <- function(data,num){
   plot.new()
 
+
+  #Saves the file to the drive, and emails the file out & to slack. 
+  fileloc <- paste(IMGPATH,"/","Linear_Regression.jpg",sep="")
+  ggsave(filename = fileloc, plot = p)
+  Email_file_to_Slack(paste("Sylvester Stallone.  Check out these clusters. ",sep=""),fileloc)
+
   print(p)
 }
 
 MultiVariate_Regression <- function(data,num){
   plot.new()
+
+  #Saves the file to the drive, and emails the file out & to slack. 
+  fileloc <- paste(IMGPATH,"/","MultiVariate_Regression.jpg",sep="")
+  ggsave(filename = fileloc, plot = p)
+  Email_file_to_Slack(paste("Hannibal is on the jazz.  Check out these clusters. ",sep=""),fileloc)
 
   print(p)
 }
@@ -906,7 +943,7 @@ main <- function(){
   load_Constants()
   load_DataSets()
 
-  setwd(path)
+  setwd(PATH)
   save.image("am.RData")
   #load("am.RData")
 
@@ -935,18 +972,19 @@ main <- function(){
   #run K_means on the remaining NA's in the data
   idata.NAs_replaced <- K_means_Clustering(idata.Missing)
 
+  data <- idata.NAs_replaced
   #Show histograms of data
   PlotMarginals(idata.NAs_replaced,dependentVariable,"comb")
 
-  Outliers(idata.NAs_replaced,5)
+  Outliers(idata.NAs_replaced,OUTLIER_CUTOFF_P_VALUE)
 
   Scree_Plot(idata.NAs_replaced)
 
   Correlation(idata.NAs_replaced)
 
-  Mean_Vectors(idata.NAs_replaced,"Violin Plot")  #broken
+  Mean_Vectors(idata.NAs_replaced,"Violin Plot")
 
-  Clustering(idata.NAs_replaced,2)  #broken
+  Clustering(idata.NAs_replaced,NUM_CLUSTERS)
 
   Linear_Regression(idata.NAs_replaced)  #broken
 
