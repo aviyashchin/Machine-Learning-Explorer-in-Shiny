@@ -31,9 +31,10 @@
 .load_Constants <- function(){
   #These should be monitored from Shiny
   DEBUG <<- FALSE   #Clear workspace with rm(list=objects()) 
-  PATH <<- "/Users/avi/boxer/MrT"
-  IMGPATH <<- "/Users/avi/boxer/MrT/plots"
+  PATH <<- "/Users/avi/boxer/MrTStaging/"
+  IMGPATH <<- "/Users/avi/boxer/MrTStaging/plots/"
   BASE_SIZE <<- 100
+  Independent <<- "numsbs"
 #  source("/Users/avi/Dropbox/programming/boxer/MrT/source/")
 
   #If missing data for a certain feature or sample is more than 5% then you probably should leave that feature or sample out. We therefore check for features (columns) and samples (rows) where more than 5% of the data is missing using a simple function
@@ -573,6 +574,8 @@ main <- function(){
   #idata <- state.x77
   #idata <- sleep
   #idata <- chickwts
+  #idata <- df
+  #idata <- loadAllAMMysqlData()
 
   slackrSetup(config_file = paste(PATH,'/gitignore/slackr.dcf',sep=""))  #to send txt to slack.
 
@@ -581,7 +584,6 @@ main <- function(){
   #load("am.RData")
 
   #Define DataSet and Independent Variable
-  #AMData <- loadAllAMMysqlData()
   #dependentVariable <- "SBsPerCapita"
 
 #DATAMUNGING
@@ -589,7 +591,7 @@ main <- function(){
 
   #check column types
   lapply(idata, class)
- 
+  
   #Check for missingness (NA's, remove columns if there's too much missing data)
   idata <- Missingness_Analysis(idata)
 
@@ -602,7 +604,7 @@ main <- function(){
   idata.notText <- cbind(idata.num,idata.int,idata.float,idata.logic)
 
   #make factors, remove whitespace
-  idata.NumAndFact <- removeTextAndWhitespace(idata)
+#  idata.NumAndFact <- removeTextAndWhitespace(idata) 
 
   idata.Removed <- NULL #I should get this from removeTextAdnWhitespace function
 

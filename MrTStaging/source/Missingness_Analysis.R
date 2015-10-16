@@ -6,6 +6,7 @@ Missingness_Analysis <- function(FIPS){
   #data <- titanic3
   #data <- airquality
   #data <- cars
+  #data <- df
   data <- FIPS
   Message_if_you_have_clean_data=""
 
@@ -28,7 +29,6 @@ Missingness_Analysis <- function(FIPS){
     #columns to remove, if more than MISSING_COLS_FOR_REMOVAL % of columsn are NA
     removecols=names(badcols[badcols>=MISSING_COLS_FOR_REMOVAL])
     data <- data[,-which(names(data) %in% removecols)]
-
     fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")
     Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",MISSING_COLS_FOR_REMOVAL,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)
   } else {

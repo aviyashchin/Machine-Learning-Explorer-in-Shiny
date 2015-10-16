@@ -72,10 +72,10 @@ loadAllAMMysqlData <- function(){
 
   #Goes through all the data and does a join on Zip code (FIPS code)
   # ZiptoFips
-  allData=list(Bankruptcy, Fruits_Vegetables, SocialCapital, Unemployment, Disparity, Education, No_Exercise, NumCompanies, PovertyEstimates, PopulationEstimates,allscumbags)
+  allData=list(allscumbags,Bankruptcy, Fruits_Vegetables, SocialCapital, Unemployment, Disparity, Education, No_Exercise, NumCompanies, PovertyEstimates, PopulationEstimates)
 
     i=1
-    FIPS=Bankruptcy
+    FIPS=allscumbags
     print(paste("# of FIPS Codes:",nrow(FIPS)))
   #   FIPS=left_join(FIPS,allData[[i]],by="FIPS")
     for (i in 2:length(allData)){

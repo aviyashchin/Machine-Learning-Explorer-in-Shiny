@@ -11,6 +11,7 @@ removeTextAndWhitespace <- function(df){
   #  {
   #  df <- df[,1:100] # chop dataframe down 
   #  }
+#data = read.table("04NYCRestaurants.txt")
 
   slackr("Here's the data we're starting with:",str(df))
 
@@ -66,10 +67,10 @@ removeTextAndWhitespace <- function(df){
   removedColumns <- df[,c(r_indi)]
 
   if(length(r_indi)>0){
-    SUCKAtxt = paste(sep="",collapse="\n")
-    slackr(eval(SUCKAtxt))
-    SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'. Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot.com, or try H2o.ai for model building, wit.ai for speech, or cortical.io for basic text comparison NLP, or torch.ch for RNN/CNN.  Here's what was taken out:",sep="")
-    slackr(eval(SUCKAtxt))
+#    SUCKAtxt = paste(sep="",collapse="\n")
+#    slackr(eval(SUCKAtxt))
+#    SUCKAtxt = paste("I'm removing columns '",list(colnames(df)[dataTypes == 0]),"'. Find someone smarter than me to analyze columns with more than ",NUM_FACTORS_WE_CAN_HANDLE," factors. Call Owen Zhang @ datarobot.com, or try H2o.ai for model building, wit.ai for speech, or cortical.io for basic text comparison NLP, or torch.ch for RNN/CNN.  Here's what was taken out:",sep="")
+#    slackr(eval(SUCKAtxt))
     slackr(str(removedColumns))
   }
 
