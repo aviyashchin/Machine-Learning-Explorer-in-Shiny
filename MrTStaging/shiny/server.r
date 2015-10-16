@@ -1,10 +1,5 @@
 library(shiny)
 library(ggplot2)
-library(robustbase)
-library(reshape)
-library(xlsx)
-library(grid)
-library(fastcluster)
 
 setnv <- function(){
   source("/Users/avi/programming/boxer/AshlyMadison")
