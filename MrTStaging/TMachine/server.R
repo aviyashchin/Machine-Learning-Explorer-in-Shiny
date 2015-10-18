@@ -147,7 +147,7 @@ shinyServer(function(input,output,session)
     results = withProgress(session, min=1, max=2, {
       setProgress(message = 'Calculation in progress',
                   detail = 'This may take a while...')
-      
+    
       setProgress(value = 1)
       
       
@@ -167,11 +167,6 @@ shinyServer(function(input,output,session)
         
         #create the equation
         
-        
-        
-        
-        
-        
         results = train(form,data=newData,tuneGrid=gridding,method="glmnet",family=familyData,trControl=control,preProcess=preprocessType);
         
         return(results);
@@ -185,7 +180,6 @@ shinyServer(function(input,output,session)
         familyData = isolate(input$rfModelTypeUI);
         
         gridding = expand.grid(.mtry=seq(mTryStartEnd[1],mTryStartEnd[2],by=nMtry));
-        
         
         
         if(familyData != "Gaussian") {
