@@ -4,6 +4,10 @@ require(e1071);
 require(randomForest);
 require(nnet);
 require(glmnet);
+library(mice);
+library(VIM);
+library("PASWR");
+source("helpers.R")
 
 #code for plotting nnets, taken from: http://beckmw.wordpress.com/2013/03/04/visualizing-neural-networks-from-the-nnet-package/
 # the formula of the output of train is off and doesn't work correctly though.
@@ -27,11 +31,8 @@ shinyServer(function(input,output,session)
   #reactive object, responsible for loading the main data
   rawInputData = reactive({
     rawData = input$rawInputFile
-    
     headerTag = input$headerUI;
-    
     sepTag = input$sepUI;
-    
     quoteTag = input$quoteUI;
     
     
@@ -53,10 +54,54 @@ shinyServer(function(input,output,session)
     return();
   })
   
+########### Joe Added Functions ##############
+  output$textmissing <- renderText({ 
+    
+    data = rawInputData()
+    
+    missing = sapply(data, function(x) sum(is.na(x)))
+    df.missing = data.frame(missing)
+    total = sum(df.missing$missing)
+    total
+    
+    paste("Number of Missing Values: ",total)
+    
+  })
+  
+  
+  output$colmissing <- renderDataTable({ 
+    data = rawInputData()
+    missing = sapply(data, function(x) sum(is.na(x)))
+    frame.missing = data.frame(missing)
+    observation = rownames(frame.missing)
+    df.missing = cbind(observation, frame.missing)
+    df.missing
+    
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+###############################################
+  
+  
+  
+  
+  
+  
+  
+  
   #this is the function that responds to the clicking of the button
-  trainResults = reactive({
-    #respond to the button
-    input$runAnalysisUI;
+  trainResults = eventReactive(input$runAnalysisUI,{
+#     #respond to the button
+#     input$runAnalysisUI;
     
     #the model we are interested in
     modelTag = isolate(input$modelSelectionUI);
@@ -271,7 +316,7 @@ shinyServer(function(input,output,session)
     if(is.null(data)){
       return(helpText("Choose a file to load"))
     } else {
-      return(selectInput("modelLabelUI","Select Label",colnames(data),colnames(data)[1]));
+      return(selectInput("modelLabelUI","Select Target Feature",colnames(data),colnames(data)[1]));
     }
   });
   

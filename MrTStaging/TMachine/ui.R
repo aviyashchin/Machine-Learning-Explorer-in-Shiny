@@ -1,17 +1,44 @@
 require(shiny);
 require(shinyIncubator);
 
-shinyUI(pageWithSidebar(
-  headerPanel("T-Machine"),
-  sidebarPanel(fileInput('rawInputFile','Upload Data File',accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv')),
+shinyUI(navbarPage(
+  title = 'T-Machine',
+  tabPanel('Summary'),
+  tabPanel('Preparation',
+           fluidPage(
+             titlePanel("Data Preparation"),
+             sidebarLayout(
+               sidebarPanel(fileInput('rawInputFile','Upload Data File',accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv')),
+                            uiOutput("labelSelectUI"),
+                            checkboxInput('headerUI','Header',TRUE),
+                            radioButtons('sepUI','Seperator',c(Comma=',',Semicolon=';',Tab='\t'),'Comma'),
+                            radioButtons('quoteUI','Quote',c(None='','Double Quote'='"','Single Quote'="'"),'Double Quote')
+                           
+               ),
+               mainPanel(
+                
+                 column(6,
+                 verbatimTextOutput("textmissing"),
+                 
+                 dataTableOutput("colmissing"))
+                 
+                 )
+             
                
-               uiOutput("labelSelectUI"),
-               
-               checkboxInput('headerUI','Header',TRUE),
-               radioButtons('sepUI','Seperator',c(Comma=',',Semicolon=';',Tab='\t'),'Comma'),
-               radioButtons('quoteUI','Quote',c(None='','Double Quote'='"','Single Quote'="'"),'Double Quote'),
-               uiOutput("dummyTagUI")
-  ),
+               )
+             
+             
+             
+             
+             
+             
+           )),
+  tabPanel('Modeling',
+           
+  fluidPage(
+  titlePanel("T-Machine"),
+  sidebarPanel('nuthing', 
+               uiOutput("dummyTagUI")),
   mainPanel(
     
             tabsetPanel(
@@ -30,4 +57,9 @@ shinyUI(pageWithSidebar(
               tabPanel("Model Results View",h4("Best Fit Model"),tableOutput("bestResultsUI"),h4("Full Model Output"),tableOutput("trainResultsUI"),plotOutput("finalPlotUI")),
               tabPanel("Data Table View",dataTableOutput("rawDataView")),
               tabPanel("Caret Feature View",plotOutput("caretPlotUI"))
-              ,id="mainTabUI"))))
+              ,id="mainTabUI")))),
+  navbarMenu('More',
+             tabPanel("Contact"),
+             tabPanel("Acknowledgements")
+             )
+  ))
