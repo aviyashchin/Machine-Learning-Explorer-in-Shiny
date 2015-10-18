@@ -1,0 +1,16 @@
+---
+title: "Shiny, Slack, AWS, Sql, and Auto-Cleaning"
+author: "Avi + Joe"
+date: "October 15, 2015"
+output: html_document
+---
+
+##QUESTION 1:
+
+To get the mysql data into the AMi
+```{r}
+curl -0 http://cdn.mysql.com/Downloads/Connector-J/mysql-connector-java-5.0.8.tar.gz | tar -zx
+
+```
+
+#asdfadsf

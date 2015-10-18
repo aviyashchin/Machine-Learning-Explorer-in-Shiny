@@ -83,9 +83,49 @@ loadAllAMMysqlData <- function(){
        FIPS=left_join(FIPS,allData[[i]],by="FIPS")
     }
 
-  dbDisconnect(con)
+  #make scumbags per capita column
+        #Which columns to use
+      MakeMePerCapita <- c("All FilingsTotal",
+                           "Business Filings Total",
+                           "Nonbusiness Filings Total", 
+                           "Number of establishments",
+                           #"Paid employees for pay period including March 12 (number)", 
+                           #"first_q_payroll",
+                           #"annual_payroll", 
+                           "N_POP_CHG_2014",
+                           "Births_2014", 
+                           "Deaths_2014", 
+                           "NATURAL_INC_2014",
+                           "INTERNATIONAL_MIG_2014",
+                           "DOMESTIC_MIG_2014", 
+                           "NET_MIG_2014",
+                           "RESIDUAL_2014", 
+                           "GQ_ESTIMATES_2014", 
+                           "POVALL_2013", 
+                           "POV017_2013",
+                           "POV517_2013", 
+                           #"POV05_2013",
+                           "Civilian_labor_force_2014",
+                           "Employed_2014",
+                           "Unemployed_2014",
+                           "SBs")
+      percapita<-FIPS[2]
+      i=1
+      for (i in 1:length(MakeMePerCapita)){
+          print(paste("MakeMePerCapita ",i," ",colnames(FIPS[eval(MakeMePerCapita[i])])))
+          ((FIPS[,eval(MakeMePerCapita[i])]=FIPS[,eval(MakeMePerCapita[i])]/FIPS[,"POP_ESTIMATE_2014"]))
+        #rename columns that have been adjusted to Per Capita Columns
+          names(FIPS)[names(FIPS)==eval(MakeMePerCapita[i])] <- paste(eval(MakeMePerCapita[i]),"PerCapita",sep="")
+        }
 
-  return(FIPS)
+      FIPS$State.y <- NULL
+      FIPS$State.x <- NULL
+      #Remove NAs- REDUCES ZIP CODES FROM 3,100 TO 1,100.  YIKES
+      FIPS = filter(FIPS, !is.na(FIPS$SBsPerCapita))    
+
+ dbDisconnect(con)
+
+ return(FIPS)
 
   on.exit(dbDisconnect(con))
 }

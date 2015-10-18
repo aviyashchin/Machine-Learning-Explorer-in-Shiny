@@ -28,9 +28,13 @@
   library("ggthemes")
   #rm(list = ls())    <- DELETES ALL OBJECTS
 
+#Checking for more than 5% missing values in cols
+pMiss <- function(x){sum(is.na(x))/length(x)*100}
+
+
 .load_Constants <- function(){
   #These should be monitored from Shiny
-  DEBUG <<- FALSE   #Clear workspace with rm(list=objects()) 
+  DEBUG <<- TRUE   #Clear workspace with rm(list=objects()) 
   PATH <<- "/Users/avi/boxer/MrTStaging/"
   IMGPATH <<- "/Users/avi/boxer/MrTStaging/plots/"
   BASE_SIZE <<- 100
@@ -567,7 +571,9 @@ Logistic_Regression <- function(data,num){
 
 main <- function(){
   loadSourceRFiles()
-  idata <- titanic3  #missing data 
+
+  #regression
+  #idata <- titanic3  #missing data 
   #idata <- airquality   #missing data 
   #idata <- cars
   #idata <- iris
@@ -575,7 +581,11 @@ main <- function(){
   #idata <- sleep
   #idata <- chickwts
   #idata <- df
-  #idata <- loadAllAMMysqlData()
+  idata <- loadAllAMMysqlData()
+  #idata <-  AMData
+
+  #time series
+
 
   slackrSetup(config_file = paste(PATH,'/gitignore/slackr.dcf',sep=""))  #to send txt to slack.
 
@@ -598,20 +608,36 @@ main <- function(){
   #select only numeric columns
   idata.num <- idata[sapply(idata, class)=="numeric"]
   idata.int <- idata[sapply(idata, class)=="integer"]
+  idata.factor <- idata[sapply(idata, class)=="factor"]
   idata.float <- idata[sapply(idata, class)=="complex"]
   idata.logic <- idata[sapply(idata, class)=="logical"]
-
-  idata.notText <- cbind(idata.num,idata.int,idata.float,idata.logic)
+  idata.notText <- cbind(idata.num,idata.int,idata.float,idata.logic,idata.factor)
 
   #make factors, remove whitespace
 #  idata.NumAndFact <- removeTextAndWhitespace(idata) 
 
-  idata.Removed <- NULL #I should get this from removeTextAdnWhitespace function
+  #idata.Removed <- NULL #I should get this from removeTextAdnWhitespace function
 
-  #run K_means on the remaining NA's in the data
-  idata <- K_means_Clustering(idata)
+  #run K_means or average on the remaining NA's in the data
+  idata <- CleanBlanksAndNAs(idata,Method="avg")
 
-#DATAVISUALIZATION
+  #Remove any columns that have a correlation of 1 with the value were trying to investigate
+  SBMatrix<-cor(final, method = "spearman", use = "pairwise")
+
+
+#LINEAR REGRESSION ANALYZE DATA/MODEL BUILDING
+
+#  Linear_Regression(idata,idata.notText)  #broken
+  
+  MultiVariate_Regression(idata.notText,"Price")  #broken
+
+  Generalized_Linear_Models(idata,idata.notText)  #broken
+
+  #Check for time series
+  ARIMATests(idata)  #broken
+
+
+#DATAVISUALIZATION  #should come back to this once the regressions are complete. 
   dependentVariable <- colnames(idata)[1]  #SHOULD BE A FUNCTION IN SHINY
 
   PlotMarginals(idata,dependentVariable,"comb")
@@ -625,19 +651,6 @@ main <- function(){
   Mean_Vectors(idata.notText,"Violin Plot")
 
   Clustering(idata.notText,NUM_CLUSTERS)
-
-#LINEAR REGRESSION ANALYZE DATA/MODEL BUILDING
-
-#  Linear_Regression(idata,idata.notText)  #broken
-  
-  
-
-  MultiVariate_Regression(idata.notText,"Price")  #broken
-
-  Generalized_Linear_Models(idata,idata.notText)  #broken
-
-  #Check for time series
-  ARIMATests(idata)  #broken
 
 #CHECKING SIGNIFICANT, CHECKING FOR OVERFITTING FUNCTIONS
 
