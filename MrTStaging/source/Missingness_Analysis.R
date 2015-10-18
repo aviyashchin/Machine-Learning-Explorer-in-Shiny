@@ -11,18 +11,16 @@ Missingness_Analysis <- function(FIPS){
   Message_if_you_have_clean_data=""
 
   #NA and Blanks Check
-  tmp=data[is.na(data)==FALSE] #only the non_na cells
-  numBlanks = count(tmp[tmp == ""])[1,2]  #checks for "" in cells
-  if(!is.na(numBlanks)){
+  #tmp=data[is.na(data)==FALSE] #only the non_na cells
+#  numBlanks = count(data[data[is.na(data)==FALSE] == ""])[1,2]  #checks for "" in cells
+#  if(!is.na(numBlanks)){
     data[data == ""] <- NA
     fileloc <- print_and_save_graph("aggr",data,"Before_Missingness_Adjustment.jpg") 
     Email_file_to_Slack(paste("Teachin' fools some basic rules - ",numBlanks," blanks were replaced with NA. I'm assuming your files are Missing not at random. Here's what your awful data looks like before I work my magic. You don't rehearse Mr. T, you just turn him loose.",sep=""),fileloc)
-  } else {
-   Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," There were no NA's or Blanks in this file. ") 
-  }
+#  } else {
+#   Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," There were no NA's or Blanks in this file. ") 
+#  }
 
-  #Checking for more than 5% missing values in cols
-  pMiss <- function(x){sum(is.na(x))/length(x)*100}
   badcols = apply(data,2,pMiss)
 
   if(sum(badcols)>0){

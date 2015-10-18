@@ -9,6 +9,8 @@
 #  */
 
 #Load Dependency Libraries
+  library(caret)
+  library(gbm)
   library(dplyr)
   library(slackr)
   library(reshape2)
@@ -19,6 +21,7 @@
   library(plyr)
   library(PASWR)
   library(mice)
+  library(C50)  #chrun dataset
   library(VIM)
   library(mailR)
   library(kknn)
@@ -28,9 +31,13 @@
   library("ggthemes")
   #rm(list = ls())    <- DELETES ALL OBJECTS
 
+#Checking for more than 5% missing values in cols
+pMiss <- function(x){sum(is.na(x))/length(x)*100}
+
+
 .load_Constants <- function(){
   #These should be monitored from Shiny
-  DEBUG <<- FALSE   #Clear workspace with rm(list=objects()) 
+  DEBUG <<- TRUE   #Clear workspace with rm(list=objects()) 
   PATH <<- "/Users/avi/boxer/MrTStaging/"
   IMGPATH <<- "/Users/avi/boxer/MrTStaging/plots/"
   BASE_SIZE <<- 100
@@ -44,6 +51,16 @@
   NUM_CLUSTERS <<- 4
   TYPE <<- "violin"  #Options: c("kd","hist","Violin Plot")
   NUM_FACTORS_WE_CAN_HANDLE <<- 6
+  TRAIN_TEST_SPLIT <<- .75
+
+  #GBM parameters
+  NUMBER_OF_TREES <<- 1000
+  SPLITS_PER_TREE <<- 5
+  LEARNING_RATE_TREE <<- 0.01
+
+  #Max Factors Allowed
+  MAX_FACTORS_ALLOWED <<- 10
+
 }
 
 loadSourceRFiles <- function(trace = TRUE, ...) {
@@ -566,54 +583,132 @@ Logistic_Regression <- function(data,num){
 #   }
 
 main <- function(){
-  loadSourceRFiles()
-  idata <- titanic3  #missing data 
-  #idata <- airquality   #missing data 
-  #idata <- cars
-  #idata <- iris
-  #idata <- state.x77
-  #idata <- sleep
-  #idata <- chickwts
-  #idata <- df
-  #idata <- loadAllAMMysqlData()
-
-  slackrSetup(config_file = paste(PATH,'/gitignore/slackr.dcf',sep=""))  #to send txt to slack.
-
   setwd(PATH)
-  save.image("MrT.RData")
-  #load("am.RData")
+  loadSourceRFiles()
+  slackrSetup(config_file = paste(PATH,'/gitignore/slackr.dcf',sep=""))  #to send txt to slack.
+  #save.image("MrT.RData")
+  #load("MrT.RData")
 
-  #Define DataSet and Independent Variable
-  #dependentVariable <- "SBsPerCapita"
+  #idata <- titanic3  #missing data 
+  dependentVariable <- "survived"  #SHOULD BE A FUNCTION IN SHINY
 
-#DATAMUNGING
-  #idata <- airquality
+  #idata <- airquality   #missing data 
+  dependentVariable <- "Solar.R"  #SHOULD BE A FUNCTION IN SHINY
 
-  #check column types
-  lapply(idata, class)
-  
+  #idata <- iris
+  dependentVariable <- "Species"  #SHOULD BE A FUNCTION IN SHINY
+
+  #idata <- state.x77
+  dependentVariable <- "Life.Exp"  #SHOULD BE A FUNCTION IN SHINY
+
+  #idata <- sleep
+  dependentVariable <- "Sleep"  #SHOULD BE A FUNCTION IN SHINY
+
+  #idata <- loadAllAMMysqlData()
+  idata <- AMData
+  dependentVariable <- "SBsPerCapita"  #SHOULD BE A FUNCTION IN SHINY
+
+  #idata <- churnTrain
+  dependentVariable <- "churn"  #SHOULD BE A FUNCTION IN SHINY
+  #idata[,dependentVariable] <- ifelse(idata[,dependentVariable] == "yes", 1, 0)
+
+  #replace all variable name whitespaces with a dot"
+  colnames(idata) <- gsub(" ", ".", colnames(idata), fixed = TRUE)
+
+  #for GBMClassification
+  if(length(levels(idata[,dependentVariable])) == 2){
+    GBMdistribution <<- "bernoulli" # For classification
+  }else if (is.null(levels(idata[,dependentVariable]))){
+    GBMdistribution <<- "gaussian" # For classification
+  } else {
+    GBMdistribution <<- "multinomial" # For classification
+  }
+
+#DATAMUNGING  PRE-PROCESSING
+
   #Check for missingness (NA's, remove columns if there's too much missing data)
   idata <- Missingness_Analysis(idata)
 
   #select only numeric columns
   idata.num <- idata[sapply(idata, class)=="numeric"]
   idata.int <- idata[sapply(idata, class)=="integer"]
+  idata.factor <- idata[sapply(idata, class)=="factor"]
   idata.float <- idata[sapply(idata, class)=="complex"]
   idata.logic <- idata[sapply(idata, class)=="logical"]
+  idata.notText <- cbind(idata.num,idata.int,idata.float,idata.logic,idata.factor)
 
-  idata.notText <- cbind(idata.num,idata.int,idata.float,idata.logic)
+  #CLEANS OUT ANY VARIABLE WITH TOO MANY OF DIFFERENT LEVELS
+  for(i in 1:ncol(idata.notText)){
+    tmpname=colnames(idata)[i]
+    if(length(levels(idata[,eval(tmpname)])) > MAX_FACTORS_ALLOWED){
+      idata.notText[,eval(tmpname)] <- NULL
+    }
+  }
+  idata <- idata.notText
 
-  #make factors, remove whitespace
-#  idata.NumAndFact <- removeTextAndWhitespace(idata) 
+  #run K_means or average on the remaining NA's in the data
+  idata <- CleanBlanksAndNAs(idata,Method="avg")  #check this with AM dataset
 
-  idata.Removed <- NULL #I should get this from removeTextAdnWhitespace function
+  #Remove any columns that have a correlation of 1 with the value were trying to investigate
+  #SBMatrix<-cor(idata, method = "spearman", use = "pairwise")
 
-  #run K_means on the remaining NA's in the data
-  idata <- K_means_Clustering(idata)
+  #dummies <- dummyVars(survived ~ ., data = etitanic)
+  #head(predict(dummies, newdata = etitanic))
 
-#DATAVISUALIZATION
-  dependentVariable <- colnames(idata)[1]  #SHOULD BE A FUNCTION IN SHINY
+  #SPLIT TRAINING AND TESTING DATA
+  inTrainingSet <- createDataPartition(idata[,dependentVariable],p = TRAIN_TEST_SPLIT, list = FALSE)
+  iTrain    <- idata[inTrainingSet,]
+  iTest     <- idata[-inTrainingSet,]
 
+  #preProcess calculates values that can be used to apply to any data set (e.g. training, set, unknowns).
+  numerics <- c(colnames(idata)[apply(idata,2,class)=="numeric"])
+
+  #idata <- AMTrain 
+  #idata <- TitanTrain
+  #idata <- TitanTrain
+  #idata <- ozoneTrain
+
+#  as.matrix()?
+
+  procValues <- preProcess(iTrain[,numerics],method = c("center", "scale", "YeoJohnson"))
+  ## Use the predict methods to do the adjustments
+  trainScaled <- predict(procValues, iTrain[,numerics])
+  testScaled <- predict(procValues, iTest[,numerics])
+  slackr(eval(procValues))
+
+#LINEAR REGRESSION ANALYZE DATA/MODEL BUILDING
+  forGBM <- as.data.frame(iTrain)
+  predict_formula <- as.formula(paste(dependentVariable," ~ .",sep=""))
+
+  gbmFit <- gbm(formula = predict_formula, # Use all predictors
+   distribution = GBMdistribution,
+   data = forGBM,
+   n.trees = NUMBER_OF_TREES, # 2000 boosting iterations
+   interaction.depth = SPLITS_PER_TREE, # How many splits in each tree
+   shrinkage = LEARNING_RATE_TREE, # learning rate
+   verbose = FALSE) # Do not print the details
+
+  #Split predictors and dependent variables
+  predictors <- names(idata)[names(idata) != dependentVariable]
+
+  summary(gbmFit)
+
+  gbmTune <- train(predict_formula, data = iTrain,method = "gbm")
+
+   # or, using the formula interface
+   gbmTune <- train(predict_formula, data = churnTrain, method = "gbm")
+
+  #Linear_Regression(idata,idata.notText)  #broken
+  
+  MultiVariate_Regression(idata.notText,"Price")  #broken
+
+  Generalized_Linear_Models(idata,idata.notText)  #broken
+
+  #Check for time series
+  ARIMATests(idata)  #broken
+
+
+#DATAVISUALIZATION  #should come back to this once the regressions are complete. 
   PlotMarginals(idata,dependentVariable,"comb")
 
   Outliers(idata.notText,OUTLIER_CUTOFF_P_VALUE)
@@ -625,19 +720,6 @@ main <- function(){
   Mean_Vectors(idata.notText,"Violin Plot")
 
   Clustering(idata.notText,NUM_CLUSTERS)
-
-#LINEAR REGRESSION ANALYZE DATA/MODEL BUILDING
-
-#  Linear_Regression(idata,idata.notText)  #broken
-  
-  
-
-  MultiVariate_Regression(idata.notText,"Price")  #broken
-
-  Generalized_Linear_Models(idata,idata.notText)  #broken
-
-  #Check for time series
-  ARIMATests(idata)  #broken
 
 #CHECKING SIGNIFICANT, CHECKING FOR OVERFITTING FUNCTIONS
 
