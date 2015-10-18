@@ -17,11 +17,27 @@ shinyUI(navbarPage(
                             
                ),
                mainPanel(
+                 tabsetPanel(
+                   tabPanel("Analysis",
                  
                  column(6,
                         verbatimTextOutput("textmissing"),
                         
                         dataTableOutput("colmissing"))
+                 
+                   ),
+                 tabPanel("Data Table",
+                          column(6,dataTableOutput("pre.data"))
+                          
+                   ),
+                 
+                 tabPanel("Preprocessing"),
+                 
+                 tabPanel("Processed Data")
+                 
+                 
+                 
+                 )
                  
                )
                
