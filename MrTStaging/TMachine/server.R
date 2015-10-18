@@ -6,6 +6,7 @@ require(nnet);
 require(glmnet);
 library(mice);
 library(VIM);
+require(fastICA);
 library("PASWR");
 source("helpers.R")
 
@@ -78,6 +79,14 @@ shinyServer(function(input,output,session)
     df.missing
     
   })
+  
+  output$pre.data <- renderDataTable({ 
+    data = rawInputData()
+    df.data = data.frame(data)
+    df.data
+    
+  })
+  
   
   
   
@@ -177,9 +186,20 @@ shinyServer(function(input,output,session)
         
         nMtry = isolate(input$rmTryUI);
         
-        familyData = isolate(input$rfModelTypeUI);
+        
+        # auto decides family
+        if(length(unique(newData[column])) == 2){
+          familyData <- "binomial" # For classification
+        }else {
+          familyData <- "gaussian" # For classification
+        } #else {
+        
+        # familyData = isolate(input$rfModelTypeUI);
         
         gridding = expand.grid(.mtry=seq(mTryStartEnd[1],mTryStartEnd[2],by=nMtry));
+        
+        
+        
         
         
         if(familyData != "Gaussian") {
@@ -335,8 +355,7 @@ shinyServer(function(input,output,session)
       } else {
         dataRange = ncol(data)-1;
       }
-      tagList(selectInput("rfModelTypeUI","Model Type",c("Binomial","Gaussian","Multinomial"),"Binomial"),
-              sliderInput("mTryRangeUI","mTry Range",min=1,max=dataRange,value=c(1,dataRange),step=1),
+      tagList(sliderInput("mTryRangeUI","mTry Range",min=1,max=dataRange,value=c(1,dataRange),step=1),
               numericInput("rmTryUI","mTry Skip",1)
       )
     } else if (modelTag == "nn") {
