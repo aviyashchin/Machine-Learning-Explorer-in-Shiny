@@ -206,7 +206,7 @@ shinyServer(function(input,output,session)
         gridding = expand.grid(.alpha=seq(alphaStart,alphaEnd,length.out=alphaRange),.lambda=seq(lambdaStart,lambdaEnd,length.out=lambdaRange));
 
 #        results = train(form,data=newData,tuneGrid=gridding,method="glmnet",family=familyData,trControl=control,preProcess=preprocessType);
-        results = train(form, data =newData,tuneGrid=gridding,method = "gbm", family=familyData,trControl=control,preProcess=preprocessType)
+
 
       };
         
@@ -273,7 +273,7 @@ shinyServer(function(input,output,session)
       } else if (modelTag == "nn") {
         
       ########################################################
-      # #DEBUG  RANDOM FOREST
+      # #DEBUG  NEURAL NEWORKS
       ########################################################
                 
       if(RUNSTANDALONE){

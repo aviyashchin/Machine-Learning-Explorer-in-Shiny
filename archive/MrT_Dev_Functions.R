@@ -610,6 +610,8 @@ main <- function(){
 
   #idata <- churnTrain
   dependentVariable <- "churn"  #SHOULD BE A FUNCTION IN SHINY
+
+  #write.table(idata, file = "titanic3.csv", sep = ",", col.names = NA,qmethod = "double")
   #idata[,dependentVariable] <- ifelse(idata[,dependentVariable] == "yes", 1, 0)
 
   #replace all variable name whitespaces with a dot"
@@ -669,12 +671,13 @@ main <- function(){
   #idata <- ozoneTrain
 
 #  as.matrix()?
+#iTrain <- idata
 
   procValues <- preProcess(iTrain[,numerics],method = c("center", "scale", "YeoJohnson"))
   ## Use the predict methods to do the adjustments
   trainScaled <- predict(procValues, iTrain[,numerics])
   testScaled <- predict(procValues, iTest[,numerics])
-  slackr(eval(procValues))
+#  slackr(eval(procValues))
 
 #LINEAR REGRESSION ANALYZE DATA/MODEL BUILDING
   forGBM <- as.data.frame(iTrain)
@@ -694,9 +697,10 @@ main <- function(){
   summary(gbmFit)
 
   gbmTune <- train(predict_formula, data = iTrain,method = "gbm")
+  summary(gbmTune)
 
    # or, using the formula interface
-   gbmTune <- train(predict_formula, data = churnTrain, method = "gbm")
+#   gbmTune <- train(predict_formula, data = churnTrain, method = "gbm")
 
   #Linear_Regression(idata,idata.notText)  #broken
   

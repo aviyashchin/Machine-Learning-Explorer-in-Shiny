@@ -27,10 +27,17 @@ Missingness_Analysis <- function(FIPS){
     #columns to remove, if more than MISSING_COLS_FOR_REMOVAL % of columsn are NA
     removecols=names(badcols[badcols>=MISSING_COLS_FOR_REMOVAL])
     data <- data[,-which(names(data) %in% removecols)]
-    fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")
-    Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",MISSING_COLS_FOR_REMOVAL,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)
-  } else {
-    Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," No columns have more than ",MISSING_COLS_FOR_REMOVAL,"% of their data missing. ")
+    myPATH <- file.path(IMGPATH,file_name)
+    print(myPATH)
+    jpeg(file=myPATH)
+    print("AGGR!")
+    eval(call(execute_function,data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data)))
+    dev.off()
+
+ #   fileloc <- print_and_save_graph("aggr",data,"After_Column_Removal.jpg")
+#    Email_file_to_Slack(paste("BAD NEWS SUCKA.  More than ",MISSING_COLS_FOR_REMOVAL,"% of variables data missing for column(s) '",do.call(paste, c(as.list(removecols),sep=", ")),"', so I deleted them. ",sep=""),fileloc)
+#  } else {
+#    Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," No columns have more than ",MISSING_COLS_FOR_REMOVAL,"% of their data missing. ")
   }
 
   #Checking for more than 5% missing values in rows
@@ -39,11 +46,18 @@ Missingness_Analysis <- function(FIPS){
 
     #only keep the good rows
     data <- data[which(badrows<=MISSING_ROWS_FOR_REMOVAL),]
+    myPATH <- file.path(IMGPATH,file_name)
+    print(myPATH)
+    jpeg(file=myPATH)
+    print("AGGR!")
+    eval(call(execute_function,data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data)))
+    dev.off()
+  }
 
-    fileloc <- print_and_save_graph("aggr",data,"After_Row_Removal.jpg")
-    Email_file_to_Slack(paste(" WHOHA.  More than ",MISSING_ROWS_FOR_REMOVAL,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>MISSING_ROWS_FOR_REMOVAL)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)
-  } else {
-        Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," You're not missing more than ",MISSING_ROWS_FOR_REMOVAL,"% of data points in any your rows.")
+#    fileloc <- print_and_save_graph("aggr",data,"After_Row_Removal.jpg")
+#    Email_file_to_Slack(paste(" WHOHA.  More than ",MISSING_ROWS_FOR_REMOVAL,"% of variables were missing for row(s) ",do.call(paste, c(as.list(which(badrows>MISSING_ROWS_FOR_REMOVAL)), sep=", ")),", so I deleted them! CLEAN YO DATA. ",sep=""),fileloc)
+#  } else {
+#        Message_if_you_have_clean_data=paste(Message_if_you_have_clean_data," You're not missing more than ",MISSING_ROWS_FOR_REMOVAL,"% of data points in any your rows.")
   }
 
   if(Message_if_you_have_clean_data!=""){
