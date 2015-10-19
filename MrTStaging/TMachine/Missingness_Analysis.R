@@ -1,11 +1,3 @@
-impute.na <- function(x){
-  return (sapply(x, function(f){is.na(f)<-which(f == '');f}))
-}
-
-col.mean<- function(x){
-  return (sapply(x, function(f) mean(f)))
-}
-
 pMiss <- function(x){
   sum(is.na(x))/length(x)*100
 }
@@ -21,7 +13,7 @@ Missingness_Analysis <- function(data,MISSING_COLS_FOR_REMOVAL,MISSING_ROWS_FOR_
     removecols=names(badcols[badcols>=MISSING_COLS_FOR_REMOVAL])
     data <- data[,-which(names(data) %in% removecols)]
     #AGGR PLOT GOES HERE eval(call(aggr,data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data)))
-      print("removing columns")
+
   }
 
   #Checking for more than 5% missing values in rows
@@ -30,7 +22,6 @@ Missingness_Analysis <- function(data,MISSING_COLS_FOR_REMOVAL,MISSING_ROWS_FOR_
 
     data <- data[which(badrows<=MISSING_ROWS_FOR_REMOVAL),]
     #eval(call(execute_function,data,col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data)))
-      print("Removing rows")
   }
 
   odata <- data

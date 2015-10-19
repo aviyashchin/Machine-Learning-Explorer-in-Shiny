@@ -44,6 +44,38 @@ shinyServer(function(input,output,session)
     }
     
   });
+
+
+  processedData = reactive({
+
+    pre.data = rawInputData()
+
+    missing.data = Missingness_Analysis(data,5,5, "mean")
+    clean.data = missing.data
+
+
+
+  });
+
+
+
+  output$test.clean = renderDataTable({
+
+    pre.data = rawInputData()
+
+    missing.data = Missingness_Analysis(data,5,5, "mean")
+    clean.data = missing.data
+
+    df.clean = data.frame(clean.data)
+    df.clean
+
+  })
+
+
+
+
+
+
   
   #responsible for building the model, responds to the button
   #REQUIRED, as the panel that holds the result is hidden and trainResults will not react to it, this one will  
@@ -313,6 +345,8 @@ shinyServer(function(input,output,session)
     }
   })
   
+
+
   
   #simple datatable of the data
   output$rawDataView = renderDataTable({

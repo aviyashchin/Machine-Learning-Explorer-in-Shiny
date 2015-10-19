@@ -31,10 +31,15 @@ shinyUI(navbarPage(
                           
                    ),
                  
-                 tabPanel("Preprocessing"),
-                 
-                 tabPanel("Processed Data")
-                 
+                 tabPanel("Preprocessing",
+                  radioButtons("missingUI","What to do with missing values?",c("Average"='mean',"K Nearest Neighbors"="knn"),"Average"),
+                  numericInput("MISSING_COLS_FOR_REMOVAL","If more than x% of col data is missing, delete the column",5),
+                  numericInput("MISSING_ROWS_FOR_REMOVAL","If more than x% of row data is missing, delete the row",5)
+                  ),
+
+                 tabPanel("Processed Data", 
+
+                          column(6, dataTableOutput("test.clean")))
                  
                  
                  )
