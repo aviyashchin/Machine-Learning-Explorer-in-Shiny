@@ -1,6 +1,0 @@
-channel: #mr-t-data-scientist
-username: @aviyashchin
-icon_emoji: 
-token: xoxp-3584981180-4421871468-9235907456-4260b8
-incoming_webhook_url:  http://myslack.slack.com/services/hooks/incoming-webhook?
-api_token: xoxp-3584981180-4421871468-9235907456-4260b8
