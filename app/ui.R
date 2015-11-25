@@ -248,7 +248,7 @@ shinyUI(dashboardPage(
         fluidRow(
           box(title = "Code", status = "primary", solidHeader = TRUE,
             collapsible = TRUE, width = 8,
-            h5("The code is open source and available at the github link: [To Be Posted Soon]"))))
+            h5("The code is open source and available at the github link: https://github.com/aviyashchin/boxer"))))
       ))
 
 
