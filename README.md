@@ -2,10 +2,8 @@
 Shiny toolkit for data science modeling using machine learning
 
 ### Collaborators
-Jospeh Lee  
 Avi Yashchin  
-
-In affliation with the NYC Data Science Academy
+Jospeh Lee  
 
 ## Introduction
 This shiny application is an exploratory toolkit using R.  The purpose fo this project was to learn, exercise, and implement R code as well as an interactive front end using Shiny. 
